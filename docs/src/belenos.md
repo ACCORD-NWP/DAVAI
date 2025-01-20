@@ -9,7 +9,8 @@ module use ~mary/public/modulefiles
 module load davai/x.y.z
 ```
 To know what version (`x.y.z`) of davai tests to use, cf. https://github.com/ACCORD-NWP/DAVAI-tests/wiki/Versions-of-tests
-I advise to put the first line in your `.bash_profile`, and execute the second only when needed.
+
+You can put the first line in your `.bash_profile`, and execute the second only when needed.
 
 ---
 

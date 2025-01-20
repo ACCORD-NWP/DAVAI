@@ -57,15 +57,7 @@ Tests versions and reference experiments
 Documentation
 -------------
 
-The User Guide is available for main releases on: https://github.com/ACCORD-NWP/DAVAI-env/releases
-
-Otherwise it is also available under `doc/` directory.
-Part of the documentation needs to be compiled from `.tex` sources, using `pdflatex`.
-To do so, from within the repository root, type:
-
-* `make doc`
-
-and the generated PDF document will be found under `doc/pdf/Davai_User_Guide.pdf`.
+The User Guide is available for main releases on: [https://github.com/ACCORD-NWP/DAVAI-env/releases](https://accord-nwp.github.io/DAVAI-env/)
 
 Dependencies
 ------------

@@ -31,4 +31,11 @@
 
 ## To test a bundle, i.e. a combination of modifications in IAL and other repos
 
-Use command `davai-new_xp_from_bundle`. The rest is identical.
+Use command `davai-new_xp_from_bundle`, providing  a bundle refering to your contributions (cf. `-h` for help).
+
+You will have the choice to create a main pack, i.e. recompiling all sources of all packages from scratch, or an incremental pack, relying on a pre-compiled pack based on your branch direct tagged ancestor, and compiling only:
+* your modified files and direct dependencies in IAL
+* the packages that you specified in the bundle using attribute `incremental_pack`, in bulk, cf. [IAL-bundle doc](https://github.com/ACCORD-NWP/IAL-bundle?tab=readme-ov-file#about-the-bundle-approach).
+The choice of main vs. incremental pack is to be set in your experiment config file (`conf/davai_nrv.ini`), attribute `packtype=main|incr`
+
+The rest is identical.

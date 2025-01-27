@@ -33,8 +33,6 @@ Installation
 Quick start
 -----------
 
-A Tutorial is available in the User Guide (cf. below).
-
 For a quick start:
 
 1. Prepare an experiment based on version `<v>` of the tests, to validate an IAL Git reference `<r>`:\
@@ -47,7 +45,7 @@ For a quick start:
   - `davai-build [-h]`
   - `davai-run_tests [-h]`
 
-More details to be found in the User Guide.
+More details to be found in the documentation, in particular in case of a multi-repos contribution.
 
 Tests versions and reference experiments
 ----------------------------------------
@@ -57,7 +55,7 @@ Tests versions and reference experiments
 Documentation
 -------------
 
-The User Guide is available for main releases on: [https://github.com/ACCORD-NWP/DAVAI-env/releases](https://accord-nwp.github.io/DAVAI-env/)
+The user guide is available [here](https://accord-nwp.github.io/DAVAI-env/).
 
 Dependencies
 ------------

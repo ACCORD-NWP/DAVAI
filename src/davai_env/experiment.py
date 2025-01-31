@@ -327,7 +327,9 @@ class ThisXP(object):
         :param extra_parameters: extra parameters to be passed to mkjob on the fly
         """
         cmd = ['python3', 'vortex/bin/mkjob.py', '-j',
-               'task={}'.format(task.strip()), 'name={}'.format(name.strip())]
+               'task={}'.format(task.strip()),
+               'name={}'.format(name.strip()),
+               'python={}'.format(sys.executable)]
         cmd.extend(['{}={}'.format(k,v) for k,v in extra_parameters.items()])
         print("Executing: '{}'".format(' '.join(cmd)))
         if not drymode:

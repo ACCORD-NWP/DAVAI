@@ -43,8 +43,7 @@ def get_args():
                             "can be set through section [paths] of user config file"]))
     parser.add_argument('-v', '--tests_version',
                         dest='davai_tests_version',
-                        help="Version of the Davai test bench to be used.",
-                        required=True)
+                        help="Version of the Davai test bench to be used.")
     parser.add_argument('-c', '--comment',
                         default=None,
                         help="Comment about experiment. Defaults to IAL_git_ref, IAL_bundle or IAL_bundle_file.")

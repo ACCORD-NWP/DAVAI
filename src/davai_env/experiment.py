@@ -55,7 +55,8 @@ class XPmaker(object):
         print("XP path created : {}".format(xp_path))
 
     @classmethod
-    def new_xp(cls, sources_to_test, davai_tests_version,
+    def new_xp(cls, sources_to_test,
+               davai_tests_version=None,
                davai_tests_origin=config['defaults']['davai_tests_origin'],
                usecase=config['defaults']['usecase'],
                host=guess_host(),
@@ -64,7 +65,7 @@ class XPmaker(object):
         Create a new experiment.
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
-        :param davai_tests_version: version of the DAVAI-tests to be used
+        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
         :param davai_tests_origin: origin repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
@@ -77,7 +78,8 @@ class XPmaker(object):
         # now XP path is created, we move in for the continuation of the experiment setup
         os.chdir(xp_path)
         xp = ThisXP(new=True)
-        xp.setup(sources_to_test, davai_tests_version,
+        xp.setup(sources_to_test,
+                 davai_tests_version=davai_tests_version,
                  davai_tests_origin=davai_tests_origin,
                  usecase=usecase,
                  host=host)
@@ -95,6 +97,7 @@ class ThisXP(object):
                                     set(('IAL_bundle_ref', 'IAL_bundle_repository')),
                                     set(('IAL_bundle_file',))
                                     )
+    IAL_davai_tests_version_file = '.davai_tests_version'
 
     def __init__(self, new=False):
         self.xp_path = os.getcwd()
@@ -108,7 +111,8 @@ class ThisXP(object):
 
 # setup --------------------------------------------------------------------------------------------------------------
 
-    def setup(self, sources_to_test, davai_tests_version,
+    def setup(self, sources_to_test,
+              davai_tests_version=None,
               davai_tests_origin=config['defaults']['davai_tests_origin'],
               usecase=config['defaults']['usecase'],
               host=guess_host()):
@@ -116,22 +120,40 @@ class ThisXP(object):
         Setup the experiment (at creation time).
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
-        :param davai_tests_version: version of the DAVAI-tests to be used
+        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
         :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
         """
+        os.makedirs('conf')
+        self._setup_conf_sources(sources_to_test)
+        if davai_tests_version is None:
+            # this will fail if the version is not known in IAL
+            davai_tests_version = self.get_davai_tests_version_from_IAL()
         # set DAVAI-tests repo
         self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
         self._setup_tasks()
         self._setup_packages()
         self._setup_logs()
         # configuration files
-        os.makedirs('conf')
-        self._setup_conf_sources(sources_to_test)
         self._setup_conf_usecase(usecase)
         self._setup_conf_general(host)
         self._setup_final_prompt()
+
+    def get_davai_tests_version_from_IAL(self):
+        """Try to get davai_tests_version from IAL."""
+        if 'IAL_git_ref' not in self.sources_to_test or 'IAL_repository' not in self.sources_to_test:
+            raise AttributeError(" ".join(["DAVAI-tests version cannot be guessed without attributes"
+                                           "'IAL_git_ref' and 'IAL_repository'. Please specify."]))
+        r = self.sources_to_test['IAL_git_ref']
+        f = self.IAL_davai_tests_version_file
+        try:
+            out = subprocess.check_output(['git', 'show', '{}:{}'.format(r, f)],
+                                          cwd=self.sources_to_test['IAL_repository'])
+        except subprocess.CalledProcessError:
+            raise ValueError(" ".join(["DAVAI-tests version could not be guessed from"
+                                       "IAL_git_ref='{}'. Please specify.".format(r)]))
+        return out.strip()
 
     @staticmethod
     def _checkout_davai_tests(gitref):

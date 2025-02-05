@@ -13,6 +13,7 @@ import subprocess
 import configparser
 import yaml
 import time
+import venv
 
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
@@ -84,12 +85,13 @@ class XPmaker(object):
         # now XP path is created, we move in for the continuation of the experiment setup
         os.chdir(xp_path)
         xp = ThisXP(new=True)
-        xp.setup(sources_to_test,
-                 davai_tests_version=davai_tests_version,
-                 davai_tests_origin=davai_tests_origin,
-                 usecase=usecase,
-                 host=host,
-                 bundle_src_dir=bundle_src_dir)
+        #xp.setup(sources_to_test,
+        xp.venv_setup(sources_to_test,
+                      davai_tests_version=davai_tests_version,
+                      davai_tests_origin=davai_tests_origin,
+                      usecase=usecase,
+                      host=host,
+                      bundle_src_dir=bundle_src_dir)
         if genesis_commandline:
             xp.write_genesis(genesis_commandline)
         return xp
@@ -108,6 +110,8 @@ class ThisXP(object):
 
     def __init__(self, new=False):
         self.xp_path = os.getcwd()
+        self.venv_path = os.path.join(self.xp_path, '.venv')
+        self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
         self.xpid = os.path.basename(os.path.dirname(os.path.dirname(self.xp_path)))
         self.vapp = os.path.basename(os.path.dirname(self.xp_path))
         self.vconf = os.path.basename(self.xp_path)
@@ -145,6 +149,39 @@ class ThisXP(object):
         self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
         self._setup_tasks()
         self._setup_packages()
+        self._setup_logs()
+        # configuration files
+        self._setup_conf_usecase(usecase)
+        self._setup_conf_general(host)
+        self._setup_final_prompt()
+
+    def venv_setup(self, sources_to_test,
+                   davai_tests_version=None,
+                   davai_tests_origin=config['defaults']['davai_tests_origin'],
+                   usecase=config['defaults']['usecase'],
+                   host=guess_host(),
+                   bundle_src_dir=None):
+        """
+        Setup the experiment as a venv (at creation time).
+
+        :param sources_to_test: information about the sources to be tested, provided as a dict
+        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
+        :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
+        :param usecase: type of set of tests to be prepared
+        :param host: host machine
+        :param bundle_src_dir: in case tests_version is not specified:
+            cache directory where to download/update bundle repositories,
+            in search for the tests_version, potentially stored in IAL.
+        """
+        os.makedirs('conf')
+        self._setup_conf_sources(sources_to_test)
+        if davai_tests_version is None:
+            # this will fail if the version is not known in IAL
+            davai_tests_version = self.guess_davai_tests_version(bundle_src_dir=bundle_src_dir)
+        # set DAVAI-tests repo
+        self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
+        self._setup_venv()
+        self._setup_packages()  # remaining, not on PyPI: vortex
         self._setup_logs()
         # configuration files
         self._setup_conf_usecase(usecase)
@@ -225,8 +262,8 @@ class ThisXP(object):
 
     def _setup_DAVAI_tests(self, remote, version):
         """Clone and checkout required version of the DAVAI-tests."""
-        subprocess.check_call(['git', 'clone', remote, self.davai_tests_dir])
-        os.chdir(self.davai_tests_dir)
+        subprocess.check_call(['git', 'clone', remote, self.davai_tests_absdir])
+        os.chdir(self.davai_tests_absdir)
         subprocess.check_call(['git', 'fetch', 'origin', version, '-q'])
         self._checkout_davai_tests(version)
         os.chdir(self.xp_path)
@@ -236,6 +273,21 @@ class ThisXP(object):
         assertion_errmsg = "The set of keys in 'sources_to_test' should contain one of: {}".format(
                            self.sources_to_test_minimal_keys)
         assert assertion_test, assertion_errmsg
+
+    def _setup_venv(self):
+        """Create a new venv it."""
+        # create venv within the xp
+        print("Create virtualenv ({})...".format(self.venv_path))
+        venv.create(self.venv_path,
+                    with_pip=True,
+                    symlinks=True,
+                    prompt='{}.venv'.format(self.xpid))
+        print("... virtualenv created.")
+        # install DAVAI-tests and dependencies in the venv
+        venv_python = os.path.join(self.venv_path, 'bin', 'python')
+        print("Setup virtualenv...")
+        subprocess.check_call([venv_python, '-m', 'pip', 'install', '-e', self.davai_tests_absdir])
+        print("... virtualenv set up.")
 
     def _setup_conf_sources(self, sources_to_test):
         """Sources config: information on sources to be tested."""
@@ -262,10 +314,6 @@ class ThisXP(object):
 
     def _setup_packages(self):
         """Link necessary packages in XP."""
-        # davai_taskutil from DAVAI-tests locally checkedout
-        os.symlink(os.path.join(self.davai_tests_dir, 'src', 'davai_taskutil'),
-                   'davai_taskutil')
-        # other packages
         packages = {p:expandpath(config['packages'][p]) for p in config['packages']}
         for package, path in packages.items():
             os.symlink(expandpath(path), package)
@@ -281,10 +329,10 @@ class ThisXP(object):
         """Final prompt for the setup of the experiment."""
         print("------------------------------------")
         print("DAVAI xp '{}' has been successfully setup !".format(self.xpid))
-        print("Now go to the XP path below and:")
-        print("- if necessary, tune experiment in '{}'".format(self.general_config_file))
-        print("- run experiment using: 'davai-run_xp'")
-        print("  =>", self.xp_path)
+        print("  => XP path:", self.xp_path)
+        print("  => XP config file: '{}'".format(self.general_config_file))
+        print("  => Activation venv: 'source {}/bin/activate'".format(self.venv_path))
+        print("  => Run experiment : 'davai-run_xp'")
         print("------------------------------------")
 
     def write_genesis(self, command):

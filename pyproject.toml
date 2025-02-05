@@ -3,7 +3,7 @@ name = "davai"
 dynamic = ["version"]
 description = "Davai environment: commandlines for running DAVAI-tests experiments."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 keywords = []
 license = {text = "CECILL-C"}
 authors = [
@@ -11,14 +11,7 @@ authors = [
     ]
 dependencies=[
     "pyyaml",
-    # indirect dependencies: required by DAVAI-tests -> should be moved into DAVAI-tests, which should be cloned +
-    # checkout + pip install -e ?
-    "ial_build==1.3.0",
-    "ial_expertise==1.2.0",
-    "epygram==2.0.2",
-    # "ecbundle" is not on PyPI, to be installed manually (though not mandatory for incr packs)
-    "requests[socks]",
-    "six",
+    "ial_build==1.3.3",
     ]
 
 [project.urls]

@@ -26,7 +26,8 @@ def main():
                    davai_tests_origin=args.davai_tests_origin,
                    usecase=args.usecase,
                    host=args.host,
-                   genesis_commandline=" ".join(sys.argv))
+                   genesis_commandline=" ".join(sys.argv),
+                   bundle_src_dir=args.bundle_src_dir)
 
 
 def get_args():
@@ -46,8 +47,7 @@ def get_args():
                              "E.g. 'https://github.com/ACCORD-NWP/IAL-bundle' or '~/repositories/IAL-bundle'.")
     parser.add_argument('-v', '--tests_version',
                         dest='davai_tests_version',
-                        help="Version of the Davai test bench to be used.",
-                        required=True)
+                        help="Version of the Davai test bench to be used.")
     parser.add_argument('-c', '--comment',
                         default=None,
                         help="Comment about experiment. Defaults to 'bundle' argument.")
@@ -67,6 +67,12 @@ def get_args():
                         help="Generic name of host machine, in order to find paths to necessary packages. " +
                              ("Default is guessed ({}), or can be set through " +
                               "section 'hosts' of user config file").format(DAVAI_HOST))
+    parser.add_argument('-b', '--bundle_src_dir',
+                        default='$HOME/bundle_cache',
+                        dest='bundle_src_dir',
+                        help=" ".join(["In case tests_version is not specified:",
+                                       "cache directory where to download/update bundle repositories,",
+                                       "in search for the tests_version, potentially stored in IAL."]))
     args = parser.parse_args()
 
     # pre-process args
@@ -87,5 +93,6 @@ def get_args():
                                IAL_bundle_repository=IAL_bundle_repository)
     sources_to_test['comment'] = args.comment
     args.sources_to_test = sources_to_test
+    args.bundle_src_dir = os.path.expanduser(os.path.expandvars(args.bundle_src_dir))
     return args
 

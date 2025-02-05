@@ -14,6 +14,8 @@ import configparser
 import yaml
 import time
 
+from ial_build.bundle import IALBundle, TmpIALbundleRepo
+
 from . import config, guess_host, initialized
 from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf
@@ -60,7 +62,8 @@ class XPmaker(object):
                davai_tests_origin=config['defaults']['davai_tests_origin'],
                usecase=config['defaults']['usecase'],
                host=guess_host(),
-               genesis_commandline=None):
+               genesis_commandline=None,
+               bundle_src_dir=None):
         """
         Create a new experiment.
 
@@ -70,6 +73,9 @@ class XPmaker(object):
         :param usecase: type of set of tests to be prepared
         :param host: host machine
         :param genesis_commandline: command-line that was used to generate the experiment, to be saved in it
+        :param bundle_src_dir: in case tests_version is not specified:
+            cache directory where to download/update bundle repositories,
+            in search for the tests_version, potentially stored in IAL.
         """
 
         assert usecase in ('NRV', 'ELP'), "Usecase not implemented yet: " + usecase
@@ -82,7 +88,8 @@ class XPmaker(object):
                  davai_tests_version=davai_tests_version,
                  davai_tests_origin=davai_tests_origin,
                  usecase=usecase,
-                 host=host)
+                 host=host,
+                 bundle_src_dir=bundle_src_dir)
         if genesis_commandline:
             xp.write_genesis(genesis_commandline)
         return xp
@@ -115,7 +122,8 @@ class ThisXP(object):
               davai_tests_version=None,
               davai_tests_origin=config['defaults']['davai_tests_origin'],
               usecase=config['defaults']['usecase'],
-              host=guess_host()):
+              host=guess_host(),
+              bundle_src_dir=None):
         """
         Setup the experiment (at creation time).
 
@@ -124,12 +132,15 @@ class ThisXP(object):
         :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
+        :param bundle_src_dir: in case tests_version is not specified:
+            cache directory where to download/update bundle repositories,
+            in search for the tests_version, potentially stored in IAL.
         """
         os.makedirs('conf')
         self._setup_conf_sources(sources_to_test)
         if davai_tests_version is None:
             # this will fail if the version is not known in IAL
-            davai_tests_version = self.get_davai_tests_version_from_IAL()
+            davai_tests_version = self.guess_davai_tests_version(bundle_src_dir=bundle_src_dir)
         # set DAVAI-tests repo
         self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
         self._setup_tasks()
@@ -140,20 +151,32 @@ class ThisXP(object):
         self._setup_conf_general(host)
         self._setup_final_prompt()
 
-    def get_davai_tests_version_from_IAL(self):
-        """Try to get davai_tests_version from IAL."""
-        if 'IAL_git_ref' not in self.sources_to_test or 'IAL_repository' not in self.sources_to_test:
-            raise AttributeError(" ".join(["DAVAI-tests version cannot be guessed without attributes"
-                                           "'IAL_git_ref' and 'IAL_repository'. Please specify."]))
-        r = self.sources_to_test['IAL_git_ref']
-        f = self.IAL_davai_tests_version_file
+    def guess_davai_tests_version(self, bundle_src_dir=None):
+        """Guess davai_tests_version from IAL repo (potentially through bundle)."""
+        if 'IAL_git_ref' in self.sources_to_test and 'IAL_repository' in self.sources_to_test:
+            IAL_git_ref = self.sources_to_test['IAL_git_ref']
+            IAL_repository = self.sources_to_test['IAL_repository']
+        else:
+            if 'IAL_bundle_file' in self.sources_to_test:
+                bf = self.sources_to_test['IAL_bundle_file']
+                bundle = IALBundle(bf)
+            elif 'IAL_bundle_ref' in self.sources_to_test and 'IAL_bundle_repository' in self.sources_to_test:
+                br = TmpIALbundleRepo(self.sources_to_test['IAL_bundle_repository'])
+                bundle = br.get_bundle(self.sources_to_test['IAL_bundle_ref'], to_file='__tmp__')
+            else:
+                raise AttributeError(
+                    "Unable to guess davai_tests_version from bundle or IAL git_ref/repository. Please specify.")
+            bundle.download(src_dir=bundle_src_dir)
+            IAL_git_ref = bundle.projects['IAL']['version']
+            IAL_repository = bundle.local_project_repo('IAL')
         try:
-            out = subprocess.check_output(['git', 'show', '{}:{}'.format(r, f)],
-                                          cwd=self.sources_to_test['IAL_repository'])
+            out = subprocess.check_output(['git', 'show', '{}:{}'.format(IAL_git_ref,
+                                                                         self.IAL_davai_tests_version_file)],
+                                          cwd=IAL_repository)
         except subprocess.CalledProcessError:
             raise ValueError(" ".join(["DAVAI-tests version could not be guessed from"
-                                       "IAL_git_ref='{}'. Please specify.".format(r)]))
-        return out.strip()
+                                       "IAL_git_ref='{}'. Please specify.".format(IAL_git_ref)]))
+        return out.strip().decode()
 
     @staticmethod
     def _checkout_davai_tests(gitref):
@@ -309,7 +332,7 @@ class ThisXP(object):
                 # sources to be tested taken from IAL_bundle_ref@IAL_bundle_repository
                 if c.get('comment', None) is None:
                     c['comment'] = c['IAL_bundle_ref']
-                c['IAL_bundle_repository'] = c.get('IAL_bundle_repository', config['default']['IAL_bundle_repository'])
+                c['IAL_bundle_repository'] = c.get('IAL_bundle_repository', config['defaults']['IAL_bundle_repository'])
             self._sources_to_test = c
         return self._sources_to_test
 

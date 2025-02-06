@@ -10,16 +10,22 @@ import socket
 import io
 import subprocess
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 # fixed parameters
 DAVAI_RC_DIR = os.path.join(os.environ['HOME'], '.davairc')
 DAVAI_XP_COUNTER = os.path.join(DAVAI_RC_DIR, '.last_xp')
 DAVAI_XPID_SYNTAX = 'dv-{xpid_num:04}-{host}@{user}'
-DAVAI_XPID_RE = re.compile('^' + DAVAI_XPID_SYNTAX.replace('{xpid_num:04}', '\d+').
-                                                   replace('-{host}', '(-\w+)?').
-                                                   replace('{user}', '\w+') + '$')
+DAVAI_XPID_RE = re.compile(r'^dv-(?P<num>\d{4})-(?P<host>\w+)@(?P<user>\w+)$')
+#DAVAI_XPID_RE = re.compile('^' + DAVAI_XPID_SYNTAX.replace('{xpid_num:04}', '\d+').
+#                                                   replace('-{host}', '(-\w+)?').
+#                                                   replace('{user}', '\w+') + '$')
 CONFIG_USER_FILE = os.path.join(DAVAI_RC_DIR, 'user_config.ini')
+
+#: usecases implemented
+usecases = ('NRV', 'ELP')
+#: vortex application
+vapp = 'davai'
 
 
 def guess_host():

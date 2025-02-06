@@ -3,14 +3,14 @@
 
 import argparse
 
-from ..experiment import ThisXP
+from ..experiment import XP
 
 __all__ = ['main']
 
 
 def main():
     args = get_args()
-    this_xp = ThisXP()
+    this_xp = XP(args.experiment)
     this_xp.build(
                   skip_fetching_sources=args.skip_fetching_sources,
                   drymode=args.drymode,
@@ -22,7 +22,16 @@ def main():
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description='Fetch sources (interactively) and build executables (batch/scheduler). To be executed from the XP directory !')
+    parser = argparse.ArgumentParser(description=" ".join([
+        'Fetch sources (interactively) and build executables (batch/scheduler).'
+        'To be executed from the XP directory !']))
+    parser.add_argument('experiment',
+                        help=" ".join(["An xpid (e.g. 'dv-0054-belenos@mary') or",
+                                       "a piece of path to grab the experiment.",
+                                       "Defaults to current working directory.",
+                                       ]),
+                                       nargs='?',
+                                       default='.')
     parser.add_argument('-s', '--skip_fetching_sources',
                         action='store_true',
                         help="Skip fetching the sources (assuming they have been fetched / and pack preexists for gmkpack).")

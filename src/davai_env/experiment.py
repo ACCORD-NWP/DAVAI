@@ -18,7 +18,7 @@ import venv
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
 from . import config, guess_host, initialized
-from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER
+from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf
 
 initialized()
@@ -26,10 +26,10 @@ initialized()
 
 class XPmaker(object):
 
-    experiments_rootdir = expandpath(config['paths']['experiments'])
+    experiments_rootdir = os.path.realpath(expandpath(config['paths']['experiments']))
 
     @staticmethod
-    def next_xp_num():
+    def _next_xp_num():
         """Get number of next Experiment."""
         if not os.path.exists(DAVAI_XP_COUNTER):
             num = 0
@@ -42,20 +42,19 @@ class XPmaker(object):
         return next_num
 
     @classmethod
-    def _new_XPID(cls, host):
-        return DAVAI_XPID_SYNTAX.format(xpid_num=cls.next_xp_num(),
+    def _new_XP_path(cls, host, usecase):
+        xpid = DAVAI_XPID_SYNTAX.format(xpid_num=cls._next_xp_num(),
                                         host=host,
                                         user=getpass.getuser())
-
-    @classmethod
-    def _new_XP_path(cls, host, usecase):
-        return os.path.join(cls.experiments_rootdir, cls._new_XPID(host), 'davai', usecase2vconf(usecase))
-
-    @staticmethod
-    def _setup_XP_path(xp_path):
+        xp_path = cls.xp_path(xpid, usecase)
         assert not os.path.exists(xp_path), "XP path: '{}' already exists".format(xp_path)
         os.makedirs(xp_path)
         print("XP path created : {}".format(xp_path))
+        return xp_path
+
+    @classmethod
+    def xp_path(cls, xpid, usecase):
+        return os.path.join(cls.experiments_rootdir, xpid, vapp, usecase2vconf(usecase))
 
     @classmethod
     def new_xp(cls, sources_to_test,
@@ -79,46 +78,74 @@ class XPmaker(object):
             in search for the tests_version, potentially stored in IAL.
         """
 
-        assert usecase in ('NRV', 'ELP'), "Usecase not implemented yet: " + usecase
+        assert usecase in usecases, "Usecase not implemented yet: " + usecase
         xp_path = cls._new_XP_path(host, usecase)
-        cls._setup_XP_path(xp_path)
         # now XP path is created, we move in for the continuation of the experiment setup
-        os.chdir(xp_path)
-        xp = ThisXP(new=True)
-        #xp.setup(sources_to_test,
-        xp.venv_setup(sources_to_test,
-                      davai_tests_version=davai_tests_version,
-                      davai_tests_origin=davai_tests_origin,
-                      usecase=usecase,
-                      host=host,
-                      bundle_src_dir=bundle_src_dir)
+        xp = XP(xp_path)
+        xp.setup(sources_to_test,
+                 davai_tests_version=davai_tests_version,
+                 davai_tests_origin=davai_tests_origin,
+                 usecase=usecase,
+                 host=host,
+                 bundle_src_dir=bundle_src_dir)
         if genesis_commandline:
             xp.write_genesis(genesis_commandline)
         return xp
 
 
-class ThisXP(object):
-    """Handles the existing experiment determined by the current working directory."""
+class XP(object):
+    """Handles a Davai experiment."""
 
     davai_tests_dir = 'DAVAI-tests'
-    sources_to_test_file = os.path.join('conf', 'sources.yaml')
+    sources_to_test_filename = os.path.join('conf', 'sources.yaml')
     sources_to_test_minimal_keys = (set(('IAL_git_ref',)),
                                     set(('IAL_bundle_ref', 'IAL_bundle_repository')),
                                     set(('IAL_bundle_file',))
                                     )
     IAL_davai_tests_version_file = '.davai_tests_version'
+    venv_dir = '.venv'
 
-    def __init__(self, new=False):
-        self.xp_path = os.getcwd()
-        self.venv_path = os.path.join(self.xp_path, '.venv')
-        self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
+    def __init__(self, xpid_or_path='.'):
+        """
+        Handles a Davai experiment.
+
+        :param xpid_or_path: an xpid or a path to grab the experiment
+        """
+        self._retrieve_xp_path(xpid_or_path)
+        # retrieve attributes
         self.xpid = os.path.basename(os.path.dirname(os.path.dirname(self.xp_path)))
         self.vapp = os.path.basename(os.path.dirname(self.xp_path))
         self.vconf = os.path.basename(self.xp_path)
         self.usecase = vconf2usecase(self.vconf)
+        # build attributes
         self.general_config_file = os.path.join('conf','{}_{}.ini'.format(self.vapp, self.vconf))
-        if not new:
-            self.assert_cwd_is_an_xp()
+        self.venv_path = os.path.join(self.xp_path, self.venv_dir)
+        self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
+        self.sources_to_test_path = os.path.join(self.xp_path, os.path.join('conf', 'sources.yaml'))
+        # checks
+        assert self.vapp == 'davai', "Unknown vapp: '{}'.".format(self.vapp)
+        assert self.usecase in usecases, "Unknown usecase: '{}'.".format(self.usecase)
+
+    def _retrieve_xp_path(self, xpid_or_path):
+        """Retrieve xp_path from an XPID or a piece of path."""
+        if DAVAI_XPID_RE.match(xpid_or_path):
+            xpid = xpid_or_path
+        else:
+            if xpid_or_path == '.':
+                path = os.path.realpath(os.getcwd())
+            else:
+                path = os.path.realpath(os.path.abspath(xpid_or_path))
+            rootlen = len(XPmaker.experiments_rootdir) + 1
+            assert path.startswith(XPmaker.experiments_rootdir) and len(path) > rootlen, \
+                   "This is not a path to a davai experiment: {}".format(path)
+            xpid = path[rootlen:].split(os.sep)[0]
+        # retrieve xp_path from XPID
+        for u in usecases:
+            xp_path = XPmaker.xp_path(xpid, u)
+            if os.path.exists(xp_path):
+                self.xp_path = xp_path
+                break
+        assert hasattr(self, 'xp_path'), "No experiment was found for XPID: '{}'.".format(xpid_or_path)
 
 # setup --------------------------------------------------------------------------------------------------------------
 
@@ -128,39 +155,6 @@ class ThisXP(object):
               usecase=config['defaults']['usecase'],
               host=guess_host(),
               bundle_src_dir=None):
-        """
-        Setup the experiment (at creation time).
-
-        :param sources_to_test: information about the sources to be tested, provided as a dict
-        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
-        :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
-        :param usecase: type of set of tests to be prepared
-        :param host: host machine
-        :param bundle_src_dir: in case tests_version is not specified:
-            cache directory where to download/update bundle repositories,
-            in search for the tests_version, potentially stored in IAL.
-        """
-        os.makedirs('conf')
-        self._setup_conf_sources(sources_to_test)
-        if davai_tests_version is None:
-            # this will fail if the version is not known in IAL
-            davai_tests_version = self.guess_davai_tests_version(bundle_src_dir=bundle_src_dir)
-        # set DAVAI-tests repo
-        self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
-        self._setup_tasks()
-        self._setup_packages()
-        self._setup_logs()
-        # configuration files
-        self._setup_conf_usecase(usecase)
-        self._setup_conf_general(host)
-        self._setup_final_prompt()
-
-    def venv_setup(self, sources_to_test,
-                   davai_tests_version=None,
-                   davai_tests_origin=config['defaults']['davai_tests_origin'],
-                   usecase=config['defaults']['usecase'],
-                   host=guess_host(),
-                   bundle_src_dir=None):
         """
         Setup the experiment as a venv (at creation time).
 
@@ -173,7 +167,7 @@ class ThisXP(object):
             cache directory where to download/update bundle repositories,
             in search for the tests_version, potentially stored in IAL.
         """
-        os.makedirs('conf')
+        os.makedirs(os.path.join(self.xp_path, 'conf'))
         self._setup_conf_sources(sources_to_test)
         if davai_tests_version is None:
             # this will fail if the version is not known in IAL
@@ -184,7 +178,7 @@ class ThisXP(object):
         self._setup_packages()  # remaining, not on PyPI: vortex
         self._setup_logs()
         # configuration files
-        self._setup_conf_usecase(usecase)
+        self._setup_conf_usecase()
         self._setup_conf_general(host)
         self._setup_final_prompt()
 
@@ -215,12 +209,14 @@ class ThisXP(object):
                                        "IAL_git_ref='{}'. Please specify.".format(IAL_git_ref)]))
         return out.strip().decode()
 
-    @staticmethod
-    def _checkout_davai_tests(gitref):
+    def _checkout_davai_tests(self, gitref):
         """Check that requested tests version exists, and switch to it."""
         remote = 'origin'
         remote_gitref = '{}/{}'.format(remote, gitref)
-        branches = subprocess.check_output(['git', 'branch'], stderr=None).decode('utf-8').split('\n')
+        branches = subprocess.check_output(['git', 'branch'],
+                                           stderr=None,
+                                           cwd=self.davai_tests_absdir
+                                           ).decode('utf-8').split('\n')
         head = [line.strip() for line in branches if line.startswith('*')][0][2:]
         detached = re.match('\(HEAD detached at (?P<ref>.*)\)$', head)
         if detached:
@@ -232,7 +228,8 @@ class ThisXP(object):
                 cmd = ['git', 'show-ref', '--verify', 'refs/heads/{}'.format(gitref)]
                 subprocess.check_call(cmd,
                                       stderr=subprocess.DEVNULL,
-                                      stdout=subprocess.DEVNULL)
+                                      stdout=subprocess.DEVNULL,
+                                      cwd=self.davai_tests_absdir)
             except subprocess.CalledProcessError:
                 # A.no
                 print("'{}' is not known in refs/heads/".format(gitref))
@@ -241,7 +238,8 @@ class ThisXP(object):
                 try:
                     subprocess.check_call(cmd,
                                           stderr=subprocess.DEVNULL,
-                                          stdout=subprocess.DEVNULL)
+                                          stdout=subprocess.DEVNULL,
+                                          cwd=self.davai_tests_absdir)
                 except subprocess.CalledProcessError:
                     # B.no: so either it is tag/commit, or doesn't exist, nothing to do about remote
                     print("'{}' is not known in refs/remotes/{}".format(gitref, remote))
@@ -254,19 +252,16 @@ class ThisXP(object):
                 gitref = remote_gitref
             # remote question has been sorted
             print("Switch DAVAI-tests repo from current HEAD '{}' to '{}'".format(head, gitref))
-            try:
-                subprocess.check_call(['git', 'checkout', gitref, '-q'])
-            except subprocess.CalledProcessError:
-                print("Have you updated your DAVAI-tests repository (command: davai-update) ?")
-                raise
+            subprocess.check_call(['git', 'checkout', gitref, '-q'],
+                                  cwd=self.davai_tests_absdir)
 
     def _setup_DAVAI_tests(self, remote, version):
         """Clone and checkout required version of the DAVAI-tests."""
-        subprocess.check_call(['git', 'clone', remote, self.davai_tests_absdir])
-        os.chdir(self.davai_tests_absdir)
-        subprocess.check_call(['git', 'fetch', 'origin', version, '-q'])
+        subprocess.check_call(['git', 'clone', remote, self.davai_tests_absdir],
+                              cwd=self.xp_path)
+        subprocess.check_call(['git', 'fetch', 'origin', version, '-q'],
+                              cwd=self.davai_tests_absdir)
         self._checkout_davai_tests(version)
-        os.chdir(self.xp_path)
 
     def check_sources_to_test(self, sources_to_test):
         assertion_test = any([s.issubset(set(sources_to_test.keys())) for s in self.sources_to_test_minimal_keys])
@@ -292,20 +287,21 @@ class ThisXP(object):
     def _setup_conf_sources(self, sources_to_test):
         """Sources config: information on sources to be tested."""
         self.check_sources_to_test(sources_to_test)
-        with io.open(self.sources_to_test_file, 'w') as f:
+        with io.open(self.sources_to_test_path, 'w') as f:
             yaml.dump(sources_to_test, f)
 
-    def _setup_conf_usecase(self, usecase):
+    def _setup_conf_usecase(self):
         """Usecase config : set of jobs/tests."""
         filename = os.path.join('conf', '{}.yaml'.format(self.usecase))
-        os.symlink(os.path.join('..', self.davai_tests_dir, filename),
-                   filename)
+        link = os.path.join(self.xp_path, filename)
+        target = os.path.join('..', self.davai_tests_dir, filename)
+        os.symlink(target, link)
 
     def _setup_conf_general(self, host=guess_host()):
         """General config file for the jobs."""
         host_general_config_file = os.path.join('..', self.davai_tests_dir, 'conf', '{}.ini'.format(host))
         os.symlink(host_general_config_file,
-                   self.general_config_file)
+                   os.path.join(self.xp_path, self.general_config_file))
 
     def _setup_tasks(self):
         """Link tasks."""
@@ -316,24 +312,24 @@ class ThisXP(object):
         """Link necessary packages in XP."""
         packages = {p:expandpath(config['packages'][p]) for p in config['packages']}
         for package, path in packages.items():
-            os.symlink(expandpath(path), package)
+            os.symlink(expandpath(path), os.path.join(self.xp_path, package))
 
     def _setup_logs(self):
         """Deport 'logs' directory."""
         logs_directory = expandpath(config['paths']['logs'])
         logs = os.path.join(logs_directory, self.xpid)
         os.makedirs(logs)
-        os.symlink(logs, 'logs')
+        os.symlink(logs, os.path.join(self.xp_path, 'logs'))
 
     def _setup_final_prompt(self):
         """Final prompt for the setup of the experiment."""
-        print("------------------------------------")
-        print("DAVAI xp '{}' has been successfully setup !".format(self.xpid))
-        print("  => XP path:", self.xp_path)
-        print("  => XP config file: '{}'".format(self.general_config_file))
-        print("  => Activation venv: 'source {}/bin/activate'".format(self.venv_path))
-        print("  => Run experiment : 'davai-run_xp'")
-        print("------------------------------------")
+        print("-" * 80)
+        print("DAVAI xp '{}' has been successfully setup in:".format(self.xpid))
+        print("**", self.xp_path, "**")
+        print("   -> XP config file: '{}'".format(self.general_config_file))
+        print("   -> Activation venv: 'source {}/bin/activate'".format(self.venv_dir))
+        print("   -> Run experiment : 'davai-run_xp'")
+        print("-" * 80)
 
     def write_genesis(self, command):
         """Write the command that created the XP in a .genesis file."""
@@ -350,6 +346,11 @@ class ThisXP(object):
         """Assert that the cwd is an actual experiment."""
         assert self.cwd_is_an_xp(), "Current working directory is not a Davai experiment directory"
 
+    def assert_valid_xp_path(self):
+        """Assert that the xp_path is actually a davai experiment."""
+        assert os.path.exists(os.path.join(self.xp_path, self.general_config_file)), \
+               "This is not a davai experiment root directory: {}".format(self.xp_path)
+
     @property
     def conf(self):
         if not hasattr(self, '_conf'):
@@ -362,7 +363,7 @@ class ThisXP(object):
     def sources_to_test(self):
         """Sources config: information on sources to be tested."""
         if not hasattr(self, '_sources_to_test'):
-            with io.open(self.sources_to_test_file, 'r') as f:
+            with io.open(self.sources_to_test_path, 'r') as f:
                 c = yaml.load(f, yaml.Loader)
             self.check_sources_to_test(c)
             # complete particular config
@@ -471,7 +472,7 @@ class ThisXP(object):
             build_job = 'build.gmkpack.bundle2pack'
         else:
             msg = "Config file '{}' should contain one of: ('IAL_git_ref', 'IAL_bundle_ref', 'IAL_bundle_file')"
-            raise KeyError(msg.format(self.sources_to_test_file))
+            raise KeyError(msg.format(self.sources_to_test_filename))
         self._launch(build_job, 'build',
                      drymode=drymode,
                      profile='rd',  # interactive, not in batch/scheduler

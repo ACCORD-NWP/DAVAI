@@ -3,14 +3,14 @@
 
 import argparse
 
-from ..experiment import ThisXP
+from ..experiment import XP
 
 __all__ = ['main']
 
 
 def main():
     args = parser.parse_args()
-    this_xp = ThisXP()
+    this_xp = XP(args.experiment)
     this_xp.ciboulai_init()
     # build
     this_xp.build(
@@ -29,6 +29,13 @@ def main():
 
 def get_args():
     parser = argparse.ArgumentParser(description='Run experiment: ciboulai_init, build, run_tests. To be executed from the XP directory !')
+    parser.add_argument('experiment',
+                        help=" ".join(["An xpid (e.g. 'dv-0054-belenos@mary') or",
+                                       "a piece of path to grab the experiment.",
+                                       "Defaults to current working directory.",
+                                       ]),
+                                       nargs='?',
+                                       default='.')
     # build arguments
     parser.add_argument('-s', '--skip_fetching_sources',
                         action='store_true',

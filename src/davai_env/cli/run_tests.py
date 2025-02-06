@@ -3,7 +3,7 @@
 
 import argparse
 
-from ..experiment import ThisXP
+from ..experiment import XP
 
 __all__ = ['main']
 
@@ -12,7 +12,7 @@ def main():
 
     args = get_args()
 
-    this_xp = ThisXP()
+    this_xp = XP(args.experiment)
     if args.list_jobs:
         this_xp.print_jobs()
     else:
@@ -23,7 +23,14 @@ def main():
 
 def get_args():
     parser = argparse.ArgumentParser(description='Launch tests. To be ran from the XP directory only !')
-    parser.add_argument('only_job',
+    parser.add_argument('experiment',
+                        help=" ".join(["An xpid (e.g. 'dv-0054-belenos@mary') or",
+                                       "a piece of path to grab the experiment.",
+                                       "Defaults to current working directory.",
+                                       ]),
+                                       nargs='?',
+                                       default='.')
+    parser.add_argument('-j', '--only_job',
                         nargs='?',
                         default=None,
                         help="Restrict the launch to the given job only (which may contain several tests)")

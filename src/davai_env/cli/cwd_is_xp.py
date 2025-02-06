@@ -3,7 +3,7 @@
 
 import argparse
 
-from ..experiment import ThisXP
+from ..experiment import XP
 
 __all__ = ['main']
 
@@ -16,7 +16,7 @@ def main():
                         action='store_true',
                         help="Silent mode")
     args = parser.parse_args()
-    this_xp = ThisXP()
+    this_xp = XP()
     if not args.silent:
         print(this_xp.xpid)
 

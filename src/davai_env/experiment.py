@@ -303,11 +303,6 @@ class XP(object):
         os.symlink(host_general_config_file,
                    os.path.join(self.xp_path, self.general_config_file))
 
-    def _setup_tasks(self):
-        """Link tasks."""
-        os.symlink(os.path.join(self.davai_tests_dir, 'src', 'tasks'),
-                   'tasks')
-
     def _setup_packages(self):
         """Link necessary packages in XP."""
         packages = {p:expandpath(config['packages'][p]) for p in config['packages']}
@@ -355,7 +350,7 @@ class XP(object):
     def conf(self):
         if not hasattr(self, '_conf'):
             config = configparser.ConfigParser()
-            config.read(self.general_config_file)
+            config.read(os.path.join(self.xp_path, self.general_config_file))
             self._conf = config
         return self._conf
 

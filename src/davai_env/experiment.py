@@ -394,7 +394,7 @@ class XP(object):
     def davai_tests_version(self):
         cmd = ['git', 'log' , '-n1', '--decorate']
         output = subprocess.check_output(cmd,
-                                         cwd=os.path.join(self.xp_path, self.davai_tests_dir)
+                                         cwd=self.davai_tests_absdir
                                          ).decode('utf-8').split('\n')
         return output[0]
 
@@ -416,14 +416,15 @@ class XP(object):
         :param name: name of the job, to get its confog characteristics (profile, ...)
         :param extra_parameters: extra parameters to be passed to mkjob on the fly
         """
-        cmd = ['python3', 'vortex/bin/mkjob.py', '-j',
+        mkjob = 'vortex/bin/mkjob.py'
+        cmd = ['python3', mkjob, '-j',
                'task={}'.format(task.strip()),
                'name={}'.format(name.strip()),
                'python={}'.format(sys.executable)]
         cmd.extend(['{}={}'.format(k,v) for k,v in extra_parameters.items()])
         print("Executing: '{}'".format(' '.join(cmd)))
         if not drymode:
-            subprocess.check_call(cmd)
+            subprocess.check_call(cmd, cwd=self.xp_path)
 
     def ciboulai_init(self):
         """(Re-)Initialize Ciboulai dashboard."""

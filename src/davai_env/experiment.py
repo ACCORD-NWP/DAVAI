@@ -120,6 +120,7 @@ class XP(object):
         # build attributes
         self.general_config_file = os.path.join('conf','{}_{}.ini'.format(self.vapp, self.vconf))
         self.venv_path = os.path.join(self.xp_path, self.venv_dir)
+        self.venv_activate = os.path.join(self.venv_path, 'bin', 'activate')
         self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
         self.sources_to_test_path = os.path.join(self.xp_path, os.path.join('conf', 'sources.yaml'))
         # checks

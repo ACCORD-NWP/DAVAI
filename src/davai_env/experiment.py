@@ -347,6 +347,12 @@ class XP(object):
         assert os.path.exists(os.path.join(self.xp_path, self.general_config_file)), \
                "This is not a davai experiment root directory: {}".format(self.xp_path)
 
+    def assert_venv_python(self):
+        """Assert the python running is the one from the experiment's venv."""
+        assert os.path.split(sys.executable)[0] == os.path.join(self.venv_path, 'bin'), \
+               " ".join(["The python running is not the one of this experiment.",
+                         "Load venv: 'source {}'.".format(self.venv_activate)])
+
     @property
     def conf(self):
         if not hasattr(self, '_conf'):

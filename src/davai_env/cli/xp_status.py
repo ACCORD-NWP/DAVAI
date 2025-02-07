@@ -12,6 +12,7 @@ from ..experiment import XP
 def main():
     args = get_args()
     this_xp = XP(args.experiment)
+    this_xp.assert_venv_python()
     this_xp.status(args.task)
 
 

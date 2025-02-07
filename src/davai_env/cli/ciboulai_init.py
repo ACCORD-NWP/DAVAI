@@ -19,5 +19,6 @@ def main():
                                        default='.')
     args = parser.parse_args()
     this_xp = XP(args.experiment)
+    this_xp.assert_venv_python()
     this_xp.ciboulai_init()
 

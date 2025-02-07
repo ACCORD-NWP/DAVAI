@@ -13,6 +13,7 @@ def main():
     args = get_args()
 
     this_xp = XP(args.experiment)
+    this_xp.assert_venv_python()
     if args.list_jobs:
         this_xp.print_jobs()
     else:

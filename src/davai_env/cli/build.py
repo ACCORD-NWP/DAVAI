@@ -11,6 +11,7 @@ __all__ = ['main']
 def main():
     args = get_args()
     this_xp = XP(args.experiment)
+    this_xp.assert_venv_python()
     this_xp.build(
                   skip_fetching_sources=args.skip_fetching_sources,
                   drymode=args.drymode,

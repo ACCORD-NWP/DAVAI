@@ -31,7 +31,6 @@ def get_args():
                                        nargs='?',
                                        default='.')
     parser.add_argument('-j', '--only_job',
-                        nargs='?',
                         default=None,
                         help="Restrict the launch to the given job only (which may contain several tests)")
     parser.add_argument('-l', '--list_jobs',

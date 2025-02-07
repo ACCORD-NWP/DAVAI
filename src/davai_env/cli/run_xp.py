@@ -9,7 +9,7 @@ __all__ = ['main']
 
 
 def main():
-    args = parser.parse_args()
+    args = get_args()
     this_xp = XP(args.experiment)
     this_xp.ciboulai_init()
     # build
@@ -36,6 +36,9 @@ def get_args():
                                        ]),
                                        nargs='?',
                                        default='.')
+    parser.add_argument('--drymode',
+                        action='store_true',
+                        help="Dry mode: print commands to be executed, but do not run them")
     # build arguments
     parser.add_argument('-s', '--skip_fetching_sources',
                         action='store_true',
@@ -46,22 +49,12 @@ def get_args():
     parser.add_argument('-c', '--cleanpack',
                         action='store_true',
                         help="Gmkpack: clean pack before git2pack+pack2bin.")
-    parser.add_argument('--drymode',
-                        action='store_true',
-                        help="Dry mode: print commands to be executed, but do not run them")
     # run_tests arguments
-    parser.add_argument('only_job',
-                        nargs='?',
+    parser.add_argument('-j', '--only_job',
                         default=None,
                         help="Restrict the launch to the given job only (which may contain several tests)")
-    parser.add_argument('-l', '--list_jobs',
-                        action='store_true',
-                        help="List the jobs supposed to be launched")
     parser.add_argument('--mpiname',
                         default=None,
                         help="MPI launcher, as listed in vortex (e.g. 'srun', 'mpirun', 'srun-ddt'.")
-    parser.add_argument('--drymode',
-                        action='store_true',
-                        help="Dry mode: print commands to be executed, but do not run them")
     return parser.parse_args()
 

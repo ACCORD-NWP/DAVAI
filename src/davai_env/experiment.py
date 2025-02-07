@@ -392,7 +392,7 @@ class XP(object):
         """Get all jobs according to *usecase* (found in config)."""
         if not hasattr(self, '_all_jobs'):
             jobs_list_file = 'conf/{}.yaml'.format(self.usecase)
-            with io.open(jobs_list_file, 'r') as fin:
+            with io.open(os.path.join(self.xp_path, jobs_list_file), 'r') as fin:
                 self._all_jobs = yaml.load(fin, yaml.Loader)
         return self._all_jobs
 

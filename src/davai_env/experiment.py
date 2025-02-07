@@ -103,7 +103,7 @@ class XP(object):
                                     set(('IAL_bundle_file',))
                                     )
     IAL_davai_tests_version_file = '.davai_tests_version'
-    venv_dir = '.venv'
+    venv_dir = 'venv'
 
     def __init__(self, xpid_or_path='.'):
         """
@@ -276,7 +276,7 @@ class XP(object):
         venv.create(self.venv_path,
                     with_pip=True,
                     symlinks=True,
-                    prompt='{}.venv'.format(self.xpid))
+                    prompt='venv:{}'.format(self.xpid))
         print("... virtualenv created.")
         # install DAVAI-tests and dependencies in the venv
         venv_python = os.path.join(self.venv_path, 'bin', 'python')

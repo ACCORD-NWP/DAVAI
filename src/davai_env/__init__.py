@@ -10,7 +10,7 @@ import socket
 import io
 import subprocess
 
-__version__ = "1.2.2"
+__version__ = "1.2.3"
 
 # fixed parameters
 DAVAI_RC_DIR = os.path.join(os.environ['HOME'], '.davairc')

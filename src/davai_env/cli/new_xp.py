@@ -22,7 +22,8 @@ def main():
 
     # create new experiment
     XPmaker.new_xp(args.sources_to_test,
-                   args.davai_tests_version,
+                   editable=args.editable,
+                   davai_tests_version=args.davai_tests_version,
                    davai_tests_origin=args.davai_tests_origin,
                    usecase=args.usecase,
                    host=args.host,
@@ -34,6 +35,9 @@ def get_args():
     parser = argparse.ArgumentParser(description='Create a Davai experiment to test an IAL Git reference.')
     parser.add_argument('IAL_git_ref',
                         help="IAL Git reference to be tested. Can be a branch, a tag or a commit number.")
+    parser.add_argument('-e', '--editable',
+                        action='store_true',
+                        help="Editable: use an editable version of Davai sources (hence a brand new venv).")
     parser.add_argument('-r', '--IAL_repo',
                         default=expandpath(config['paths']['IAL_repository']),
                         dest='IAL_repository',

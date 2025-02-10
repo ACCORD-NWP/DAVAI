@@ -51,13 +51,13 @@ def guess_host():
 
 # CONFIG
 config = configparser.ConfigParser()
-with importlib.resources.open_text("davai.conf", "base.ini",) as fh:
+with importlib.resources.open_text("davai_env.conf", "base.ini",) as fh:
     config.read_file(fh)
 # read user config a first time to help guessing host
 if os.path.exists(CONFIG_USER_FILE):
     config.read(CONFIG_USER_FILE)
 # then complete config with host config file
-with importlib.resources.open_text("davai.conf", f"{guess_host()}.ini") as fh:
+with importlib.resources.open_text("davai_env.conf", f"{guess_host()}.ini") as fh:
     config.read_file(fh)
 # and read again user config so that it overwrites host config
 if os.path.exists(CONFIG_USER_FILE):
@@ -77,7 +77,7 @@ def preset_user_config_file(prompt=None):
         if not os.path.exists(os.path.basename(CONFIG_USER_FILE)):
             os.makedirs(os.path.basename(CONFIG_USER_FILE))
         with importlib.resources.open_text(
-            "davai.conf", "user_config_template.ini",
+            "davai_env.conf", "user_config_template.ini",
         ) as i:
             t = i.readlines()
         with io.open(CONFIG_USER_FILE, 'w') as o:

@@ -17,7 +17,7 @@ import venv
 
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
-from . import config, guess_host, initialized
+from . import config, guess_host, initialized, __version__
 from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf
 
@@ -57,7 +57,9 @@ class XPmaker(object):
         return os.path.join(cls.experiments_rootdir, xpid, vapp, usecase2vconf(usecase))
 
     @classmethod
-    def new_xp(cls, sources_to_test,
+    def new_xp(cls,
+               sources_to_test,
+               editable=False,
                davai_tests_version=None,
                davai_tests_origin=config['defaults']['davai_tests_origin'],
                usecase=config['defaults']['usecase'],
@@ -68,6 +70,7 @@ class XPmaker(object):
         Create a new experiment.
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
+        :param editable: whether davai sources must be editable or not
         :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
         :param davai_tests_origin: origin repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
@@ -83,6 +86,7 @@ class XPmaker(object):
         # now XP path is created, we move in for the continuation of the experiment setup
         xp = XP(xp_path)
         xp.setup(sources_to_test,
+                 editable=editable,
                  davai_tests_version=davai_tests_version,
                  davai_tests_origin=davai_tests_origin,
                  usecase=usecase,
@@ -120,12 +124,20 @@ class XP(object):
         # build attributes
         self.general_config_file = os.path.join('conf','{}_{}.ini'.format(self.vapp, self.vconf))
         self.venv_path = os.path.join(self.xp_path, self.venv_dir)
+        self.venv_python = os.path.join(self.venv_path, 'bin', 'python')
         self.venv_activate = os.path.join(self.venv_path, 'bin', 'activate')
         self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
         self.sources_to_test_path = os.path.join(self.xp_path, os.path.join('conf', 'sources.yaml'))
         # checks
         assert self.vapp == 'davai', "Unknown vapp: '{}'.".format(self.vapp)
         assert self.usecase in usecases, "Unknown usecase: '{}'.".format(self.usecase)
+
+    @property
+    def _venv_site_path(self):
+        return os.path.join(self.venv_path,
+                            'lib',
+                            'python{}.{}'.format(sys.version_info.major, sys.version_info.minor),
+                            'site-packages')
 
     def _retrieve_xp_path(self, xpid_or_path):
         """Retrieve xp_path from an XPID or a piece of path."""
@@ -150,7 +162,9 @@ class XP(object):
 
 # setup --------------------------------------------------------------------------------------------------------------
 
-    def setup(self, sources_to_test,
+    def setup(self,
+              sources_to_test,
+              editable=False,
               davai_tests_version=None,
               davai_tests_origin=config['defaults']['davai_tests_origin'],
               usecase=config['defaults']['usecase'],
@@ -160,6 +174,7 @@ class XP(object):
         Setup the experiment as a venv (at creation time).
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
+        :param editable: whether davai sources must be editable or not
         :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
         :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
         :param usecase: type of set of tests to be prepared
@@ -174,13 +189,17 @@ class XP(object):
             # this will fail if the version is not known in IAL
             davai_tests_version = self.guess_davai_tests_version(bundle_src_dir=bundle_src_dir)
         # set DAVAI-tests repo
-        self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
-        self._setup_venv()
+        if editable:
+            self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
+            self._setup_new_venv()
+        else:
+            venv_path = os.path.join(expandpath(config['paths']['venvs']), davai_tests_version)
+            self._link_venv(venv_path)
         self._setup_packages()  # remaining, not on PyPI: vortex
         self._setup_logs()
         # configuration files
-        self._setup_conf_usecase()
-        self._setup_conf_general(host)
+        self._setup_conf_usecase(editable)
+        self._setup_conf_general(editable, host=host)
         self._setup_final_prompt()
 
     def guess_davai_tests_version(self, bundle_src_dir=None):
@@ -270,19 +289,23 @@ class XP(object):
                            self.sources_to_test_minimal_keys)
         assert assertion_test, assertion_errmsg
 
-    def _setup_venv(self):
-        """Create a new venv it."""
+    def _link_venv(self, venv_path):
+        """Link venv to an existing venv path."""
+        print("Using venv:", venv_path)
+        os.symlink(venv_path, self.venv_path)
+
+    def _setup_new_venv(self):
+        """Create a new venv in the XP."""
         # create venv within the xp
         print("Create virtualenv ({})...".format(self.venv_path))
         venv.create(self.venv_path,
                     with_pip=True,
-                    symlinks=True,
+                    symlinks=False,
                     prompt='venv:{}'.format(self.xpid))
         print("... virtualenv created.")
         # install DAVAI-tests and dependencies in the venv
-        venv_python = os.path.join(self.venv_path, 'bin', 'python')
         print("Setup virtualenv...")
-        subprocess.check_call([venv_python, '-m', 'pip', 'install', '-e', self.davai_tests_absdir])
+        subprocess.check_call([self.venv_python, '-m', 'pip', 'install', '-e', self.davai_tests_absdir])
         print("... virtualenv set up.")
 
     def _setup_conf_sources(self, sources_to_test):
@@ -291,18 +314,25 @@ class XP(object):
         with io.open(self.sources_to_test_path, 'w') as f:
             yaml.dump(sources_to_test, f)
 
-    def _setup_conf_usecase(self):
+    def _setup_conf_usecase(self, editable):
         """Usecase config : set of jobs/tests."""
-        filename = os.path.join('conf', '{}.yaml'.format(self.usecase))
-        link = os.path.join(self.xp_path, filename)
-        target = os.path.join('..', self.davai_tests_dir, filename)
+        basename = '{}.yaml'.format(self.usecase)
+        link = os.path.join(self.xp_path, 'conf', basename)
+        if editable:
+            target = os.path.join('..', self.davai_tests_dir, 'src', 'tasks', 'conf', basename)
+        else:
+            target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
         os.symlink(target, link)
 
-    def _setup_conf_general(self, host=guess_host()):
+    def _setup_conf_general(self, editable, host=guess_host()):
         """General config file for the jobs."""
-        host_general_config_file = os.path.join('..', self.davai_tests_dir, 'conf', '{}.ini'.format(host))
-        os.symlink(host_general_config_file,
-                   os.path.join(self.xp_path, self.general_config_file))
+        basename = '{}.ini'.format(host)
+        link = os.path.join(self.xp_path, self.general_config_file)
+        if editable:
+            target = os.path.join('..', self.davai_tests_dir, 'src', 'tasks', 'conf', basename)
+        else:
+            target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
+        os.symlink(target, link)
 
     def _setup_packages(self):
         """Link necessary packages in XP."""
@@ -349,7 +379,9 @@ class XP(object):
 
     def assert_venv_python(self):
         """Assert the python running is the one from the experiment's venv."""
-        assert os.path.split(sys.executable)[0] == os.path.join(self.venv_path, 'bin'), \
+        sys_venv = os.path.realpath(os.path.split(sys.executable)[0])
+        this_venv = os.path.realpath(os.path.join(self.venv_path, 'bin'))
+        assert sys_venv == this_venv, \
                " ".join(["The python running is not the one of this experiment.",
                          "Load venv: 'source {}'.".format(self.venv_activate)])
 
@@ -398,11 +430,14 @@ class XP(object):
 
     @property
     def davai_tests_version(self):
-        cmd = ['git', 'log' , '-n1', '--decorate']
-        output = subprocess.check_output(cmd,
-                                         cwd=self.davai_tests_absdir
-                                         ).decode('utf-8').split('\n')
-        return output[0]
+        try:
+            cmd = ['git', 'log' , '-n1', '--decorate']
+            output = subprocess.check_output(cmd,
+                                             cwd=self.davai_tests_absdir
+                                             ).decode('utf-8').split('\n')
+            return output[0]
+        except Exception:
+            return __version__
 
 # utilities ----------------------------------------------------------------------------------------------------------
 

@@ -1,0 +1,47 @@
+forecasts:
+    # standalone forecasts = "pure" toy models forecasts without any extra component (DFI, IAU, Fullpos...)
+    - standalone_forecast_alaro0_antwrp1300
+    - standalone_forecast_alaro1_antwrp1300
+    - standalone_forecast_alaro1_sfx_chmh2325
+    - standalone_forecast_arome_corsica2500
+    - standalone_forecast_arpege_globaltst149c24
+    - standalone_forecast_arpege_nosfx_globaltst149c24
+    - standalone_forecast_ifs_global21
+    # canonical forecasts = close to operations, including extra components
+    - canonical_forecast_arpege_global798c22
+    - canonical_forecast_arpege_apl_global798c22
+
+assim:
+    # oops
+    - OOPSBSM_4D_arpege  # BSM = Bator+Screening+Minim
+    - OOPSBSM_3D_arpege  # 3DVar Arpege
+    - OOPSBA1_4D_arpege  # BA1 = Bator+AllInOneOOPSAnalysis
+    # CNT0
+    - CNT0BSM_4D_arpege  # BSM = Bator+Screening+Minim
+    - CNT0BSM_3D_arpege  # 3DVar Arpege
+    - BsC_arpege  # BsC = Bator_surf+Canari
+    - BSM_3D_arome  # BSM = Bator+Screening+Minim
+    # FIXME: - BA1_3D_arome  # Bator+AllInOneOOPSAnalysis 3DVar Arome
+    # one obstype at a time -- Bator+Screening only
+    - BS_3D_arpege__obstype
+    - BS_4D_arpege__obstype
+    - BS_3D_arome__obstype
+
+objects:
+    - OpObs4D_arpege  # Tests of 4D Observation operators (NL, TL, AD), one obstype at a time
+    - OpObs3D_arpege  # Tests of 3D Observation operators (NL, TL, AD), one obstype at a time
+    - Bmat_arpege  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
+    - ModelTL_arpege # TL model, adjoint test
+
+# mixs: jobs containing several tasks of various families
+#mixs:
+#    - PF  # Prep-Forecast (using older PGD)
+#    - PPF  # PGD-Prep-Forecast (using new PGD)
+
+fullpos:
+    - Fp_lbc  # Fp_lbc = Fullpos creation of LBC files
+
+surfex:
+    - PP_geo_arome   # PP_geo_arome  = PGD+Prep on a range of LAM geometries
+    - PP_geo_arpege  # PP_geo_arpege = PGD+Prep on a range of Gaussian geometries
+

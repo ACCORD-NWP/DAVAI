@@ -22,8 +22,8 @@ def main():
 
     # create new experiment
     XPmaker.new_xp(args.sources_to_test,
-                   args.davai_tests_version,
-                   davai_tests_origin=args.davai_tests_origin,
+                   args.davai_version,
+                   davai_remote_repo=args.davai_remote_repo,
                    usecase=args.usecase,
                    host=args.host,
                    genesis_commandline=" ".join(sys.argv),
@@ -45,8 +45,8 @@ def get_args():
                         dest='IAL_bundle_repository',
                         help="URL or path of IAL-bundle repository in which to find the given reference of bundle. " +
                              "E.g. 'https://github.com/ACCORD-NWP/IAL-bundle' or '~/repositories/IAL-bundle'.")
-    parser.add_argument('-v', '--tests_version',
-                        dest='davai_tests_version',
+    parser.add_argument('-v', '--davai_version',
+                        dest='davai_version',
                         help="Version of the Davai test bench to be used.")
     parser.add_argument('-c', '--comment',
                         default=None,
@@ -55,12 +55,12 @@ def get_args():
                         default=config['defaults']['usecase'],
                         help="Usecase: NRV (restrained set of canonical tests) or ELP (extended elementary tests); " +
                              "More to come (PC, ...). Defaults to: '{}'".format(config['defaults']['usecase']))
-    parser.add_argument('-o', '--origin', '--davai_tests_origin',
-                        default=config['defaults']['davai_tests_origin'],
-                        dest='davai_tests_origin',
+    parser.add_argument('-o', '--origin', '--davai_remote_repo',
+                        default=config['defaults']['davai_remote_repo'],
+                        dest='davai_remote_repo',
                         help=" ".join([
                             "URL of the DAVAI-tests origin repository to be cloned in XP.",
-                            "Default ({})".format(config['defaults']['davai_tests_origin']),
+                            "Default ({})".format(config['defaults']['davai_remote_repo']),
                             "can be set through section [defaults] of user config file."]))
     parser.add_argument('--host',
                         default=DAVAI_HOST,
@@ -70,9 +70,9 @@ def get_args():
     parser.add_argument('-b', '--bundle_src_dir',
                         default='$HOME/bundle_cache',
                         dest='bundle_src_dir',
-                        help=" ".join(["In case tests_version is not specified:",
+                        help=" ".join(["In case davai_version is not specified:",
                                        "cache directory where to download/update bundle repositories,",
-                                       "in search for the tests_version, potentially stored in IAL."]))
+                                       "in search for the davai_version, potentially stored in IAL."]))
     args = parser.parse_args()
 
     # pre-process args

@@ -19,5 +19,5 @@ def main():
                                        default='.')
     parser.parse_args()
     this_xp = XP(args.experiment)
-    print(this_xp.davai_tests_version)
+    print(this_xp.davai_version)
 

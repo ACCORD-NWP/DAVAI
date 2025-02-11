@@ -23,8 +23,8 @@ def main():
     # create new experiment
     XPmaker.new_xp(args.sources_to_test,
                    editable=args.editable,
-                   davai_tests_version=args.davai_tests_version,
-                   davai_tests_origin=args.davai_tests_origin,
+                   davai_version=args.davai_version,
+                   davai_remote_repo=args.davai_remote_repo,
                    usecase=args.usecase,
                    host=args.host,
                    genesis_commandline=" ".join(sys.argv))
@@ -45,8 +45,8 @@ def get_args():
                             "Path to IAL Git repository in which to find 'IAL_git_ref' argument.",
                             "Default ({})".format(config['paths']['IAL_repository']),
                             "can be set through section [paths] of user config file"]))
-    parser.add_argument('-v', '--tests_version',
-                        dest='davai_tests_version',
+    parser.add_argument('-v', '--davai_version',
+                        dest='davai_version',
                         help="Version of the Davai test bench to be used.")
     parser.add_argument('-c', '--comment',
                         default=None,
@@ -55,12 +55,12 @@ def get_args():
                         default=config['defaults']['usecase'],
                         help="Usecase: NRV (restrained set of canonical tests) or ELP (extended elementary tests); " +
                              "More (PC, ...) to come. Defaults to: '{}'".format(config['defaults']['usecase']))
-    parser.add_argument('--origin', '--davai_tests_origin',
-                        default=config['defaults']['davai_tests_origin'],
-                        dest='davai_tests_origin',
+    parser.add_argument('--origin', '--davai_remote_repo',
+                        default=config['defaults']['davai_remote_repo'],
+                        dest='davai_remote_repo',
                         help=("URL of the DAVAI-tests origin repository to be cloned in XP. " +
                               "Default ({}) can be set through section [defaults] " +
-                              "of user config file").format(config['defaults']['davai_tests_origin']))
+                              "of user config file").format(config['defaults']['davai_remote_repo']))
     parser.add_argument('--host',
                         default=DAVAI_HOST,
                         help="Generic name of host machine, in order to find paths to necessary packages. " +

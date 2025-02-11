@@ -61,8 +61,8 @@ class XPmaker(object):
     def new_xp(cls,
                sources_to_test,
                editable=False,
-               davai_tests_version=None,
-               davai_tests_origin=config['defaults']['davai_tests_origin'],
+               davai_version=None,
+               davai_remote_repo=config['defaults']['davai_remote_repo'],
                usecase=config['defaults']['usecase'],
                host=guess_host(),
                genesis_commandline=None,
@@ -72,14 +72,14 @@ class XPmaker(object):
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
         :param editable: whether davai sources must be editable or not
-        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
-        :param davai_tests_origin: origin repository of the DAVAI-tests to be cloned
+        :param davai_version: version of the DAVAI to be used. If not provided, try to guess from IAL repo
+        :param davai_remote_repo: origin repository of the DAVAI to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
         :param genesis_commandline: command-line that was used to generate the experiment, to be saved in it
-        :param bundle_src_dir: in case tests_version is not specified:
+        :param bundle_src_dir: in case davai_version is not specified:
             cache directory where to download/update bundle repositories,
-            in search for the tests_version, potentially stored in IAL.
+            in search for the davai_version, potentially stored in IAL.
         """
 
         assert usecase in usecases, "Usecase not implemented yet: " + usecase
@@ -88,8 +88,8 @@ class XPmaker(object):
         xp = XP(xp_path)
         xp.setup(sources_to_test,
                  editable=editable,
-                 davai_tests_version=davai_tests_version,
-                 davai_tests_origin=davai_tests_origin,
+                 davai_version=davai_version,
+                 davai_remote_repo=davai_remote_repo,
                  usecase=usecase,
                  host=host,
                  bundle_src_dir=bundle_src_dir)
@@ -101,13 +101,13 @@ class XPmaker(object):
 class XP(object):
     """Handles a Davai experiment."""
 
-    davai_tests_dir = 'DAVAI-tests'
+    davai_repo_name = 'DAVAI'
     sources_to_test_filename = os.path.join('conf', 'sources.yaml')
     sources_to_test_minimal_keys = (set(('IAL_git_ref',)),
                                     set(('IAL_bundle_ref', 'IAL_bundle_repository')),
                                     set(('IAL_bundle_file',))
                                     )
-    IAL_davai_tests_version_file = '.davai_tests_version'
+    davai_version_file_in_IAL = '.davai_default_version'
     venv_dir = 'venv'
 
     def __init__(self, xpid_or_path='.'):
@@ -127,7 +127,7 @@ class XP(object):
         self.venv_path = os.path.join(self.xp_path, self.venv_dir)
         self.venv_python = os.path.join(self.venv_path, 'bin', 'python')
         self.venv_activate = os.path.join(self.venv_path, 'bin', 'activate')
-        self.davai_tests_absdir = os.path.join(self.xp_path, self.davai_tests_dir)
+        self.davai_repo_absdir = os.path.join(self.xp_path, self.davai_repo_name)
         self.sources_to_test_path = os.path.join(self.xp_path, os.path.join('conf', 'sources.yaml'))
         # checks
         assert self.vapp == 'davai', "Unknown vapp: '{}'.".format(self.vapp)
@@ -166,8 +166,8 @@ class XP(object):
     def setup(self,
               sources_to_test,
               editable=False,
-              davai_tests_version=None,
-              davai_tests_origin=config['defaults']['davai_tests_origin'],
+              davai_version=None,
+              davai_remote_repo=config['defaults']['davai_remote_repo'],
               usecase=config['defaults']['usecase'],
               host=guess_host(),
               bundle_src_dir=None):
@@ -176,25 +176,26 @@ class XP(object):
 
         :param sources_to_test: information about the sources to be tested, provided as a dict
         :param editable: whether davai sources must be editable or not
-        :param davai_tests_version: version of the DAVAI-tests to be used. If not provided, try to guess from IAL repo
-        :param davai_tests_origin: remote repository of the DAVAI-tests to be cloned
+        :param davai_version: version of the DAVAI to be used. If not provided, try to guess from IAL repo
+        :param davai_remote_repo: remote repository of the DAVAI to be cloned
         :param usecase: type of set of tests to be prepared
         :param host: host machine
-        :param bundle_src_dir: in case tests_version is not specified:
+        :param bundle_src_dir: in case davai_version is not specified:
             cache directory where to download/update bundle repositories,
-            in search for the tests_version, potentially stored in IAL.
+            in search for the davai_version, potentially stored in IAL.
         """
         os.makedirs(os.path.join(self.xp_path, 'conf'))
         self._setup_conf_sources(sources_to_test)
-        if davai_tests_version is None:
+        if davai_version is None:
             # this will fail if the version is not known in IAL
-            davai_tests_version = self.guess_davai_tests_version(bundle_src_dir=bundle_src_dir)
-        # set DAVAI-tests repo
+            davai_version = self.guess_davai_version(bundle_src_dir=bundle_src_dir)
         if editable:
-            self._setup_DAVAI_tests(davai_tests_origin, davai_tests_version)
+            # set DAVAI repo
+            self._setup_DAVAI_repo(davai_remote_repo, davai_version)
             self._setup_new_venv()
         else:
-            venv_path = os.path.join(expandpath(config['paths']['venvs']), davai_tests_version)
+            # use existing venv of this version
+            venv_path = os.path.join(expandpath(config['paths']['venvs']), davai_version)
             self._link_venv(venv_path)
         self._setup_packages()  # remaining, not on PyPI: vortex
         self._setup_logs()
@@ -203,8 +204,8 @@ class XP(object):
         self._setup_conf_general(editable, host=host)
         self._setup_final_prompt()
 
-    def guess_davai_tests_version(self, bundle_src_dir=None):
-        """Guess davai_tests_version from IAL repo (potentially through bundle)."""
+    def guess_davai_version(self, bundle_src_dir=None):
+        """Guess davai_version from IAL repo (potentially through bundle)."""
         if 'IAL_git_ref' in self.sources_to_test and 'IAL_repository' in self.sources_to_test:
             IAL_git_ref = self.sources_to_test['IAL_git_ref']
             IAL_repository = self.sources_to_test['IAL_repository']
@@ -217,16 +218,16 @@ class XP(object):
                 bundle = br.get_bundle(self.sources_to_test['IAL_bundle_ref'], to_file='__tmp__')
             else:
                 raise AttributeError(
-                    "Unable to guess davai_tests_version from bundle or IAL git_ref/repository. Please specify.")
+                    "Unable to guess davai_version from bundle or IAL git_ref/repository. Please specify.")
             bundle.download(src_dir=bundle_src_dir)
             IAL_git_ref = bundle.projects['IAL']['version']
             IAL_repository = bundle.local_project_repo('IAL')
         try:
             out = subprocess.check_output(['git', 'show', '{}:{}'.format(IAL_git_ref,
-                                                                         self.IAL_davai_tests_version_file)],
+                                                                         self.davai_version_file_in_IAL)],
                                           cwd=IAL_repository)
         except subprocess.CalledProcessError:
-            raise ValueError(" ".join(["DAVAI-tests version could not be guessed from"
+            raise ValueError(" ".join(["DAVAI version could not be guessed from"
                                        "IAL_git_ref='{}'. Please specify.".format(IAL_git_ref)]))
         return out.strip().decode()
 
@@ -236,7 +237,7 @@ class XP(object):
         remote_gitref = '{}/{}'.format(remote, gitref)
         branches = subprocess.check_output(['git', 'branch'],
                                            stderr=None,
-                                           cwd=self.davai_tests_absdir
+                                           cwd=self.davai_repo_absdir
                                            ).decode('utf-8').split('\n')
         head = [line.strip() for line in branches if line.startswith('*')][0][2:]
         detached = re.match('\(HEAD detached at (?P<ref>.*)\)$', head)
@@ -250,7 +251,7 @@ class XP(object):
                 subprocess.check_call(cmd,
                                       stderr=subprocess.DEVNULL,
                                       stdout=subprocess.DEVNULL,
-                                      cwd=self.davai_tests_absdir)
+                                      cwd=self.davai_repo_absdir)
             except subprocess.CalledProcessError:
                 # A.no
                 print("'{}' is not known in refs/heads/".format(gitref))
@@ -260,7 +261,7 @@ class XP(object):
                     subprocess.check_call(cmd,
                                           stderr=subprocess.DEVNULL,
                                           stdout=subprocess.DEVNULL,
-                                          cwd=self.davai_tests_absdir)
+                                          cwd=self.davai_repo_absdir)
                 except subprocess.CalledProcessError:
                     # B.no: so either it is tag/commit, or doesn't exist, nothing to do about remote
                     print("'{}' is not known in refs/remotes/{}".format(gitref, remote))
@@ -272,16 +273,16 @@ class XP(object):
                 # A.yes: this is a local branch, do we take it from remote or local ?
                 gitref = remote_gitref
             # remote question has been sorted
-            print("Switch DAVAI-tests repo from current HEAD '{}' to '{}'".format(head, gitref))
+            print("Switch DAVAI repo from current HEAD '{}' to '{}'".format(head, gitref))
             subprocess.check_call(['git', 'checkout', gitref, '-q'],
-                                  cwd=self.davai_tests_absdir)
+                                  cwd=self.davai_repo_absdir)
 
-    def _setup_DAVAI_tests(self, remote, version):
-        """Clone and checkout required version of the DAVAI-tests."""
-        subprocess.check_call(['git', 'clone', remote, self.davai_tests_absdir],
+    def _setup_DAVAI_repo(self, remote, version):
+        """Clone and checkout required version of the DAVAI."""
+        subprocess.check_call(['git', 'clone', remote, self.davai_repo_absdir],
                               cwd=self.xp_path)
         subprocess.check_call(['git', 'fetch', 'origin', version, '-q'],
-                              cwd=self.davai_tests_absdir)
+                              cwd=self.davai_repo_absdir)
         self._checkout_davai_tests(version)
 
     def check_sources_to_test(self, sources_to_test):
@@ -304,9 +305,9 @@ class XP(object):
                     symlinks=False,
                     prompt='venv@davai:{}'.format(self.xpid))
         print("... virtualenv created.")
-        # install DAVAI-tests and dependencies in the venv
+        # install DAVAI and dependencies in the venv
         print("Setup virtualenv...")
-        subprocess.check_call([self.venv_python, '-m', 'pip', 'install', '-e', self.davai_tests_absdir])
+        subprocess.check_call([self.venv_python, '-m', 'pip', 'install', '-e', self.davai_repo_absdir])
         print("... virtualenv set up.")
 
     def _setup_conf_sources(self, sources_to_test):
@@ -320,7 +321,7 @@ class XP(object):
         basename = '{}.yaml'.format(self.usecase)
         link = os.path.join(self.xp_path, 'conf', basename)
         if editable:
-            target = os.path.join('..', self.davai_tests_dir, 'src', 'tasks', 'conf', basename)
+            target = os.path.join('..', self.davai_repo_name, 'src', 'tasks', 'conf', basename)
         else:
             target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
         os.symlink(target, link)
@@ -330,7 +331,7 @@ class XP(object):
         basename = '{}.ini'.format(host)
         link = os.path.join(self.xp_path, self.general_config_file)
         if editable:
-            target = os.path.join('..', self.davai_tests_dir, 'src', 'tasks', 'conf', basename)
+            target = os.path.join('..', self.davai_repo_name, 'src', 'tasks', 'conf', basename)
         else:
             target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
         os.symlink(target, link)
@@ -430,14 +431,16 @@ class XP(object):
         return self._all_jobs
 
     @property
-    def davai_tests_version(self):
+    def davai_version(self):
         try:
+            # editable case
             cmd = ['git', 'log' , '-n1', '--decorate']
             output = subprocess.check_output(cmd,
-                                             cwd=self.davai_tests_absdir
+                                             cwd=self.davai_repo_absdir
                                              ).decode('utf-8').split('\n')
             return output[0]
         except Exception:
+            # version from the venv
             return __version__
 
 # utilities ----------------------------------------------------------------------------------------------------------
@@ -473,7 +476,7 @@ class XP(object):
         self._launch('ciboulai_xpsetup', 'ciboulai_xpsetup',
                      profile='rd',
                      usecase=self.usecase,
-                     tests_version=self.davai_tests_version.replace("'", '"'),
+                     davai_version=self.davai_version.replace("'", '"'),
                      **self.sources_to_test)
 
     def build(self,

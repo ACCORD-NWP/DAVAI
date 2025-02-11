@@ -23,7 +23,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'plot_spectral':True, 'hide_equal_norms':self.conf.hide_equal_norms}),
                 FPDict({'kind':'fields_in_file'})
-                ] + davai.util.default_experts()
+                ] + davai.vtx.util.default_experts()
 
     def output_block(self):
         return '-'.join([self.conf.prefix,

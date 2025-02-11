@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Hooks on resources for Davai tasks.
+Hooks on namelists for Davai tasks.
 """
 
 

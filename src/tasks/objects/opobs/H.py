@@ -40,7 +40,7 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._withvarbc = True            
             self._suffix_vbc = '_varbc'
             
-        self.experts = [FPDict({'kind':'oops:'+self._testid}),FPDict({'kind':'joTables'})] + davai.util.default_experts()
+        self.experts = [FPDict({'kind':'oops:'+self._testid}),FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
 
         # 0./ Promises
         if 'early-fetch' in self.steps or 'fetch' in self.steps:

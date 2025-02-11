@@ -2,12 +2,11 @@
 Hooks for special DAVAI processings.
 """
 
-import contextlib
 import json
 
 from bronx.fancies import loggers
 
-from .util import SummariesStack, DavaiException, send_task_to_DAVAI_server
+from ..util import SummariesStack, DavaiException, send_task_to_DAVAI_server, _send_to_davai_server_build_proxy
 
 #: No automatic export
 __all__ = []
@@ -41,19 +40,6 @@ def throw_summary_on_stack(t, rh):
                            vconf=rh.provider.vconf,
                            xpid=rh.provider.experiment)
     stack.throw_on_stack(rh)
-
-
-@contextlib.contextmanager
-def _send_to_davai_server_build_proxy(sh):
-    """Open a SSH tunnel as a SOCKS proxy (if needed)."""
-    if not sh.default_target.isnetworknode:
-        # Compute node: open tunnel for send to target
-        ssh_obj = sh.ssh('network', virtualnode=True, maxtries=1, mandatory_hostcheck=False)
-        with ssh_obj.tunnel('socks') as tunnel:
-            proxy = 'socks5://127.0.0.1:{}'.format(tunnel.entranceport)
-            yield {scheme: proxy for scheme in ('http', 'https')}
-    else:
-        yield None
 
 
 def send_to_DAVAI_server(t, rh, fatal=True):  # @UnusedVariables

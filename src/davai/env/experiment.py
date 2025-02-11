@@ -570,9 +570,9 @@ class XP(object):
         sys.path.extend([vortexpath, os.path.join(vortexpath, 'src'), os.path.join(vortexpath, 'site')])
         # vortex/davai
         import vortex
-        import davai
+        from ..vtx.util import SummariesStack
         # process stack or task
-        stack = davai.util.SummariesStack(vortex.ticket(), self.vapp, self.vconf, self.xpid)
+        stack = SummariesStack(vortex.ticket(), self.vapp, self.vconf, self.xpid)
         if task is None:
             stack.tasks_status(print_it=True)
         else:

@@ -4,3 +4,4 @@ Davai python package: contains command-line interface, task utilities and vortex
 
 __version__ = "2.0.0"
 
+#from . import vtx

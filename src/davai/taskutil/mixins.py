@@ -8,8 +8,9 @@ import os
 
 from vortex import toolbox
 from bronx.stdtypes.date import Period, utcnow
-from davai.algo.mixins import context_info_for_task_summary  # a function in vortex
 
+from ..vtx.util import context_info_for_task_summary
+from ..vtx.hooks.summaries import take_the_DAVAI_train
 from . import gmkpack_executables_block_tag
 
 
@@ -255,7 +256,7 @@ class DavaiTaskMixin(WrappedToolboxMixin):
             block          = self.output_block(),
             experiment     = self.conf.xpid,
             format         = 'json',
-            hook_train     = ('davai.hooks.take_the_DAVAI_train',
+            hook_train     = (take_the_DAVAI_train,
                               self.conf.expertise_fatal_exceptions,
                               self.conf.hook_davai_wagons),
             kind           = self._taskinfo_kind,
@@ -357,7 +358,7 @@ class DavaiTaskMixin(WrappedToolboxMixin):
             kind           = self._taskinfo_kind,
             block          = self.output_block(),
             experiment     = self.conf.xpid,
-            hook_train     = ('davai.hooks.take_the_DAVAI_train',
+            hook_train     = (take_the_DAVAI_train,
                               self.conf.expertise_fatal_exceptions,
                               self.conf.hook_davai_wagons),
             format         = 'json',
@@ -375,7 +376,7 @@ class DavaiTaskMixin(WrappedToolboxMixin):
             kind           = self._taskinfo_kind,
             block          = self.output_block(),
             experiment     = self.conf.xpid,
-            hook_train     = ('davai.hooks.take_the_DAVAI_train',
+            hook_train     = (take_the_DAVAI_train,
                               self.conf.expertise_fatal_exceptions,
                               self.conf.hook_davai_wagons),
             format         = 'json',

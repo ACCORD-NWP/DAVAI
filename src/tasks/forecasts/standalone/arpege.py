@@ -21,7 +21,7 @@ class StandaloneArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'plot_spectral':True, 'hide_equal_norms':self.conf.hide_equal_norms}),
                 FPDict({'kind':'fields_in_file'})
-                ] + davai.util.default_experts()
+                ] + davai.vtx.util.default_experts()
 
     def _flow_input_pgd_block(self):
         """Block of PGD in case of a PPF flow-chained job."""

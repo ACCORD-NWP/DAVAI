@@ -20,7 +20,7 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'fields_in_file'}),
                 FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms})
-                ] + davai.util.default_experts()
+                ] + davai.vtx.util.default_experts()
 
     def process(self):
         self._wrapped_init()

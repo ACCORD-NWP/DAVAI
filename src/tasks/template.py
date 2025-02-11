@@ -14,7 +14,7 @@ from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 class EmptyTemplateTask(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'norms'})] + davai.util.default_experts()
+    experts = [FPDict({'kind':'norms'})] + davai.vtx.util.default_experts()
     lead_expert = experts[0]
 
     def process(self):

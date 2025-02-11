@@ -18,7 +18,7 @@ from davai.taskutil.hooks import hook_fix_model, hook_gnam, hook_disable_fullpos
 
 class Hdirect(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = davai.util.default_experts()
+    experts = davai.vtx.util.default_experts()
 
     def output_block(self):
         return '-'.join([self.conf.model,

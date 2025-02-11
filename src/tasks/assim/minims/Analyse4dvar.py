@@ -18,7 +18,7 @@ from davai.taskutil.hooks import hook_fix_model, hook_gnam, hook_disable_flowdep
 
 class Analyse4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'joTables'})] + davai.util.default_experts()
+    experts = [FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
 
     def output_block(self):
         return '-'.join([self.conf.model,

@@ -1,16 +1,15 @@
 """
 Functions and classes used by other modules from package.
 """
-
-from footprints import proxy as fpx
-
 import os
 import errno
 import json
 import re
 import tarfile
 import tempfile
+import contextlib
 
+from footprints import proxy as fpx
 from bronx.fancies import loggers
 from bronx.stdtypes import date
 
@@ -28,10 +27,20 @@ class DavaiException(Exception):
     pass
 
 
-def block_from_olive_tree():
-    """Get block from the Olive tree."""
-    t = sessions.current()
-    return t.sh.path.join(* t.env['SMSNAME'].split(t.sh.path.sep)[4:])
+def context_info_for_task_summary(context, jobname=None):
+    """Get some infos from context for task summary."""
+    info = {'rundir': context.rundir}
+    for k in ('MTOOL_STEP_ABORT', 'MTOOL_STEP_DEPOT', 'MTOOL_STEP_SPOOL'):
+        v = context.env.get(k, None)
+        if v:
+            info[k] = v
+    if context.rundir and 'MTOOL_STEP_ABORT' in info and 'MTOOL_STEP_SPOOL' in info:
+        abort_dir = context.system.path.join(info['MTOOL_STEP_ABORT'],
+                                             context.rundir[len(info['MTOOL_STEP_SPOOL']) + 1:])
+        info['(if aborted)'] = abort_dir
+    if jobname is not None:
+        info['jobname'] = jobname
+    return info
 
 
 def default_experts(excepted=[]):
@@ -146,6 +155,19 @@ def send_task_to_DAVAI_server(davai_server_post_url, xpid, jsonData, kind,
                          status, headers, rdata)
             if fatal:
                 raise DavaiException('HTTP post failed')
+
+
+@contextlib.contextmanager
+def _send_to_davai_server_build_proxy(sh):
+    """Open a SSH tunnel as a SOCKS proxy (if needed)."""
+    if not sh.default_target.isnetworknode:
+        # Compute node: open tunnel for send to target
+        ssh_obj = sh.ssh('network', virtualnode=True, maxtries=1, mandatory_hostcheck=False)
+        with ssh_obj.tunnel('socks') as tunnel:
+            proxy = 'socks5://127.0.0.1:{}'.format(tunnel.entranceport)
+            yield {scheme: proxy for scheme in ('http', 'https')}
+    else:
+        yield None
 
 
 def set_env4git():

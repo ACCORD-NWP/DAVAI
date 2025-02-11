@@ -15,7 +15,7 @@ from davai.taskutil.hooks import hook_adjust_DFI, hook_gnam
 
 class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'joTables'})] + davai.util.default_experts()
+    experts = [FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
 
     def output_block(self):
         return '-'.join([self.conf.model,

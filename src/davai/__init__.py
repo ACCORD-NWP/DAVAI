@@ -4,4 +4,3 @@ Davai python package: contains command-line interface and davai-specific utiliti
 
 __version__ = "2.0.0"
 
-#from . import vtx

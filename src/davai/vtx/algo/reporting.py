@@ -9,8 +9,7 @@ from vortex.syntax import stdattrs
 from vortex.algo.components import (AlgoComponent, AlgoComponentDecoMixin,
                                     AlgoComponentError)
 from .mixins import context_info_for_task_summary
-from ..util import SummariesStack
-from ...taskutil.experiment import gather_mkjob_xp_conf
+from ..util import SummariesStack, gather_mkjob_xp_conf
 
 #: No automatic export
 __all__ = []

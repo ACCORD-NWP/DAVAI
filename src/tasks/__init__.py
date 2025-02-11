@@ -7,7 +7,7 @@ import io
 
 import vortex
 from vortex.layout.jobs import JobAssistantPlugin
-from davai.util import set_env4git
+from davai.vtx.util import set_env4git
 from bronx.fancies import loggers
 logger = loggers.getLogger(__name__)
 

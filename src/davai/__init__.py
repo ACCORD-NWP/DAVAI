@@ -1,5 +1,5 @@
 """
-Davai python package: contains command-line interface, task utilities and vortex specific resources and AlgoComponents.
+Davai python package: contains command-line interface and davai-specific utilities, resources and AlgoComponents.
 """
 
 __version__ = "2.0.0"

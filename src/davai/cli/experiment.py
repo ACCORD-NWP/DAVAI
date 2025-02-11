@@ -17,7 +17,8 @@ import venv
 
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
-from . import config, guess_host, initialized, __version__
+from .. import __version__
+from . import config, guess_host, initialized
 from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf
 

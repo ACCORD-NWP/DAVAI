@@ -9,8 +9,8 @@ import os
 from vortex import toolbox
 from bronx.stdtypes.date import Period, utcnow
 
-from ..vtx.util import context_info_for_task_summary
-from ..vtx.hooks.summaries import take_the_DAVAI_train
+from ..util import context_info_for_task_summary
+from ..hooks.summaries import take_the_DAVAI_train
 from . import gmkpack_executables_block_tag
 
 

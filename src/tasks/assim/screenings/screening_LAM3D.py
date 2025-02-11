@@ -9,8 +9,8 @@ from vortex import toolbox
 from vortex.layout.nodes import Task
 import davai
 
-from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.taskutil.hooks import hook_adjust_DFI, hook_gnam
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.hooks.namelists import hook_adjust_DFI, hook_gnam
 
 
 class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):

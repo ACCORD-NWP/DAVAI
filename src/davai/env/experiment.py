@@ -563,6 +563,7 @@ class XP(object):
 
     def status(self, task=None):
         """Print status of tasks, read from cache files."""
+        # TODO: transform into a task run in interactive (like ciboulai_init)
         # First we need MTOOLDIR set up for retrieving paths
         set_default_mtooldir()
         # Then set Vortex in path

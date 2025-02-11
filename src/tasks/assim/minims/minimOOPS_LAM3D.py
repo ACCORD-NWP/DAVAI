@@ -11,7 +11,7 @@ from common.util.hooks import update_namelist
 from common.util.hooks import arpifs_obs_error_correl_legacy2oops
 import davai
 
-from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):

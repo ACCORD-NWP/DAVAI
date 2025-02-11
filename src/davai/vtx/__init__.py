@@ -1,13 +1,11 @@
 """
-The DAVAI extension package.
-
-DAVAI stands for *Dispositif d'Aide à la VAlidation d'IFS-ARPEGE-AROME*.
+DAVAI extension package to Vortex.
 """
 
 # Recursive inclusion of packages with potential FootprintBase classes
-from . import algo, data, util, hooks
+from . import util, algo, data, hooks, tasks
 
 #: No automatic export
 __all__ = []
 
-__tocinfoline__ = 'The DAVAI extension'
+__tocinfoline__ = 'DAVAI extension package to Vortex.'

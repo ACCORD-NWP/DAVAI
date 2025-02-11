@@ -10,8 +10,8 @@ from vortex import toolbox
 from vortex.layout.nodes import Task, Driver
 from common.util.hooks import update_namelist
 import davai
-from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.taskutil.hooks import hook_gnam
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.hooks.namelists import hook_gnam
 
 
 class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):

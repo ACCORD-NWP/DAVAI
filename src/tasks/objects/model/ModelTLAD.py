@@ -12,8 +12,8 @@ import davai
 
 from common.util.hooks import arpifs_obs_error_correl_legacy2oops
 
-from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.taskutil.hooks import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb
 
 
 class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):

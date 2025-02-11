@@ -9,7 +9,7 @@ import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Task, Driver
 import davai
-from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class EmptyTemplateTask(Task, DavaiIALTaskMixin, IncludesTaskMixin):

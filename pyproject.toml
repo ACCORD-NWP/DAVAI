@@ -26,32 +26,31 @@ source = "https://github.com/ACCORD-NWP/DAVAI-env.git"
 tracker = "https://github.com/ACCORD-NWP/DAVAI-env/issues"
 
 [project.scripts]
-davai-build = "davai_env.cli.build:main"
-davai-ciboulai_init = "davai_env.cli.ciboulai_init:main"
-davai-config = "davai_env.cli.config:main"
-davai-cwd_is_xp = "davai_env.cli.cwd_is_xp:main"
-davai-get_xp_path = "davai_env.cli.get_xp_path:main"
-davai-new_xp = "davai_env.cli.new_xp:main"
-davai-new_xp_from_bundle = "davai_env.cli.new_xp_from_bundle:main"
-davai-run_tests = "davai_env.cli.run_tests:main"
-davai-run_xp = "davai_env.cli.run_xp:main"
-davai-shelf = "davai_env.cli.shelf:main"
-davai-tests_version = "davai_env.cli.tests_version:main"
-davai-xp_status = "davai_env.cli.xp_status:main"
+davai-build = "davai.env.cli.build:main"
+davai-ciboulai_init = "davai.env.cli.ciboulai_init:main"
+davai-config = "davai.env.cli.config:main"
+davai-cwd_is_xp = "davai.env.cli.cwd_is_xp:main"
+davai-get_xp_path = "davai.env.cli.get_xp_path:main"
+davai-new_xp = "davai.env.cli.new_xp:main"
+davai-new_xp_from_bundle = "davai.env.cli.new_xp_from_bundle:main"
+davai-run_tests = "davai.env.cli.run_tests:main"
+davai-run_xp = "davai.env.cli.run_xp:main"
+davai-shelf = "davai.env.cli.shelf:main"
+davai-tests_version = "davai.env.cli.tests_version:main"
+davai-xp_status = "davai.env.cli.xp_status:main"
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-dir]
-davai_env = "src/davai_env"
-davai_taskutil = "src/davai_taskutil"
+davai = "src/davai"
 tasks = "src/tasks"
 
 [tool.setuptools.package-data]
-"davai_env" = ["conf/*.ini"]
+"davai" = ["conf/*.ini"]
 "tasks" = ["conf/*.ini", "conf/*.yaml"]
 
 [tool.setuptools.dynamic]
-version = {attr = "davai_env.__version__"}
+version = {attr = "davai.__version__"}
 

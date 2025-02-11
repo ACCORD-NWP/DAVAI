@@ -14,9 +14,9 @@ __all__ = ['main']
 def main():
     args = get_args()
     if args.action == "show":
-        davai_env.show_config()
+        show_config()
     else:
-        davai_env.preset_user_config_file(prompt=True)
+        preset_user_config_file(prompt=True)
 
 def get_args():
     parser = argparse.ArgumentParser(description="Show current DAVAI-env configuration, " +

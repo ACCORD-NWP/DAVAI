@@ -301,7 +301,7 @@ class XP(object):
         venv.create(self.venv_path,
                     with_pip=True,
                     symlinks=False,
-                    prompt='venv:{}'.format(self.xpid))
+                    prompt='venv@davai:{}'.format(self.xpid))
         print("... virtualenv created.")
         # install DAVAI-tests and dependencies in the venv
         print("Setup virtualenv...")

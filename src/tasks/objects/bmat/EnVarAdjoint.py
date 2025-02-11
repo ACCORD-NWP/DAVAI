@@ -12,8 +12,8 @@ import davai
 
 from common.util.hooks import arpifs_obs_error_correl_legacy2oops
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai_taskutil.hooks import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb, hook_ensemble_build
+from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.taskutil.hooks import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb, hook_ensemble_build
 
 
 class EnVarAdjoint(Task, DavaiIALTaskMixin, IncludesTaskMixin):

@@ -9,7 +9,7 @@ from vortex import toolbox
 from vortex.layout.nodes import Task
 from common.util.hooks import update_namelist
 
-from davai_taskutil.mixins import DavaiTaskMixin
+from davai.taskutil.mixins import DavaiTaskMixin
 
 
 class BatorODB(Task, DavaiTaskMixin):

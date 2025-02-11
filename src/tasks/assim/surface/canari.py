@@ -9,8 +9,8 @@ from vortex import toolbox
 from vortex.layout.nodes import Task
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai_taskutil.hooks import hook_gnam
+from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.taskutil.hooks import hook_gnam
 
 
 class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):

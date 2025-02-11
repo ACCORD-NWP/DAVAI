@@ -10,8 +10,8 @@ from vortex.layout.nodes import Task
 from common.util.hooks import update_namelist
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai_taskutil.hooks import hook_OOPS_2_CNT0
+from davai.taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.taskutil.hooks import hook_OOPS_2_CNT0
 
 
 class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):

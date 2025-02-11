@@ -8,6 +8,7 @@ from vortex import toolbox
 from vortex.layout.nodes import Task, Driver
 
 import davai  # for algos and specific resources
+from davai.vtx.hooks.summaries import send_to_DAVAI_server
 
 
 def setup(t, **kw):
@@ -52,7 +53,7 @@ class CiboulaiXpSetup(Task):
                 block          = 'summaries_stack',
                 experiment     = self.conf.xpid,
                 format         = 'json',
-                hook_send      = (davai.vtx.hooks.summaries.send_to_DAVAI_server,
+                hook_send      = (send_to_DAVAI_server,
                                   self.conf.expertise_fatal_exceptions),
                 kind           = 'xpinfo',
                 local          = 'xpinfo.[format]',

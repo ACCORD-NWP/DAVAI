@@ -3,8 +3,8 @@ using Documenter
 
 include("pages.jl")
 
-format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true", 
-                    ) 
+format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true",
+                    )
 
 makedocs(
     sitename = "Davai",
@@ -14,6 +14,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/ACCORD-NWP/DAVAI.git",
-    devbranch = "main",   
+    devbranch = "main",
     devurl = "main",
 )

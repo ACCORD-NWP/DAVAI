@@ -10,7 +10,7 @@ on:
       
 jobs:
   build:
-    if: github.repository == 'ACCORD-NWP/DAVAI-env' 
+    if: github.repository == 'ACCORD-NWP/DAVAI' 
     permissions: 
       contents: write
       statuses: write 

@@ -11,13 +11,12 @@ import tempfile
 import subprocess
 import tarfile
 
-from . import config, guess_host
+from . import config, DAVAI_HOST
 from .util import expandpath
 
 # set variables
-host = guess_host()
 vortex_cache_config = os.path.join(config['packages']['vortex'],
-                                   'conf', 'cache-{}.ini'.format(host))
+                                   'conf', 'cache-{}.ini'.format(DAVAI_HOST))
 cache_config = configparser.ConfigParser()
 cache_config.read(expandpath(vortex_cache_config))
 cache_config.read(expandpath(cache_config['marketplace-vortex']['externalconf_davai_path']))

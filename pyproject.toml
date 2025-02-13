@@ -48,7 +48,7 @@ davai = "src/davai"
 tasks = "src/tasks"
 
 [tool.setuptools.package-data]
-"davai" = ["conf/*.ini"]
+"davai.cli" = ["conf/*.ini"]
 "tasks" = ["conf/*.ini", "conf/*.yaml"]
 
 [tool.setuptools.dynamic]

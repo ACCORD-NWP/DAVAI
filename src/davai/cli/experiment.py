@@ -18,11 +18,9 @@ import venv
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
 from .. import __version__
-from . import config, guess_host, initialized
-from . import DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
-from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf
-
-initialized()
+from . import config
+from . import DAVAI_HOST, DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
+from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf, initialized
 
 
 class XPmaker(object):
@@ -64,7 +62,7 @@ class XPmaker(object):
                davai_version=None,
                davai_remote_repo=config['defaults']['davai_remote_repo'],
                usecase=config['defaults']['usecase'],
-               host=guess_host(),
+               host=DAVAI_HOST,
                genesis_commandline=None,
                bundle_src_dir=None):
         """
@@ -169,7 +167,7 @@ class XP(object):
               davai_version=None,
               davai_remote_repo=config['defaults']['davai_remote_repo'],
               usecase=config['defaults']['usecase'],
-              host=guess_host(),
+              host=DAVAI_HOST,
               bundle_src_dir=None):
         """
         Setup the experiment as a venv (at creation time).
@@ -326,7 +324,7 @@ class XP(object):
             target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
         os.symlink(target, link)
 
-    def _setup_conf_general(self, editable, host=guess_host()):
+    def _setup_conf_general(self, editable, host=DAVAI_HOST):
         """General config file for the jobs."""
         basename = '{}.ini'.format(host)
         link = os.path.join(self.xp_path, self.general_config_file)
@@ -536,7 +534,7 @@ class XP(object):
                      fake_build=fake_build,
                      **self.sources_to_test)
         # run build monitoring (interactively)
-        if guess_host() != 'atos_bologna':  # FIXME: dirty
+        if DAVAI_HOST != 'atos_bologna':  # FIXME: dirty
             set_default_mtooldir()
         self._launch('build.wait4build', 'build',
                      drymode=drymode,

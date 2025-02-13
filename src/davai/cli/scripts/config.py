@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding:Utf-8 -*-
 """
-Show current DAVAI-env configuration, or provide a commented user config template, if not existing.
+Show current DAVAI-env configuration.
 """
 
 import argparse
 
-from .. import show_config, preset_user_config_file
+from ..util import show_config
 
 __all__ = ['main']
 
@@ -15,13 +15,12 @@ def main():
     args = get_args()
     if args.action == "show":
         show_config()
-    else:
-        preset_user_config_file(prompt=True)
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Show current DAVAI-env configuration, " +
-                                                 "or provide a commented user config template, if not existing.")
+    parser = argparse.ArgumentParser(description="Show current DAVAI-env configuration.")
     parser.add_argument('action',
-                        choices=['show', 'preset_user'])
+                        choices=['show', ],
+                        nargs='?',
+                        default='show')
     return parser.parse_args()
 

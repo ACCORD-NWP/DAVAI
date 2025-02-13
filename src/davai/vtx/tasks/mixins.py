@@ -528,10 +528,10 @@ class GmkpackMixin(BuildMixin):
     def _set_gmkpack_env(self):
         """Set env according to config file. Do not rely on user's install of gmkpack."""
         if 'GMKROOT' in self.conf:
-            self.env['PATH'] = ':'.join([self.conf['GMKROOT'], self.env['PATH']])
-        for k in ('GMK_SUPPORT', 'GMKFILE'):
+            self.env['PATH'] = ':'.join([os.path.expandvars(self.conf['GMKROOT']), self.env['PATH']])
+        for k in ('GMK_OPT', 'GMK_SUPPORT', 'GMKFILE', 'HOMEPACK'):
             if k in self.conf:
-                self.env[k] = self.conf[k]
+                self.env[k] = os.path.expandvars(self.conf[k])
 
     @property
     def gmkpack_compiler_label(self):

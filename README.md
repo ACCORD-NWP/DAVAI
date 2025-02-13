@@ -57,7 +57,10 @@ More details to be found in the documentation, in particular in case of a multi-
 Tests versions and reference experiments
 ----------------------------------------
 
-=> https://github.com/ACCORD-NWP/DAVAI/wiki/Versions-of-tests
+From CY50+, a default version of Davai can be found in IAL repo, file `.davai_version`.
+
+However, past the declaration of a cycle, a new version can be recommended, in which case it will be referenced on this
+wiki page: https://github.com/ACCORD-NWP/DAVAI/wiki/Versions-of-tests
 
 Documentation
 -------------

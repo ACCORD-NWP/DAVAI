@@ -44,6 +44,7 @@ class Pack2Bin(Task, DavaiTaskMixin, GmkpackMixin):
         return programs
 
     def process(self):
+        self._set_gmkpack_env()
         self.tasks2wait4_add()  # warn wait4build manager to wait for this task
         self._wrapped_init()
 

@@ -26,6 +26,7 @@ def setup(t, **kw):
 class Bundle2Pack(Task, DavaiTaskMixin, GmkpackMixin):
 
     def process(self):
+        self._set_gmkpack_env()
         self._wrapped_init()
 
         # 0./ Promises

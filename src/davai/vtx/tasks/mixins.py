@@ -525,6 +525,14 @@ class BuildMixin(object):
 class GmkpackMixin(BuildMixin):
     """A mixin for tasks that deal with building of executables with gmkpack."""
 
+    def _set_gmkpack_env(self):
+        """Set env according to config file. Do not rely on user's install of gmkpack."""
+        if 'GMKROOT' in self.conf:
+            self.env['PATH'] = ':'.join([self.conf['GMKROOT'], self.env['PATH']])
+        for k in ('GMK_SUPPORT', 'GMKFILE'):
+            if k in self.conf:
+                self.env[k] = self.conf[k]
+
     @property
     def gmkpack_compiler_label(self):
         """Return gmkpack's 'compiler_label' from config's compilation_flavour."""

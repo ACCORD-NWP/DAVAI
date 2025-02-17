@@ -75,7 +75,6 @@ class GitRef2Pack(Task, DavaiTaskMixin, GmkpackMixin):
                 crash_witness  = False,
                 engine         = 'algo',
                 git_ref        = self.conf.IAL_git_ref,
-                homepack       = self.conf.get('homepack', None),
                 kind           = 'ialgitref2pack',
                 pack_type      = self.conf.packtype,
                 preexisting_pack = self.conf.preexisting_pack,

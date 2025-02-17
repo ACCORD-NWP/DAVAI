@@ -90,7 +90,6 @@ class Bundle2Pack(Task, DavaiTaskMixin, GmkpackMixin):
                 compiler_label = self.gmkpack_compiler_label,
                 crash_witness  = False,
                 engine         = 'algo',
-                homepack       = self.conf.get('homepack', None),
                 kind           = 'bundle2pack',
                 pack_type      = self.conf.packtype,
                 preexisting_pack = self.conf.preexisting_pack,

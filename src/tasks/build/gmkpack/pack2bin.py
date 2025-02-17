@@ -91,7 +91,6 @@ class Pack2Bin(Task, DavaiTaskMixin, GmkpackMixin):
                 cleanpack      = self.conf.get('cleanpack', False),
                 crash_witness  = True,
                 engine         = 'algo',
-                homepack       = self.conf.get('homepack', None),
                 kind           = 'pack_build_executables',
                 packname       = self.guess_pack(abspath=False, to_bin=False),
                 programs       = self.programs,

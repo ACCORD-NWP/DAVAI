@@ -531,6 +531,7 @@ class GmkpackMixin(BuildMixin):
             self.env['PATH'] = ':'.join([os.path.expandvars(self.conf['GMKROOT']), self.env['PATH']])
         for k in ('GMK_OPT', 'GMK_SUPPORT', 'GMKFILE', 'HOMEPACK'):
             if k in self.conf:
+                print("Export gmkpack variables {}={}".format(k, os.path.expandvars(self.conf[k])))
                 self.env[k] = os.path.expandvars(self.conf[k])
 
     @property

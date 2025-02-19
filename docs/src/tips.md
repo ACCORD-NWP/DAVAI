@@ -42,12 +42,12 @@
   to list the jobs and then
 
   ```
-  davai-run_tests <category.job>
+  davai-run_tests -j <category.job>
   ```
   
   !!! note "Example" 
       ```
-      davai-run_tests forecasts.standalone_forecasts
+      davai-run_tests -j forecasts.standalone_forecasts
       ```
 
 - The syntax `category.job` indicates that the job to be run is the **Driver** in `./tasks/category/job.py`

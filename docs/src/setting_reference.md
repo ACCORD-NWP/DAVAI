@@ -20,7 +20,7 @@ contributions to `CY49T1`.
     `git checkout -b on_49 [<chosen_initial_ref]`
 
 3.  Set the reference experiment:\
-    `davai-new_xp CY49 -v on_49 -u ELP –origin <URL of my DAVAI-tests repo>`\
+    `davai-new_xp CY49 -v on_49 -u ELP --origin <URL of my DAVAI-tests repo>`\
     $\hookrightarrow$ `dv-xxxx-machine@user`\
     Note:
 
@@ -28,7 +28,7 @@ contributions to `CY49T1`.
         this usecase so it could be used as a reference for both
         usecases.
 
-    -   `–origin <URL...>` to clone that repo in which you created the
+    -   `--origin <URL...>` to clone that repo in which you created the
         branch
 
     -   in config of the experiment, set `archive_as_ref = True` : the

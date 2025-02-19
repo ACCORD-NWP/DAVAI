@@ -14,7 +14,7 @@ complementary:
 -   to run a single job:
 
     ```
-    davai-run_tests <job identifier as given by -l option>
+    davai-run_tests -j <job identifier as given by -l option>
     ```
 
 Some tests are gathered together within a single job. There are 2

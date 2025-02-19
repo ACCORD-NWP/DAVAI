@@ -14,6 +14,7 @@ import configparser
 import yaml
 import time
 import venv
+import shutil
 
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
@@ -317,22 +318,28 @@ class XP(object):
     def _setup_conf_usecase(self, editable):
         """Usecase config : set of jobs/tests."""
         basename = '{}.yaml'.format(self.usecase)
-        link = os.path.join(self.xp_path, 'conf', basename)
+        loc = os.path.join(self.xp_path, 'conf', basename)
         if editable:
             target = os.path.join('..', self.davai_repo_name, 'src', 'tasks', 'conf', basename)
+            os.symlink(target, loc)
         else:
             target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
-        os.symlink(target, link)
+            bak = loc + '.bak'
+            os.symlink(target, bak)
+            shutil.copyfile(target, loc)
 
     def _setup_conf_general(self, editable, host=DAVAI_HOST):
         """General config file for the jobs."""
         basename = '{}.ini'.format(host)
-        link = os.path.join(self.xp_path, self.general_config_file)
+        loc = os.path.join(self.xp_path, self.general_config_file)
         if editable:
             target = os.path.join('..', self.davai_repo_name, 'src', 'tasks', 'conf', basename)
+            os.symlink(target, loc)
         else:
             target = os.path.join(self._venv_site_path, 'tasks', 'conf', basename)
-        os.symlink(target, link)
+            bak = loc + '.bak'
+            os.symlink(target, bak)
+            shutil.copyfile(target, loc)
 
     def _setup_packages(self):
         """Link necessary packages in XP."""

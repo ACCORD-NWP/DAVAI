@@ -81,7 +81,6 @@ class Bundle2Pack(Task, DavaiTaskMixin, GmkpackMixin):
 
         # 2.2/ Compute step
         if 'compute' in self.steps:
-            self._notify_start_compute()
             self.sh.title('Toolbox algo = tbalgo')
             tbalgo = toolbox.algo(
                 bundle_src_dir = self.bundle_src_dir,

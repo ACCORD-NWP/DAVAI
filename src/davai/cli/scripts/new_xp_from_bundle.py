@@ -22,7 +22,8 @@ def main():
 
     # create new experiment
     XPmaker.new_xp(args.sources_to_test,
-                   args.davai_version,
+                   editable=args.editable,
+                   davai_version=args.davai_version,
                    davai_remote_repo=args.davai_remote_repo,
                    usecase=args.usecase,
                    host=args.host,
@@ -40,6 +41,9 @@ def get_args():
                             "if not will assume the provided 'bundle' argument is a reference",
                             "in the IAL-bundle repository.",
                             "The repository can be specified via arg -r in this latter case."]))
+    parser.add_argument('-e', '--editable',
+                        action='store_true',
+                        help="Editable: use an editable version of Davai sources (hence a brand new venv).")
     parser.add_argument('-r', '--IAL_bundle_repo',
                         default=None,
                         dest='IAL_bundle_repository',

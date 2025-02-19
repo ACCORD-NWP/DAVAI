@@ -21,17 +21,32 @@ Installation
 * on [`Atos/bologna`@ECMWF](docs/src/atos_bologna.md)
 
 * or to setup your own install:
-  * Clone this repository, e.g. in `~/repositories/`:\
-    `git clone https://github.com/ACCORD-NWP/DAVAI.git`
   * Create a venv:
-    - `python -m venv ~/venvs/davai`
-    - `source ~/venvs/davai`
-  * Install in your venv:
-    - `pip install [-e] ~/repositories/DAVAI`
+    ```
+    python -m venv ~/venvs/davai`
+    source ~/venvs/davai
+    ```
+  * Then either install your own working version:
+    - Clone this repository, e.g. in `~/repositories/` and install it:
+      ```
+      git clone https://github.com/ACCORD-NWP/DAVAI.git
+      pip install [-e] DAVAI
+      ```
+    - Or from PyPI:
+      ```
+      pip install davai
+      ```
 
-* If you want to inspect possible customizations:
-  - `davai-config show`
-  - `davai-config preset_user`
+> [!TIP]
+> Useful function to put in your `.bashrc`:
+> ```
+> function davai-activate() {
+>   path="${1:-.}"
+>   source $path/venv/bin/activate
+>   }
+> ```
+> so as to activate an experiment venv using `davai-activate` from within it, or `davai-activate path/to/xp`.
+
 
 Quick start
 -----------
@@ -70,20 +85,26 @@ The user guide is available [here](https://accord-nwp.github.io/DAVAI/).
 Dependencies
 ------------
 
-DAVAI is mainly written in Python3. Make sure you have Python3.10 at least.
-It also uses Git, make sure you have a "recent enough" version of it, or some commands may not work properly.
-DAVAI works over a number of NWP packages, tools, software, that need to be installed on the machine with their own
-procedures. These include:
-
-* [_**Vortex**_](https://opensource.umr-cnrm.fr/projects/vortex):
-  scripting system used for the definition of tasks (resources, executables launch, ...) and the running
-  of the jobs. It embeds a number of necesary-as-well sub-packages.
+DAVAI is mainly written in Python. Make sure you have Python3.10 at least.
+Python dependencies are included in the `pyproject.toml` file.
+They include in particular:
 * [_**IAL-build**_](https://github.com/ACCORD-NWP/IAL-build):
   wrappers around `git` and `gmkpack` (and eventually other building tools) to build IAL executables from Git
 * [_**IAL-expertise**_](https://github.com/ACCORD-NWP/IAL-expertise):
   tools to analyse automatically the outputs of NWP configurations -- norms, Jo-tables, fields in FA/GRIB files, ...
 * [_**EPyGrAM**_](https://github.com/UMR-CNRM/EPyGrAM): a Python library for handling output data from the IAL models;
   it is used here within _IAL-expertise_.
+Note that the Vortex package, currently used in version 1.x, is not yet available in these dependencies; cf. below.
+
+It also uses Git, make sure you have a "recent enough" version of it, or some commands may not work properly.
+DAVAI works over a number of NWP packages, tools, softwares, that need to be pre-installed on the machine with their own
+procedures. These include:
+
+* [_**Vortex**_](https://opensource.umr-cnrm.fr/projects/vortex):
+  scripting system used for the definition of tasks (resources, executables launch, ...) and the running
+  of the jobs. It embeds a number of necesary-as-well sub-packages.
+* [_**Gmkpack**_](https://www.umr-cnrm.fr/gmapdoc/spip.php?article79):
+  build system for IAL. Documentation is outdated.
 
 These packages may already be pre-installed on MF's HPC or other platforms where DAVAI is already ported.
 Cf. the "Local complements" in "Installation" section, in this case.

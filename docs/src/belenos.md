@@ -4,20 +4,23 @@ Complementary information about DAVAI setup on `belenos` HPC machine @ MF
 Quick install
 -------------
 
-```
+Set in your `.bash_profile`:
+```bash
 module use ~mary/public/modulefiles
-module load davai
 ```
 
-If you want to specify a fixed version: `module load davai/x.y.z`
-To know what version (`x.y.z`) of davai to use, cf. https://github.com/ACCORD-NWP/DAVAI/wiki/Versions-of-tests
+then when you need to load davai to create a new testing experiment:
+```bash
+module load davai/2.0.0
+```
 
-You can put the first line in your `.bash_profile`, and execute the second only when needed.
+Note: the version of the tests used in your experiment can be different from the version loaded here.
+This `module load ...` is only useful to prepend the PATH with `davai-new_xp*` command(s).
 
 ---
 
-Pre-requirements (if not already set up)
-----------------------------------------
+Pre-requirements
+----------------
 
 1. Load modules (conveniently in your `.bash_profile`):
    ```

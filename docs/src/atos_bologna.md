@@ -4,48 +4,37 @@ Complementary information about DAVAI setup on `aa|ab|ac|ad` HPC machine @ ECMWF
 Quick install
 -------------
 
-```
+Set in your `.bash_profile`:
+```bash
 module use ~acrd/public/modulefiles
-module load davai
 ```
 
-If you want to specify a fixed version: `module load davai/x.y.z`
-To know what version (`x.y.z`) of davai tests to use, cf. https://github.com/ACCORD-NWP/DAVAI-tests/wiki/Versions-of-tests
+then when you need to load davai to create a new testing experiment:
+```bash
+module load davai/2.0.0
+```
 
-You can put the first line in your `.bash_profile`, and execute the second only when needed.
+Note: the version of the tests used in your experiment can be different from the version loaded here.
+This `module load ...` is only useful to prepend the PATH with `davai-new_xp*` command(s).
 
 ---
 
-Pre-requirements (if not already set up)
-----------------------------------------
+Pre-requirements
+----------------
 
-1. Load the required environment for GMKPACK compilation and DAVAI execution. It is **REQUIRED** that you add the following to your `.bash_profile`:
+1. Recommended environment in your `.bash_profile`:
    ```bash
-   module purge
-   module use /home/acrd/public/modulefiles
-   module load intel/2021.4.0 prgenv/intel python3/3.10.10-01 ecmwf-toolbox/2021.08.3.0 davai/master
-
-   # Gmkpack is installed at Ryad El Khatib's
-   HOMEREK=~rme
-   export GMKROOT=$HOMEREK/public/bin/gmkpack
-   # use efficiently filesystems
-   export ROOTPACK=$PERM/rootpack
-   export HOMEPACK=$PERM/pack
-   export GMKTMP=$TMPDIR/gmktmp
-   # default compilation options
-   export GMKFILE=OMPIIFC2104.AA
-   export GMK_OPT=x
-   # update paths
-   export PATH=$GMKROOT/util:$PATH
-   export MANPATH=$MANPATH:$GMKROOT/mani
+   module load python3/3.10.10-01
+   module load prgenv/intel
    ```
 
 2. Ensure permissions to `accord` group (e.g. with `chgrp`) for support, something like:
    ```bash
    for d in $HOME/davai $HOME/pack $SCRATCH/mtool/depot
    do
-   mkdir -p $d
-   chgrp -R accord $d
-   chmod g+s $d
+     mkdir -p $d
+     chgrp -R accord $d
+     chmod g+s $d
    done
    ```
+   If you skip this, support cannot be granted.

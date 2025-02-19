@@ -27,9 +27,6 @@ In the `[gitref2pack]` section:
     (preferably to modifying the environment variable, so that will be
     specific to that experiment only)
 
--   to avoid cleaning all `.o` and `.a` when (re-)populating the pack:\
-    $\hookrightarrow$ set `cleanpack = False`\
-
 In the `[pack2bin]` section:
 
 -   to make the `pack2bin` task crash more quickly after a

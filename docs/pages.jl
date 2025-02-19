@@ -20,7 +20,6 @@ pages = [
         "Input data" => "inputdata.md",
         "Update namelists" => "uget/update_namelists.md",
         "Other options" => "otheroptions.md",
-        "User configuration" =>  "userconfiguration.md",
         "Parallel profiling" => "parallelprofiling.md",
         "Expert thresholds" => "expertthresholds.md"
     ],

@@ -10,6 +10,7 @@
        ```
        davai-new_xp mary_CY48T1_cleaning -v DV48T1
        ```
+   
    An experiment with a unique experiment ID is created and prompted as output of the command, together with its path.
 
    - To know what is the version to be used for a given development: See [here](https://github.com/ACCORD-NWP/DAVAI-tests/wiki)
@@ -17,21 +18,20 @@
    - See Appendix for a more comprehensive approach to tests versioning.
    - If the version you are requesting is not known, you may need to specify the DAVAI-tests origin repository from which to clone/fetch it, using argument `–origin <URL of the remote DAVAI-tests.git>`
 
-2. Go to the (prompted) experiment directory.
+3. Go to the (prompted) experiment directory.
    
    - If you want to set some options differently from the default, open file `conf/davai_nrv.ini` and tune the parameters in the `[DEFAULT]` section.
      The usual tunable parameters are detailed in Section options
    - Load the experiment _**venv**_: `source venv/bin/activate`
 
-> [!TIP]
-> Useful function to put in your `.bashrc`:
-> ```
-> function davai-activate() {
->   path="${1:-.}"
->   source $path/venv/bin/activate
->   }
-> ```
-> so as to activate an experiment venv using `davai-activate` from within it, or `davai-activate path/to/xp`.
+!!! tip "Useful function to put in your `.bashrc`:"
+    ```
+    function davai-activate() {
+      path="${1:-.}"
+      source $path/venv/bin/activate
+      }
+    ```
+    so as to activate an experiment venv using `davai-activate` from within it, or `davai-activate path/to/xp`.
 
 3. Launch the build and tests:
 

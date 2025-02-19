@@ -27,10 +27,6 @@ To switch to this mode:
 -   create a new experiment with the same arguments but `-u ELP` and go
     in it
 
--   for a faster build (no re-compilation), edit config file
-    `conf/davai_elp.ini` and in section `[gitref2pack]`, set
-    `cleanpack = False`
-
 -   `davai-run_xp`
 
 Instead of 50$^+$ tests, the ELP mode will provide hundreds of more

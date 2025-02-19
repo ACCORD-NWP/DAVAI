@@ -17,15 +17,12 @@ This testing experiment will consist in:
 -   `conf/sources.yaml` : information about the sources to be tested, in
     terms of Git or bundle
 
--   `tasks/` : templates of single tasks and jobs
-
--   links to the python packages that are used by the scripts (`vortex`,
-    `epygram`, `ial_build`, `ial_expertise`)
+-   `venv/` : python venv to be used by the experiment. Either a link to an existing venv, or an actual virtualenv in _editable_ mode
 
 -   a `logs` directory/link will appear after the first execution,
     containing log files of each job.
 
--   `DAVAI-tests` : a clone of the DAVAI-tests repository, checkedout on
-    the requested version of the tests, on which point the `tasks/` and
-    `conf/`
+-   `DAVAI` : in case of _editable_ mode, a clone of the DAVAI repository, checkedout on
+    the requested version, used by the venv
 
+-   links to the python packages that are used by the scripts and not pip-packaged yet (only `vortex` remains at present)

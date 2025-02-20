@@ -341,7 +341,7 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
                     default = '__any__',
                     values = ['__any__', '__finally__', '__none__']
                 ),
-                fake_it = dict(
+                fake_build = dict(
                     info = " ".join([
                         "Fake the build, assuming the binaries have been recompiled manually already.",
                         "Better know what you're doing..."]),
@@ -355,8 +355,8 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
 
     def execute(self, rh, kw):  # @UnusedVariable
         from ial_build.algos import pack_build_executables  # @UnresolvedImport
-        if self.fake_it:
-            print("!!! Fake build ! Assuming binaries already present !!!")
+        if self.fake_build:
+            print("!!! Fake build ! Assuming binaries already present in pack !!!")
         else:
             pack_build_executables(self.packname,
                                    programs=self.programs,

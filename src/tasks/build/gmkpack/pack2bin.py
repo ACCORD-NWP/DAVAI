@@ -91,13 +91,14 @@ class Pack2Bin(Task, DavaiTaskMixin, GmkpackMixin):
                 cleanpack      = self.conf.get('cleanpack', False),
                 crash_witness  = True,
                 engine         = 'algo',
+                fake_build     = self.conf.get('fake_build', False),
+                fatal_build_failure = self.conf.fatal_build_failure,
                 kind           = 'pack_build_executables',
                 packname       = self.guess_pack(abspath=False, to_bin=False),
                 programs       = self.programs,
                 other_options  = FPDict({'GMK_THREADS':self.conf.threads, 'Ofrt':self.conf.Ofrt,
                                          'optvcc':self.conf.get('optvcc', None)}),
                 regenerate_ics = self.conf.regenerate_ics,
-                fatal_build_failure = self.conf.fatal_build_failure,
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()

@@ -11,7 +11,7 @@ module use ~acrd/public/modulefiles
 
 then when you need to load davai to create a new testing experiment:
 ```bash
-module load davai/2.0.0
+module load davai/2
 ```
 
 Note: the version of the tests used in your experiment can be different from the version loaded here.

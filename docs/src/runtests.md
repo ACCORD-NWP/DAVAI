@@ -1,22 +1,22 @@
 ### Run tests
 
-1. Create your experiment, specifying which version of the tests you want to use:
+1. Create your experiment, specifying which version of the tests you need to use:
 
    ```
-   davai-new_xp <my_branch> -v <tests_version>
+   davai-new_xp <my_branch> [-v <tests_version>]
    ```
 
    !!! tip "Example" 
        ```
-       davai-new_xp mary_CY48T1_cleaning -v DV48T1
+       davai-new_xp mary_CY50_superdev -v 2.0.0
        ```
    
    An experiment with a unique experiment ID is created and prompted as output of the command, together with its path.
 
-   - To know what is the version to be used for a given development: See [here](https://github.com/ACCORD-NWP/DAVAI-tests/wiki)
+   - To know what is the version to be used for a given development: See [here](versions.md)
    - See `davai-new_xp -h` for more options on this command
    - See Appendix for a more comprehensive approach to tests versioning.
-   - If the version you are requesting is not known, you may need to specify the DAVAI-tests origin repository from which to clone/fetch it, using argument `–origin <URL of the remote DAVAI-tests.git>`
+   - If the version you are requesting is not known, you may need to specify the DAVAI origin repository from which to clone/fetch it, using argument `--origin <URL of the remote DAVAI.git>`
 
 2. Go to the (prompted) experiment directory.
    

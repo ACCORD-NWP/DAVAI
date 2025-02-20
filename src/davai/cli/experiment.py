@@ -147,6 +147,7 @@ class XP(object):
             if xpid_or_path == '.':
                 path = os.path.realpath(os.getcwd())
             else:
+                assert os.path.exists(xpid_or_path), "This path does not exist: {}".format(xpid_or_path)
                 path = os.path.realpath(os.path.abspath(xpid_or_path))
             rootlen = len(XPmaker.experiments_rootdir) + 1
             assert path.startswith(XPmaker.experiments_rootdir) and len(path) > rootlen, \

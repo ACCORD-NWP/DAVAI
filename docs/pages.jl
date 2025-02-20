@@ -12,7 +12,8 @@ pages = [
         "MTOOL" => "mtool.md",
         "First tips" => "tips.md"
     ],
-    "Advanced topics" => [
+    "In more details" => [
+        "Versions" => "versions.md",
         "Build" => "build.md",
         "Rerun tests" => "rerun.md",
         "Investigate Problems" => "investigatingproblems.md",

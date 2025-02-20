@@ -1,5 +1,7 @@
 ## Versioning of tests
 
+:warning: _**outdated from version 2.0+, to be updated...**_
+
 The following reasons may require to update the tests:
 
 1. Update the input resources or a task template script, to **change the purpose or context of a test** (e.g. new observations or

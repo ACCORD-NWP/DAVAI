@@ -278,7 +278,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role           = 'OOPSFullposNamelists',
                 binary         = 'arpifs',
                 format         = 'ascii',
-                genv           = self.conf.davaienv,
+                genv           = self.conf.davaienv,  # not in appenv because of special toy truncation
                 object         = ['149','63'],  
                 kind           = 'namelist',
                 local          = 'fp_change_resol_[object].nam',

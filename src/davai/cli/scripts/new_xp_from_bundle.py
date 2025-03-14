@@ -39,8 +39,8 @@ def get_args():
                             "a git ref (tag, commit) in the IAL-bundle repository.",
                             "First guess will be to check if the local file exists,",
                             "if not will assume the provided 'bundle' argument is a reference",
-                            "in the IAL-bundle repository.",
-                            "The repository can be specified via arg -r in this latter case."]))
+                            "in the IAL-bundle repository, in which case",
+                            "the repository has to be specified via arg -r."]))
     parser.add_argument('-e', '--editable',
                         action='store_true',
                         help="Editable: use an editable version of Davai sources (hence a brand new venv).")
@@ -85,9 +85,13 @@ def get_args():
         # local bundle file
         sources_to_test = dict(IAL_bundle_file=os.path.abspath(args.bundle))
     else:
-        # git ref in an IAL-bundle repo
-        assert args.IAL_bundle_repository is not None, \
-        "If 'bundle' is an IAL-bundle git ref, you must provide a repository (-r) where to find it."
+        if args.IAL_bundle_repository is None:
+            if args.bundle.endswith('.yml') or args.bundle.endswith('.yaml'):
+                # seems like an invalid path
+                raise IOError("Bundle '{}' is not a path to an existing file".format(args.bundle))
+            else:
+                # git ref in an IAL-bundle repo
+                raise IOError("If 'bundle' is an IAL-bundle git ref, you must provide a repository (-r) where to find it.")
         local_repo = os.path.abspath(args.IAL_bundle_repository)
         if os.path.isdir(local_repo):
             IAL_bundle_repository = local_repo

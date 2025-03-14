@@ -7,6 +7,7 @@ from vortex import toolbox
 from vortex.layout.nodes import Task, Driver, Family, LoopFamily
 
 from davai.vtx.tasks.mixins import DavaiTaskMixin, GmkpackMixin
+from ial_build.bundle import TmpIALbundleRepo
 
 
 def setup(t, **kw):

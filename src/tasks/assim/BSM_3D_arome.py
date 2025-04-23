@@ -26,7 +26,8 @@ def setup(t, **kw):
                                 # delayed_fail to let the minimOOPS run before raising error
                                 MinimCNT0(tag='minimCNT0', ticket=t, on_error='delayed_fail', **kw),
                                 MinimOOPS(tag='minimOOPS', ticket=t, **kw),
-                                ], **kw)
+                                ], **kw),
+                            AnalyseLAM3D(tag='AnalyseLAM3D', ticket=t, **kw)
                             ], **kw),
                         ], **kw),
                     ], **kw),

@@ -12,6 +12,7 @@ from common.util.hooks import arpifs_obs_error_correl_legacy2oops
 import davai
 
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.hooks.namelists import hook_gnam
 
 
 class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -195,9 +196,20 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.davaienv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
-                object         = ['observations_tlad','standard_geometry','bmatrix',
-                                  'write_analysis', 'oops_write_spec'],
-                source         = 'OOPS_ARO/naml_[object]',
+                object         = ['standard_geometry','bmatrix_aro'],
+                source         = 'objects/naml_[object]',
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'OOPSObsObjectsNamelists',
+                binary         = 'arome',
+                format         = 'ascii',
+                intent         = 'inout',
+                genv           = self.conf.appenv,
+                kind           = 'namelist',
+                local          = 'naml_[object]',
+                object         = ['observations_aro'],
+                source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -207,8 +219,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.davaienv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
-                object         = ['gom_setup_0', 'gom_setup_hres', 'jb_cov'],
-                source         = 'OOPS_ARO/namelist_[object]',
+                object         = ['gom_setup_0', 'gom_setup_hres'],  #, 'jb_cov'
+                source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -219,8 +231,22 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
-                object         = ['nonlinear_model', 'linear_model', 'traj_model'],
-                source         = 'OOPS_ARO/naml_[object]',
+                hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
+                object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
+                source         = 'objects/naml_[object]',
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'OOPSWriteObjectsNamelists',
+                binary         = 'arome',
+                format         = 'ascii',
+                intent         = 'inout',
+                genv           = self.conf.appenv,
+                kind           = 'namelist',
+                local          = 'naml_[object]',
+                hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
+                object         = ['write_analysis_aro'],
+                source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
@@ -290,7 +316,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             )
             #-------------------------------------------------------------------------------
 
-        self._notify_inputs_done()
         # 2.2/ Compute step
         if 'compute' in self.steps:
             self._notify_start_compute()

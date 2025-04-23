@@ -9,8 +9,8 @@ from vortex import toolbox
 from vortex.layout.nodes import Task
 import davai
 
+from davai.vtx.tasks.hooks import hook_gnam
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.vtx.hooks.namelists import hook_adjust_DFI, hook_gnam
 
 
 class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -195,9 +195,19 @@ class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
-                hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
-                object         = ['observations_aro','standard_geometry','bmatrix_aro',
-                                  'write_analysis_aro'],
+                object         = ['standard_geometry','bmatrix_aro'],
+                source         = 'objects/naml_[object]',
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'OOPSObsObjectsNamelists',
+                binary         = 'arome',
+                format         = 'ascii',
+                intent         = 'inout',
+                genv           = self.conf.appenv,
+                kind           = 'namelist',
+                local          = 'naml_[object]',
+                object         = ['observations_aro'],
                 source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
@@ -208,7 +218,7 @@ class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
-                object         = ['gom_setup', 'gom_setup_hres'],
+                object         = ['gom_setup_0', 'gom_setup_hres'], #, 'gom_setup'
                 source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
@@ -220,7 +230,21 @@ class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
+                hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
+                source         = 'objects/naml_[object]',
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'OOPSWriteObjectsNamelists',
+                binary         = 'arome',
+                format         = 'ascii',
+                intent         = 'inout',
+                genv           = self.conf.appenv,
+                kind           = 'namelist',
+                local          = 'naml_[object]',
+                hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
+                object         = ['write_analysis_aro'],
                 source         = 'objects/naml_[object]',
             )
             #-------------------------------------------------------------------------------
@@ -324,7 +348,6 @@ class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             )
             #-------------------------------------------------------------------------------
 
-        self._notify_inputs_done()
         # 2.2/ Compute step
         if 'compute' in self.steps:
             self._notify_start_compute()
@@ -337,7 +360,7 @@ class AnalyseLAM3D(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'ooanalysis',
                 npool          = self.conf.obs_npools,
                 slots          = self.obs_tslots,
-                withscreening  = True,
+                withscreening  = True,                
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()

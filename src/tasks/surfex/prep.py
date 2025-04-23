@@ -10,16 +10,19 @@ from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
-from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'fields_in_file'})]
+    
+    def filtered_orography_in_pgd(self):
+      return( hasattr(self.conf,'filtered_orography_in_pgd') and self.conf.filtered_orography_in_pgd )
 
     def _flow_input_pgd_block(self):
         return '-'.join([self.conf.prefix,
-                         'pgd',
+                         'finalize-pgd' if self.filtered_orography_in_pgd() else 'pgd',
                          self.conf.model,
                          self.conf.geometry.tag])
 
@@ -146,7 +149,6 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 )
             #-------------------------------------------------------------------------------
 
-        self._notify_inputs_done()
         # 2.2/ Compute step
         if 'compute' in self.steps:
             self._notify_start_compute()
@@ -191,4 +193,3 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'late-backup' in self.steps or 'backup' in self.steps:
             self._wrapped_output(**self._output_listing())
             #-------------------------------------------------------------------------------
-

@@ -21,7 +21,7 @@ def setup(t, **kw):
                         loopconf='geometrys',
                         loopsuffix='-{0.tag}',
                         nodes=[
-                        Family(tag='PP-arp', ticket=t, on_error='delayed_fail', nodes=[
+                        Family(tag='PP-arpege', ticket=t, on_error='delayed_fail', nodes=[
                             PGD(tag='pgd-arpege', openmp=8, ticket=t, **kw),
                             Prep(tag='prep-arpege', ticket=t, **kw),
                             ], **kw),

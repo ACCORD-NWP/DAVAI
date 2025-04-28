@@ -10,7 +10,7 @@ from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):

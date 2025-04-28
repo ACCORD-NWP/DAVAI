@@ -10,7 +10,7 @@ from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -44,7 +44,7 @@ class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.1.0/ Reference resources, to be compared to:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            if not self.filtered_orography_in_pgd():
+            #if not self.filtered_orography_in_pgd():
                 # if filtered_orography_in_pgd, the comparison to the reference PGD is done after the finalize_pgd step.
                 self._wrapped_input(**self._reference_continuity_expertise())            
                 self._wrapped_input(
@@ -233,7 +233,7 @@ class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:
-            if not self.filtered_orography_in_pgd():
+            #if not self.filtered_orography_in_pgd():
                 self._wrapped_output(**self._output_expertise())
                 self._wrapped_output(**self._output_comparison_expertise())
             #-------------------------------------------------------------------------------

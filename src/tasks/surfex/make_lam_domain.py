@@ -10,14 +10,14 @@ from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class MakeLamDomain(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})]
+    experts = []  # [FPDict({'kind':'fields_in_file'})]
     _taskinfo_kind = 'statictaskinfo'
-            
+
     def geom_params(self):
       if self.conf.geometry.tag == 'nm2500':
         gp =  {'Iwidth':8,'Xpoints_CI':181,'Ypoints_CI':97,'center_lat':7.,'center_lon':80.,'force_projection':'mercator','maximize_CI_in_E':False,'reference_lat':None,'resolution':2500,'tilting':0}
@@ -102,7 +102,7 @@ class MakeLamDomain(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             print()
             self.component_runner(tbalgo, [None])
             #-------------------------------------------------------------------------------
-            #self.run_expertise()
+            self.run_expertise()
             #-------------------------------------------------------------------------------
 
         # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
@@ -125,7 +125,7 @@ class MakeLamDomain(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:
-            #self._wrapped_output(**self._output_expertise())
+            self._wrapped_output(**self._output_expertise())
             #self._wrapped_output(**self._output_comparison_expertise())
             pass
             #-------------------------------------------------------------------------------

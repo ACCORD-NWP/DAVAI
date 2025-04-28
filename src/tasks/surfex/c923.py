@@ -10,7 +10,7 @@ from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
-from davai_taskutil.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 
 class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -45,8 +45,16 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.1.0/ Reference resources, to be compared to:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            pass
-            
+            self._wrapped_input(
+                role           = 'Reference',  # Clim file
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                format         = 'fa',
+                kind           = 'clim_model',
+                local          = 'ref.Const.Clim',
+                vconf          = self.conf.ref_vconf,
+            )
             #-------------------------------------------------------------------------------
 
         # 1.1.1/ Static Resources:
@@ -173,28 +181,28 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             print()
             self.component_runner(tbalgo, tbx)
             #-------------------------------------------------------------------------------
-            #self.run_expertise()
+            self.run_expertise()
             #-------------------------------------------------------------------------------
 
         # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
         if 'backup' in self.steps:
             #-------------------------------------------------------------------------------
-            self._wrapper_output = toolbox.output(
+            self._wrapped_output(
                 role           = 'ClimFile',
                 block          = self.output_block(),
                 experiment     = self.conf.xpid,
                 format         = 'fa',
                 kind           = 'clim_model',
                 local          = 'Const.Clim',
+                namespace      = self.REF_OUTPUT,
             )
 
             #-------------------------------------------------------------------------------
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:
-            pass
-            #self._wrapped_output(**self._output_expertise())
-            #self._wrapped_output(**self._output_comparison_expertise())
+            self._wrapped_output(**self._output_expertise())
+            self._wrapped_output(**self._output_comparison_expertise())
             #-------------------------------------------------------------------------------
 
         # 3.0.2/ Other output resources of possible interest:

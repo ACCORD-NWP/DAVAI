@@ -9,7 +9,7 @@ from vortex import toolbox
 from vortex.layout.nodes import Task
 import davai
 
-from davai.vtx.tasks.hooks import hook_gnam
+from davai.vtx.hooks.namelists import hook_gnam
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 

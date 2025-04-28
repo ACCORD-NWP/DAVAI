@@ -16,13 +16,10 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'fields_in_file'})]
-    
-    def filtered_orography_in_pgd(self):
-      return( hasattr(self.conf,'filtered_orography_in_pgd') and self.conf.filtered_orography_in_pgd )
 
     def _flow_input_pgd_block(self):
         return '-'.join([self.conf.prefix,
-                         'finalize-pgd' if self.filtered_orography_in_pgd() else 'pgd',
+                         'finalize-pgd' if self.conf.get('filtered_orography_in_pgd') else 'pgd',
                          self.conf.model,
                          self.conf.geometry.tag])
 

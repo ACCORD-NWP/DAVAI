@@ -32,6 +32,7 @@ objects:
     - OpObs4D_arpege  # Tests of 4D Observation operators (NL, TL, AD), one obstype at a time
     - OpObs3D_arpege  # Tests of 3D Observation operators (NL, TL, AD), one obstype at a time
     - Bmat_arpege  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
+    - Bmat_arome  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
     - ModelTL_arpege # TL model, adjoint test
 
 # mixs: jobs containing several tasks of various families

@@ -25,6 +25,7 @@ assim:
 
 objects:
     - Bmat_arpege  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
+    - Bmat_arome  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
     - ModelTL_arpege # TL model, adjoint test
 
 fullpos:

@@ -15,11 +15,8 @@ def setup(t, **kw):
             Family(tag='3dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     BatorODB(tag='batodb', ticket=t, **kw),
-                    # delayed_fail to let the OOPS family run before raising error
-                    Family(tag='cnt0', ticket=t, on_error='delayed_fail', nodes=[
-                        ScreeningCNT0(tag='screeningCNT0', ticket=t, **kw),
-                        MinimCNT0(tag='minimCNT0', ticket=t, **kw),
-                        ], **kw),
+                    ScreeningCNT0(tag='screeningCNT0', ticket=t, **kw),
+                    MinimCNT0(tag='minimCNT0', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
             ], **kw),

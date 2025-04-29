@@ -10,12 +10,12 @@ forecasts:
     - canonical_forecast_arpege_apl_global798c22
 
 assim:
-    - OOPSBSM_4D_arpege  # BSM = Bator+Screening+Minim
-    - OOPSBA1_4D_arpege  # BA1 = Bator+AllInOne
-    - CNT0BSM_4D_arpege  # BSM = Bator+Screening+Minim
-    - BsC_arpege  # BsC = Bator_surf+Canari
-    - BSM_3D_arome  # BSM = Bator+Screening+Minim
-    - BA1_3D_arome  # BA1 = Bator+AllInOne
+    - arpege_BSM4DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arpege_BA4DVar_OOPS  # BA = Bator+Analysis (all-in-one)
+    - arpege_BSM4DVar_CNT0  # BSM = Bator+Screening+Minim
+    - arpege_BC  # BC = Bator(surf)+Canari
+    - arome_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
+    - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
 
 # mixs: jobs containing several tasks of various families
 #mixs:

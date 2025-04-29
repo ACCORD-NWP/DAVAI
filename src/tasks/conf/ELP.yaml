@@ -12,20 +12,20 @@ forecasts:
     - canonical_forecast_arpege_apl_global798c22
 
 assim:
-    # oops
-    - OOPSBSM_4D_arpege  # BSM = Bator+Screening+Minim
-    - OOPSBSM_3D_arpege  # 3DVar Arpege
-    - OOPSBA1_4D_arpege  # BA1 = Bator+AllInOneOOPSAnalysis
-    # CNT0
-    - CNT0BSM_4D_arpege  # BSM = Bator+Screening+Minim
-    - CNT0BSM_3D_arpege  # 3DVar Arpege
-    - BsC_arpege  # BsC = Bator_surf+Canari
-    - BSM_3D_arome  # BSM = Bator+Screening+Minim
-    # FIXME: - BA1_3D_arome  # Bator+AllInOneOOPSAnalysis 3DVar Arome
+    # arpege
+    - arpege_BA4DVar_OOPS  # BA = Bator+Analysis (all-in-one)
+    - arpege_BSM4DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arpege_BSM4DVar_CNT0  # BSM = Bator+Screening+Minim
+    - arpege_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arpege_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
+    - arpege_BC  # BC = Bator(surf)+Canari
+    # arome
+    - arome_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
+    - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
     # one obstype at a time -- Bator+Screening only
-    - BS_3D_arpege__obstype
-    - BS_4D_arpege__obstype
-    - BS_3D_arome__obstype
+    - arpege_BS3D__obstype
+    - arpege_BS4D__obstype
+    - arome_BS3D__obstype
 
 objects:
     - OpObs4D_arpege  # Tests of 4D Observation operators (NL, TL, AD), one obstype at a time

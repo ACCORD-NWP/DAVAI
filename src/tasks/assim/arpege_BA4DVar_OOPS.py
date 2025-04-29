@@ -14,7 +14,7 @@ def setup(t, **kw):
             Family(tag='4dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     BatorODB(tag='batodb', ticket=t, **kw),
-                    Analyse4dvar(tag='Analyse4dvar', ticket=t, **kw),
+                    Analyse4dvar(tag='Analysis4dvar', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
             ], **kw),

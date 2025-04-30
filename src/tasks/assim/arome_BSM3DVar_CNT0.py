@@ -19,8 +19,8 @@ def setup(t, **kw):
                         loopsuffix='.{}',
                         nodes=[
                             BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningCNT0(tag='screeningCNT0', ticket=t, **kw),
-                            MinimCNT0(tag='minimCNT0', ticket=t, **kw),
+                            ScreeningCNT0(tag='screeningcnt0', ticket=t, **kw),
+                            MinimCNT0(tag='minimcnt0', ticket=t, **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

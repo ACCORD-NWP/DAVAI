@@ -27,7 +27,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def obs_input_block(self):
         return '-'.join([self.conf.model,
                          self.NDVar,
-                         'screening' + self._tag_suffix()])
+                         'screeningoops' + self._tag_suffix()])
 
     def process(self):
         self._wrapped_init()

@@ -19,8 +19,8 @@ def setup(t, **kw):
                         loopsuffix='.{}',
                         nodes=[
                             BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningOOPS(tag='screeningOOPS', ticket=t, **kw),
-                            MinimOOPSNoVARBC(tag='minimOOPSNoVARBC', ticket=t, **kw),
+                            ScreeningOOPS(tag='screeningoops', ticket=t, **kw),
+                            MinimOOPSNoVARBC(tag='minimoops_novarbc', ticket=t, **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

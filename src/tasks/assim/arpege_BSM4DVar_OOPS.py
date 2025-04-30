@@ -16,9 +16,9 @@ def setup(t, **kw):
             Family(tag='4dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     BatorODB(tag='batodb', ticket=t, **kw),
-                    ScreeningOOPS(tag='screeningOOPS', ticket=t, **kw),
+                    ScreeningOOPS(tag='screeningoops', ticket=t, **kw),
                     #Htlad(tag='test_adjoint', ticket=t, on_error='delayed_fail', **kw),
-                    MinimOOPS(tag='minimOOPS', ticket=t, **kw),
+                    MinimOOPS(tag='minimoops', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
             ], **kw),

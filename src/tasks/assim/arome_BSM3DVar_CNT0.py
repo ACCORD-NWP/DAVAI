@@ -18,9 +18,11 @@ def setup(t, **kw):
                         loopconf='rundates',
                         loopsuffix='.{}',
                         nodes=[
-                            BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningCNT0(tag='screeningcnt0', ticket=t, **kw),
-                            MinimCNT0(tag='minimcnt0', ticket=t, **kw),
+                            Family(tag='BSM', ticket=t, on_error='delayed_fail', nodes=[
+                                BatorODB(tag='batodb', ticket=t, **kw),
+                                ScreeningCNT0(tag='screeningcnt0', ticket=t, **kw),
+                                MinimCNT0(tag='minimcnt0', ticket=t, **kw),
+                            ], **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

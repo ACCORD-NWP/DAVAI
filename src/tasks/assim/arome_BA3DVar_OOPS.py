@@ -18,8 +18,10 @@ def setup(t, **kw):
                         loopconf='rundates',
                         loopsuffix='.{}',
                         nodes=[
-                            BatorODB(tag='batodb', ticket=t, **kw),
-                            AnalysisOOPS(tag='AnalysisOOPS', ticket=t, **kw),
+                            Family(tag='BA', ticket=t, on_error='delayed_fail', nodes=[
+                                BatorODB(tag='batodb', ticket=t, **kw),
+                                AnalysisOOPS(tag='AnalysisOOPS', ticket=t, **kw),
+                            ], **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

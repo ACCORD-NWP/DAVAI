@@ -13,7 +13,7 @@ from common.algo.assim import (Screening, Minim, Canari)
 from common.algo.odbtools import (Raw2ODBparallel)
 from common.algo.forecasts import (Forecast, LAMForecast, DFIForecast,
                                    FullPosBDAP, FullPosGeo)
-from common.algo.clim import (BuildPGD, BuildPGD_MPI)
+from common.algo.clim import (BuildPGD, BuildPGD_MPI, C923)
 from common.algo.coupling import Coupling, Prep
 from common.algo.fpserver import FullPosServer
 
@@ -150,6 +150,10 @@ class BuildPGD_CrashWitness(BuildPGD, _CrashWitnessDecoMixin):
 
 
 class BuildPGD_MPI_CrashWitness(BuildPGD_MPI, _CrashWitnessDecoMixin):
+    pass
+
+
+class C923_CrashWitness(C923, _CrashWitnessDecoMixin):
     pass
 
 

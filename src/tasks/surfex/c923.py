@@ -173,6 +173,7 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self.sh.title('Toolbox algo = tbalgo')
             tbalgo = toolbox.algo(
                 conf           = '923',
+                crash_witness  = True,
                 engine         = 'parallel',
                 kind           = 'c923',
                 orog_in_pgd    = True,

@@ -14,9 +14,9 @@ forecasts:
 assim:
     # arpege
     - arpege_BA4DVar_OOPS  # BA = Bator+Analysis (all-in-one)
-    - arpege_BSM4DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arpege_BSHM4DVar_OOPS  # BSM = Bator+Screening+H(TL/AD)+Minim
     - arpege_BSM4DVar_CNT0  # BSM = Bator+Screening+Minim
-    - arpege_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arpege_BSHM3DVar_OOPS  # BSM = Bator+Screening+H(TL/AD)+Minim
     - arpege_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
     - arpege_BC  # BC = Bator(surf)+Canari
     # arome

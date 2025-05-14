@@ -16,6 +16,7 @@ def main():
                   skip_fetching_sources=args.skip_fetching_sources,
                   drymode=args.drymode,
                   fake_build=args.fake_build,
+                  archive_as_ref=args.archive_as_ref,
                   # gmkpack arguments
                   preexisting_pack=args.preexisting_pack,
                   cleanpack=args.cleanpack,
@@ -43,6 +44,10 @@ def get_args():
                         action='store_true',
                         help=" ".join(["Fake build: assume binaries already present (in pack),"
                                        "copy them in vortex workflow. Better know what you're doing..."]))
+    parser.add_argument('-a', '--archive_as_ref',
+                        action='store_true',
+                        default=False,
+                        help="Archive tests outputs so they can be retrieved as a reference.")
     parser.add_argument('-c', '--cleanpack',
                         action='store_true',
                         help="Gmkpack: clean pack before git2pack+pack2bin.")

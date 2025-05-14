@@ -489,6 +489,7 @@ class XP(object):
               drymode=False,
               skip_fetching_sources=False,
               fake_build=False,
+              archive_as_ref=False,
               # gmkpack arguments
               preexisting_pack=False,
               cleanpack=False):
@@ -503,7 +504,8 @@ class XP(object):
             # launch build in batch/scheduler
             self._gmkpack_launch_build(drymode=drymode,
                                        cleanpack=cleanpack,
-                                       fake_build=fake_build)
+                                       fake_build=fake_build,
+                                       archive_as_ref=archive_as_ref)
         else:
             raise NotImplementedError("compiling_system == {}".format(compiling_system))
 
@@ -531,7 +533,8 @@ class XP(object):
     def _gmkpack_launch_build(self,
                               drymode=False,
                               cleanpack=False,
-                              fake_build=False):
+                              fake_build=False,
+                              archive_as_ref=False):
         """Launch build job."""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         # run build in batch/scheduler
@@ -540,6 +543,7 @@ class XP(object):
                      drymode=drymode,
                      cleanpack=cleanpack,
                      fake_build=fake_build,
+                     archive_as_ref=archive_as_ref,
                      **self.sources_to_test)
         # run build monitoring (interactively)
         if DAVAI_HOST != 'atos_bologna':  # FIXME: dirty
@@ -548,11 +552,16 @@ class XP(object):
                      drymode=drymode,
                      profile='rd')
 
-    def launch_jobs(self, only_job=None, drymode=False, mpiname=None):
+    def launch_jobs(self,
+                    only_job=None,
+                    drymode=False,
+                    mpiname=None,
+                    archive_as_ref=False):
         """Launch jobs, either all, or only the one requested."""
         extra_params = {}
         if mpiname is not None:
             extra_params['mpiname'] = mpiname
+        extra_params['archive_as_ref'] = archive_as_ref
         only_job_launched = False
         for family, jobs in self.all_jobs.items():
             for job in jobs:

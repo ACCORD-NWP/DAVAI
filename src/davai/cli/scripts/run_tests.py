@@ -18,7 +18,8 @@ def main():
     else:
         this_xp.launch_jobs(only_job=args.only_job,
                             drymode=args.drymode,
-                            mpiname=args.mpiname)
+                            mpiname=args.mpiname,
+                            archive_as_ref=args.archive_as_ref)
         this_xp.afterlaunch_prompt()
 
 def get_args():
@@ -36,6 +37,10 @@ def get_args():
     parser.add_argument('-l', '--list_jobs',
                         action='store_true',
                         help="List the jobs supposed to be launched")
+    parser.add_argument('-a', '--archive_as_ref',
+                        action='store_true',
+                        default=False,
+                        help="Archive tests outputs so they can be retrieved as a reference.")
     parser.add_argument('--mpiname',
                         default=None,
                         help="MPI launcher, as listed in vortex (e.g. 'srun', 'mpirun', 'srun-ddt'.")

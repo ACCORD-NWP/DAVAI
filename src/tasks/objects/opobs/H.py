@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -18,28 +16,19 @@ from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fu
 
 class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.ND,
-                         self.tag])
-
-    def obs_input_block(self):
-        return '-'.join([self.conf.model,
-                         self.ND,
-                         'hdirect' + self._tag_suffix()])
+    _flow_input_task_tag = 'batodb'
 
     def process(self):
         self._wrapped_init()
         self._notify_start_inputs()
-                
+
         self._testid = self.conf.test_family + '/'+ self.tag.split(".")[0].split("+")[0]
         self._withvarbc = False
         self._suffix_vbc = ''
         if len(self.tag.split("+")) > 1:
-            self._withvarbc = True            
+            self._withvarbc = True
             self._suffix_vbc = '_varbc'
-            
+
         self.experts = [FPDict({'kind':'oops:'+self._testid}),FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
 
         # 0./ Promises
@@ -333,13 +322,13 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Observations',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'odb',
                 intent         = 'inout',
                 kind           = 'observations',
                 local          = 'CCMA',
-                layout         = 'ccma',                
+                layout         = 'ccma',
                 part           = 'mix',
                 stage          = 'screening',
             )

@@ -12,7 +12,7 @@ from .minims.minimCNT0_LAM3D import Minim as MinimCNT0
 def setup(t, **kw):
     return Driver(tag='drv', ticket=t, options=kw, nodes=[
         Family(tag='arome', ticket=t, nodes=[
-            Family(tag='3dvar3h', ticket=t, nodes=[
+            Family(tag='3dvar3hcnt0', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     LoopFamily(tag='rundates', ticket=t,
                         loopconf='rundates',
@@ -20,8 +20,8 @@ def setup(t, **kw):
                         nodes=[
                             Family(tag='BSM', ticket=t, on_error='delayed_fail', nodes=[
                                 BatorODB(tag='batodb', ticket=t, **kw),
-                                ScreeningCNT0(tag='screeningcnt0', ticket=t, **kw),
-                                MinimCNT0(tag='minimcnt0', ticket=t, **kw),
+                                ScreeningCNT0(tag='screening', ticket=t, **kw),
+                                MinimCNT0(tag='minim', ticket=t, **kw),
                             ], **kw),
                         ], **kw),
                     ], **kw),

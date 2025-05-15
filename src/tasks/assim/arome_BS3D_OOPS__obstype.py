@@ -7,7 +7,7 @@ import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Driver, Family, LoopFamily
 
-from .raw2odb.batodbLAM import BatorODB
+from .raw2odb.batodbNew import BatorODB
 from .screenings.screeningOOPS_LAM3D import ScreeningOOPS
 
 
@@ -21,7 +21,7 @@ def setup(t, **kw):
                         loopsuffix='.{}',
                         nodes=[
                             BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningOOPS(tag='screeningOOPS', ticket=t, **kw),
+                            ScreeningOOPS(tag='screening', ticket=t, **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

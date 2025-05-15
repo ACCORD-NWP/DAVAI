@@ -16,7 +16,7 @@ assim:
     - arpege_BC  # BC = Bator(surf)+Canari
     - arome_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
     - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
-    #- arome_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
+    - arome_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
 
 # mixs: jobs containing several tasks of various families
 #mixs:

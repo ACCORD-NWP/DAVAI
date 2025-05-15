@@ -15,8 +15,8 @@ def setup(t, **kw):
             Family(tag='4dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     BatorODB(tag='batodb', ticket=t, **kw),
-                    ScreeningCNT0(tag='screeningcnt0', ticket=t, **kw),
-                    MinimCNT0(tag='minimcnt0', ticket=t, **kw),
+                    ScreeningCNT0(tag='screening', ticket=t, **kw),
+                    MinimCNT0(tag='minim', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
             ], **kw),

@@ -25,8 +25,8 @@ assim:
     # one obstype at a time -- Bator+Screening only
     - arpege_BS3D__obstype
     - arpege_BS4D__obstype
-    - arome_BS3D__obstype
-    #- arome_BS3D_OOPS__obstype
+    - arome_BS3D_CNT0__obstype
+    - arome_BS3D_OOPS__obstype
 
 objects:
     - OpObs4D_arpege  # Tests of 4D Observation operators (NL, TL, AD), one obstype at a time

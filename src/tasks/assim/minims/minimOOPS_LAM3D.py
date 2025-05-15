@@ -13,19 +13,10 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 from davai.vtx.hooks.namelists import hook_gnam
 
 
-class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
+class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
-
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         self.tag])
-
-    def obs_input_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         'screeningoops' + self._tag_suffix()])
+    _flow_input_task_tag = 'screening'
 
     def process(self):
         self._wrapped_init()
@@ -48,59 +39,21 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._load_usual_tools()  # LFI tools, ecCodes defs, ...
             #-------------------------------------------------------------------------------
-            # FIXME: not anymore in Arpege cycle / commonenv
             self._wrapped_input(
                 role           = 'GetIREmisAtlasInHDF',
                 format         = 'ascii',
-                #genv           = self.conf.commonenv,
-                genv           = self.conf.davaienv,
-                instrument     = '[targetname]',
+                genv           = self.conf.commonenv,
+                source         = 'uwir',
                 kind           = 'atlas_emissivity',
                 local          = 'uw_ir_emis_atlas_hdf5.tar',
-                targetname     = 'iasi',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
-                role           = 'RCorrelations(MF)',
+                role           = 'MwaveRtCoef',
                 format         = 'unknown',
-                genv           = self.conf.commonenv,
-                kind           = 'correlations',
-                local          = 'rmtberr_[instrument].dat',
-                intent         = 'inout',
-                instrument     = 'iasi,cris',
-                hook_convert   = (arpifs_obs_error_correl_legacy2oops,),
-            )
-            # FIXME: not anymore in Arpege cycle / commonenv
-            #self._wrapped_input(
-            #    role           = 'RCorrelations(MF)',
-            #    format         = 'unknown',
-            #    #genv           = self.conf.commonenv,
-            #    genv           = self.conf.davaienv,
-            #    kind           = 'correl',
-            #    local          = '[scope]_correlation.dat',
-            #    scope          = 'iasi,cris',
-            #)
-            #-------------------------------------------------------------------------------
-            #self._wrapped_input(
-            #    role           = 'RCorrelations(ECMWF & OOPS version - contains sigmaO)',
-            #    format         = 'unknown',
-            #    genv           = self.conf.commonenv,
-            #    kind           = 'correl',
-            #    local          = 'rmtb[scope].dat',
-            #    scope          = 'err_iasi,err_cris',
-            #)
-            #-------------------------------------------------------------------------------
-            # FIXME: not anymore in Arpege cycle / commonenv
-            self._wrapped_input(
-                role           = 'AtlasEmissivity',
-                format         = 'unknown',
-                #genv           = self.conf.commonenv,
-                genv           = self.conf.davaienv,
-                instrument     = '[targetname]',
-                kind           = 'atlas_emissivity',
-                local          = 'ATLAS_[targetname:upper].BIN',
-                month          = self.conf.rundate,
-                targetname     = 'ssmis,iasi,an1,an2',
+                genv           = self.conf.appenv,
+                kind           = 'mwave_rtcoef',
+                local          = 'mwave_resources.tgz',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -125,14 +78,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.commonenv,
                 kind           = 'rrtm',
                 local          = 'rrtm.const.tgz',
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'Coefmodel',
-                format         = 'unknown',
-                genv           = self.conf.commonenv,
-                kind           = 'coefmodel',
-                local          = 'COEF_MODEL.BIN',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -172,7 +117,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'config',
                 local          = 'oops.[format]',
                 nativefmt      = '[format]',
-                objects        = 't{}_aro'.format((self.NDVar).lower()),
+                objects        = 'minim-3DVar_aro',
                 scope          = 'oops',
             )
             #-------------------------------------------------------------------------------
@@ -189,7 +134,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = 'arome',
                 format         = 'ascii',
                 genv           = self.conf.appenv,
                 kind           = 'namelist',
@@ -200,7 +144,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObsObjectsNamelists',
-                binary         = 'arome',
                 format         = 'ascii',
                 intent         = 'inout',
                 genv           = self.conf.appenv,
@@ -212,7 +155,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSGomNamelists',
-                binary         = 'arome',
                 format         = 'ascii',
                 genv           = self.conf.appenv,
                 kind           = 'namelist',
@@ -223,7 +165,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = 'arome',
                 format         = 'ascii',
                 genv           = self.conf.appenv,
                 intent         = 'inout',
@@ -236,7 +177,6 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSWriteObjectsNamelists',
-                binary         = 'arome',
                 format         = 'ascii',
                 intent         = 'inout',
                 genv           = self.conf.appenv,
@@ -249,9 +189,9 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = 'arome',
                 format         = 'ascii',
                 genv           = self.conf.appenv,
+                hook_cvaraux   = (hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
@@ -272,7 +212,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Guess',
-                block          = 'forecast',
+                block          = 'cplguess',
                 date           = '{}/-{}'.format(self.conf.rundate, self.conf.cyclestep),
                 experiment     = self.conf.input_shelf,
                 format         = 'fa',
@@ -283,26 +223,12 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 vconf          = self.conf.shelves_vconf,
             )
             #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'VarBC',
-                block          = 'minim',
-                date           = '{}/-{}'.format(self.conf.rundate, self.conf.cyclestep),
-                experiment     = self.conf.input_shelf,
-                format         = 'ascii',
-                intent         = 'inout',
-                kind           = 'varbc',
-                local          = 'VARBC.cycle',
-                stage          = 'traj',
-                vapp           = self.conf.shelves_vapp,
-                vconf          = self.conf.shelves_vconf,
-            )
-            #-------------------------------------------------------------------------------
 
         # 2.1/ Flow Resources: produced by another task of the same job
         if 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Observations',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'odb',
                 intent         = 'inout',

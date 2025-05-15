@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -22,15 +20,7 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms})
                 ] + davai.vtx.util.default_experts()
 
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.conf.assim_scheme,
-                         self.tag])
-
-    def obs_input_block(self):
-        return '-'.join([self.conf.model,
-                         self.conf.assim_scheme,
-                         'batodb' + self._tag_suffix()])
+    _flow_input_task_tag = 'batodb'
 
     def process(self):
         self._wrapped_init()
@@ -227,7 +217,7 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Observations',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'odb',
                 intent         = 'in',

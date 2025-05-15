@@ -16,21 +16,12 @@ from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fu
 
 class Htlad(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         self.tag])
-
-    def obs_input_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         'screeningoops' + self._tag_suffix()])
+    _flow_input_task_tag = 'screening'
 
     def process(self):
         self._wrapped_init()
         self._notify_start_inputs()
-                
+
         self._testid = self.conf.test_family + '/'+ self.tag.split(".")[0].split("+")[0]
         self._withvarbc = False
         self._suffix_vbc = ''
@@ -331,13 +322,13 @@ class Htlad(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Observations',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'odb',
                 intent         = 'inout',
                 kind           = 'observations',
                 local          = 'CCMA',
-                layout         = 'ccma',                
+                layout         = 'ccma',
                 part           = 'mix',
                 stage          = 'screening',
             )

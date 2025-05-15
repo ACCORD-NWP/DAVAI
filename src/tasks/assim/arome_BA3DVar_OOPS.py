@@ -4,9 +4,8 @@ import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Driver, Family, LoopFamily
 
-#from .raw2odb.batodbLAM import BatorODB
-from .raw2odb.batodb import BatorODB
-from .minims.AnalyseOOPS_LAM3D import AnalyseLAM3D as AnalysisOOPS
+from .raw2odb.batodbNew import BatorODB
+from .minims.OOPSAnalysis_LAM3DVar import OOPSAnalysisLAM3DVar as Analysis
 
 
 def setup(t, **kw):
@@ -20,7 +19,7 @@ def setup(t, **kw):
                         nodes=[
                             Family(tag='BA', ticket=t, on_error='delayed_fail', nodes=[
                                 BatorODB(tag='batodb', ticket=t, **kw),
-                                AnalysisOOPS(tag='AnalysisOOPS', ticket=t, **kw),
+                                Analysis(tag='analysis', ticket=t, **kw),
                             ], **kw),
                         ], **kw),
                     ], **kw),

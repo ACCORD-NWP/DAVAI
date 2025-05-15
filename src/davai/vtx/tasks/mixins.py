@@ -239,11 +239,14 @@ class DavaiTaskMixin(WrappedToolboxMixin):
         return self.output_block()
 
     def output_block(self):
-        """
-        Output block method: should map more or less Family tree, separated by "-".
-        TO BE OVERWRITTEN in (most) real tasks
-        """
-        return '-'.join([self.tag])
+        return '@'.join([self.conf.testjob,  # = job: family.driver
+                         self.tag])          # = tag of the task (+suffix if LoopFamily)
+
+    def input_block(self, flow_input_task_tag=None):
+        if flow_input_task_tag is None:
+            flow_input_task_tag = self._flow_input_task_tag
+        return '@'.join([self.conf.testjob,
+                         flow_input_task_tag + self._tag_suffix()])
 
     def _tag_suffix(self):
         """Get the suffix part of the tag, in case of a LoopFamily-ed task."""

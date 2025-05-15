@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict, FPSet
 
 import vortex
@@ -16,10 +14,9 @@ class BatorODB(Task, DavaiTaskMixin):
 
     experts = [FPDict({'kind':'bator_obscount'}), FPDict({'kind':'bator_profile'})]
 
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.conf.assim_scheme,
-                         self.tag])
+    #def output_block(self):
+    #    return '-'.join([self.conf.testjob,
+    #                     self.tag])
 
     def process(self):
         self._wrapped_init()
@@ -193,6 +190,7 @@ class BatorODB(Task, DavaiTaskMixin):
             self._notify_start_compute()
             self.sh.title('Toolbox algo = tbalgo')
             tbalgo = toolbox.algo(
+                crash_witness  = True,
                 drhookprof     = self.conf.drhook_profiling,
                 engine         = 'parallel',
                 ioassign       = tbio[0].container.localpath(),

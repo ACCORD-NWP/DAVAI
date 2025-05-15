@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Loop on obstypes to test BatorODB+Screening independantly on each obstypes.
+Loop on obstypes to test BatorODB+H independantly on each obstypes.
 """
-
-from __future__ import print_function, absolute_import, unicode_literals, division
 
 import vortex
 from vortex.layout.nodes import Driver, Family, LoopFamily

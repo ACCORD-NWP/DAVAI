@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -15,20 +13,10 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_flowdependentb
 
 
-
 class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
-
-    def output_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         self.tag])
-
-    def obs_input_block(self):
-        return '-'.join([self.conf.model,
-                         self.NDVar,
-                         'batodb' + self._tag_suffix()])
+    _flow_input_task_tag = 'batodb'
 
     def process(self):
         self._wrapped_init()
@@ -422,7 +410,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'fetch' in self.steps:
             tbmap = self._wrapped_input(
                 role           = 'Obsmap',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'ascii',
                 kind           = 'obsmap',
@@ -432,7 +420,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Observations',
-                block          = self.obs_input_block(),
+                block          = self.input_block(),
                 experiment     = self.conf.xpid,
                 format         = 'odb',
                 intent         = 'inout',

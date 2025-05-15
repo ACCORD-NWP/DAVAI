@@ -14,14 +14,14 @@ from .screenings.screeningCNT0_LAM3D import Screening as ScreeningCNT0
 def setup(t, **kw):
     return Driver(tag='drv', ticket=t, options=kw, nodes=[
         Family(tag='arome', ticket=t, nodes=[
-            Family(tag='3dvar3h', ticket=t, nodes=[
+            Family(tag='3dvar3hcnt0', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     LoopFamily(tag='obstypes', ticket=t,
                         loopconf='obstypes',
                         loopsuffix='.{}',
                         nodes=[
                             BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningCNT0(tag='screeningCNT0', ticket=t, **kw),
+                            ScreeningCNT0(tag='screening', ticket=t, **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

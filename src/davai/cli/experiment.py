@@ -470,6 +470,7 @@ class XP(object):
         mkjob = 'vortex/bin/mkjob.py'
         cmd = ['python3', mkjob, '-j',
                'task={}'.format(task.strip()),
+               'testjob={}'.format(task.strip()),
                'name={}'.format(name.strip()),
                'python={}'.format(sys.executable)]
         cmd.extend(['{}={}'.format(k,v) for k,v in extra_parameters.items()])

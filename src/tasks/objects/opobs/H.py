@@ -16,7 +16,7 @@ from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fu
 
 class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    _flow_input_task_tag = 'batodb'
+    _flow_input_task_tag = 'hdirect'
 
     def process(self):
         self._wrapped_init()

@@ -13,8 +13,7 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_flowdependentb
 
 
-
-class Analyse4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
+class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'joTables'})] + davai.vtx.util.default_experts()
     _flow_input_task_tag = 'batodb'

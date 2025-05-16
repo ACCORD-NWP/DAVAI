@@ -3,6 +3,7 @@ from footprints import FPDict
 
 import vortex
 from vortex import toolbox
+from vortex.layout.nodes import Task
 
 from davai.vtx.tasks.mixins import DavaiTaskMixin, GmkpackMixin
 from davai.vtx.algo.build import binaries_syntax_in_workdir

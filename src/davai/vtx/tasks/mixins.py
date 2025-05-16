@@ -11,7 +11,7 @@ from bronx.stdtypes.date import Period, utcnow
 
 from ..util import context_info_for_task_summary
 from ..hooks.summaries import take_the_DAVAI_train
-from . import gmkpack_executables_block_tag, gmkpack_build_job
+from ...util import gmkpack_executables_block_tag, gmkpack_build_job
 
 
 class IncludesTaskMixin(object):

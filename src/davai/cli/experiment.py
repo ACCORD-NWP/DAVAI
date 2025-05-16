@@ -19,10 +19,10 @@ import shutil
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
 from .. import __version__
+from ..util import gmkpack_build_job
 from . import config
 from . import DAVAI_HOST, DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf, initialized
-from ..vtx.tasks import gmkpack_build_job
 
 
 class XPmaker(object):

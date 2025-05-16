@@ -3,8 +3,9 @@
 import vortex
 from vortex.layout.nodes import Task, Driver, Family, LoopFamily
 
-from davai.vtx.tasks import gmkpack_executables_block_tag
+from davai.util import gmkpack_executables_block_tag
 from .pack2bin import Pack2Bin
+from ..wait4build import Wait4BuildInit
 
 
 def setup(t, **kw):

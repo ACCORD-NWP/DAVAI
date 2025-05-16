@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Fi = Forecast (inline fullpos)
+LBC = Lateral Boundary Conditions
+Creation of LBCs from a coupling model to a LAM
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
 
 import vortex
 from vortex import toolbox
@@ -16,13 +16,13 @@ def setup(t, **kw):
     return Driver(tag='drv', ticket=t, options=kw, nodes=[
         Family(tag='default_compilation_flavour', ticket=t, nodes=[
                 Family(tag='ifs', ticket=t, on_error='delayed_fail', nodes=[
-                    IFS_LBCbyFullpos(tag='fp_lbc-ifs', ticket=t, **kw),
+                    IFS_LBCbyFullpos(tag='from_ifs', ticket=t, **kw),
                     ], **kw),
                 Family(tag='arpege', ticket=t, on_error='delayed_fail', nodes=[
-                    ArpegeLBCbyFullpos(tag='fp_lbc-arpege', ticket=t, **kw),
+                    ArpegeLBCbyFullpos(tag='from_arpege', ticket=t, **kw),
                     ], **kw),
             #Family(tag='arome', ticket=t, nodes=[
-            #    LBCbyFullpos(tag='fp_lbc.from-arome', ticket=t, **kw),
+            #    LBCbyFullpos(tag='from_arome', ticket=t, **kw),
             #    ], **kw),a
             ], **kw),
         ],

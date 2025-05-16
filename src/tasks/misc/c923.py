@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -17,22 +15,6 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'fields_in_file'})]
     _taskinfo_kind = 'statictaskinfo'
-
-    def _flow_input_name_block(self):
-        return '-'.join([self.conf.prefix,
-                         'make-domain',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
-    def _flow_input_pgd_block(self):
-        return '-'.join([self.conf.prefix,
-                         'pgd',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-                         
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()
@@ -116,7 +98,7 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
             tbtrunc=self._wrapped_input(
                 role           = 'TruncationDefinition',
-                block          = self._flow_input_name_block(),
+                block          = self.input_block('make_domain'),
                 experiment     = self.conf.xpid,
                 format         = 'ascii',
                 geometry       = self.conf.geometry.tag,
@@ -129,7 +111,7 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
             tbgeo=self._wrapped_input(
                 role           = 'GeometryDefinition',
-                block          =  self._flow_input_name_block(),
+                block          = self.input_block('make_domain'),
                 experiment = self.conf.xpid,
                 format         = 'ascii',
                 geometry = self.conf.geometry.tag,
@@ -157,7 +139,7 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             # PGD file
             self._wrapped_input(
                 role           = 'Pgd',
-                block          = self._flow_input_pgd_block(),
+                block          = self.input_block('pgd'),
                 experiment     = self.conf.xpid,
                 format         = 'fa',
                 kind           = 'pgd',

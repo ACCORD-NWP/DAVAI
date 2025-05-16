@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -16,14 +14,10 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb, hook_ensemble_build
 
 
-class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
+class EnVarAdjoint(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})] + davai.vtx.util.default_experts()
-
-    def output_block(self):
-        return '-'.join([self.conf.jobname,
-                         self.conf.model,
-                         self.tag])
+    experts = [FPDict({'kind':'oops:op_obs_file/test_adjoint'})] + davai.vtx.util.default_experts()
+    _flow_input_task_tag = 'bmatsp'
 
     def process(self):
         self._wrapped_init()
@@ -40,19 +34,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(**self._reference_continuity_expertise())
             self._wrapped_input(**self._reference_continuity_listing())
             #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'Reference',  # ModelState
-                block          = self.output_block(),
-                experiment     = self.conf.ref_xpid,
-                fatal          = False,
-                format         = '[nativefmt]',
-                kind           = 'historic',
-                local          = 'ref.ICMSHM[member]+0000',
-                member         = [1,2,3,4,5,6,7,8],
-                nativefmt      = 'fa',
-                term           = '-3',
-                vconf          = self.conf.ref_vconf,
-            )
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -72,14 +53,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.appenv,
                 kind           = 'rrtm',
                 local          = 'rrtm.const.tgz',
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'WaveletTable',
-                format         = 'unknown',
-                genv           = self.conf.appenv,
-                kind           = 'wtable',
-                local          = 'rtable.tar',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -112,7 +85,7 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='config',
                 local='oops.[format]',
                 nativefmt='[format]',
-                objects='test_ensemble',
+                objects='test_envar',
                 scope='oops',
             )
 
@@ -150,6 +123,7 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 binary=self.conf.model,
                 format='ascii',
                 genv=self.conf.appenv,
+                hook_simpleb=(hook_disable_flowdependentb,),
                 intent='inout',
                 kind='namelist',
                 local='[object].nam',
@@ -163,7 +137,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 format='ascii',
                 genv=self.conf.appenv,
                 hook_nofullpos=(hook_disable_fullpos,),
-                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
+                hook_simpleb=(hook_disable_flowdependentb,),
+                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':4}}),
                 hook_cvaraux=(hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent='inout',
                 kind='namelist',
@@ -183,6 +158,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.2/ Flow Resources (initial): theoretically flow-resources, but statically stored in input_shelf
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
+            #-------------------------------------------------------------------------------
+            # TODO: Fix error_covariance_3d_mod.F90, then remove this unused resource
             self._wrapped_input(
                 role='BackgroundStdError',
                 block='sigmab',
@@ -198,32 +175,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
-                role='Wavelet',
-                block='sigmab',
-                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
-                experiment=self.conf.input_shelf,
-                format='unknown',
-                kind='wavelet',
-                local='wavelet_[geometry:truncation].cv',
-                term='3',
-                vapp=self.conf.shelves_vapp,
-                vconf=self.conf.shelves_vconf,
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role='Srenorm',
-                block='sigmab',
-                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
-                experiment=self.conf.input_shelf,
-                format='grib',
-                kind='bgstdrenorm',
-                local='srenorm_[geometry:truncation]',
-                term='3',
-                vapp=self.conf.shelves_vapp,
-                vconf=self.conf.shelves_vconf,
-            )            
-            #-------------------------------------------------------------------------------            
-            self._wrapped_input(
                 role='Guess',
                 block='forecast',
                 date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
@@ -236,6 +187,19 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 vconf=self.conf.shelves_vconf,
             )
             #-------------------------------------------------------------------------------
+
+        # 2.1/ Flow Resources: produced by another task of the same job
+        if 'fetch' in self.steps:
+            self._wrapped_input(
+                role='ModelState',
+                block=self.input_block(),
+                experiment=self.conf.xpid,
+                format='fa',
+                kind='historic',
+                local= 'ICMSHM[member]_term[term:fmth]',
+                member= [1,2,3,4,5,6,7,8],
+                term='-3',
+            )
 
         self._notify_inputs_done()
         # 2.2/ Compute step
@@ -250,7 +214,7 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='ootest',
                 terms=[-3, ],
                 members=range(1, int(self.conf.members) + 1),
-                test_type='ensemble/build',
+                test_type='b/test_adjoint',
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()
@@ -258,21 +222,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self.run_expertise()
             #-------------------------------------------------------------------------------
-
-        # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
-        if 'backup' in self.steps:
-            #-------------------------------------------------------------------------------
-            self._wrapped_output(
-                role='ModelState',
-                block=self.output_block(),
-                experiment=self.conf.xpid,
-                format='fa',
-                kind='historic',
-                local='ICMSHM[member]+0000',
-                term='-3',
-                member=[1,2,3,4,5,6,7,8],
-                namespace=self.REF_OUTPUT,
-            )
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:

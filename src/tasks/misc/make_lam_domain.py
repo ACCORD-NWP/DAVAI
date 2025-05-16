@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -34,10 +32,6 @@ class MakeLamDomain(Task, DavaiIALTaskMixin, IncludesTaskMixin):
       else:
         raise Exception("Unknown geometry: ",self.conf.geometry.tag)
       return(gp)
-
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()

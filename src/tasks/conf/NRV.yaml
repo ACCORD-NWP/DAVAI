@@ -1,13 +1,15 @@
 forecasts:
-    - standalone_forecast_alaro0_antwrp1300                # standalone forecasts = "pure" toy models forecasts without any extra component (DFI, IAU, Fullpos...)
-    - standalone_forecast_alaro1_antwrp1300
-    - standalone_forecast_alaro1_sfx_chmh2325
-    - standalone_forecast_arome_corsica2500
-    - standalone_forecast_arpege_globaltst149c24
-    - standalone_forecast_arpege_nosfx_globaltst149c24
-    - standalone_forecast_ifs_global21
-    - canonical_forecast_arpege_global798c22               # canonical forecasts = close to operations, including extra components
-    - canonical_forecast_arpege_apl_global798c22
+    # standalone forecasts = "pure" toy models forecasts without any extra component (DFI, IAU, Fullpos...)
+    - standalone_alaro0_antwrp1300
+    - standalone_alaro1_antwrp1300
+    - standalone_alaro1_sfx_chmh2325
+    - standalone_arome_corsica2500
+    - standalone_arpege_globaltst149c24
+    - standalone_arpege_nosfx_globaltst149c24
+    - standalone_ifs_global21
+    # canonical forecasts = close to operations, including extra components
+    - canonical_arpege_global798c22
+    - canonical_arpege_apl_global798c22
 
 assim:
     - arpege_BSHM4DVar_OOPS  # BSHM = Bator+Screening+H(TL/AD)+Minim
@@ -18,20 +20,23 @@ assim:
     - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
     - arome_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
 
+misc:
+    - Physiography_arome   # PGD + clim 923(N923=1) on a range of LAM geometries
+
+oops:
+    - Bmat_arpege  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
+    - Bmat_arome  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
+    - ModelTLAD_arpege # TL model, adjoint test
+
+fullpos:
+    - LBC  # Fp_lbc = Fullpos creation of LBC files
+
+surfex:
+    - PP_arome   # PP_arome  = PGD+Prep on a LAM geometry
+    - PP_arpege  # PP_arpege = PGD+Prep on Gauss grids
+
 # mixs: jobs containing several tasks of various families
 #mixs:
 #    - PF  # Prep-Forecast (using older PGD)
 #    - PPF  # PGD-Prep-Forecast (using new PGD)
-
-objects:
-    - Bmat_arpege  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
-    - Bmat_arome  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
-    - ModelTL_arpege # TL model, adjoint test
-
-fullpos:
-    - Fp_lbc  # Fp_lbc = Fullpos creation of LBC files
-
-surfex:
-    - PP_geo_arome   # PP_geo_arome  = PGD+Prep on a range of LAM geometries
-    - PP_geo_arpege  # PP_geo_arpege = PGD+Prep on a range of Gaussian geometries
 

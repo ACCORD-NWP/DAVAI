@@ -7,7 +7,7 @@ from vortex.layout.nodes import Driver, Family
 from .raw2odb.batodb import BatorODB
 from .screenings.screeningOOPS import Screening as ScreeningOOPS
 from .minims.minimOOPS import Minim as MinimOOPS
-from .opobs.Htlad import Htlad
+from .obsop.Htlad import Htlad
 
 def setup(t, **kw):
     return Driver(tag='drv', ticket=t, options=kw, nodes=[

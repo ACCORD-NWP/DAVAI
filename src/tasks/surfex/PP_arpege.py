@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-PP_geo = PGD+Prep on a range of ARPEGE geometries
+PP_geo = PGD+Prep
 """
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Driver, Family, LoopFamily
@@ -21,9 +19,9 @@ def setup(t, **kw):
                         loopconf='geometrys',
                         loopsuffix='-{0.tag}',
                         nodes=[
-                        Family(tag='PP-arpege', ticket=t, on_error='delayed_fail', nodes=[
-                            PGD(tag='pgd-arpege', openmp=8, ticket=t, **kw),
-                            Prep(tag='prep-arpege', ticket=t, **kw),
+                        Family(tag='PP', ticket=t, on_error='delayed_fail', nodes=[
+                            PGD(tag='pgd', ticket=t, **kw),
+                            Prep(tag='prep', ticket=t, **kw),
                             ], **kw),
                         ], **kw),
                     ], **kw),

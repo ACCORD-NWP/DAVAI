@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 from footprints.util import rangex
 
@@ -37,10 +35,6 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                          'prep',
                          self.conf.model,
                          self.conf.geometry.tag])
-
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Driver, Family, LoopFamily
@@ -16,15 +14,15 @@ def setup(t, **kw):
         Family(tag='arpege', ticket=t, nodes=[
             Family(tag='4dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
-                    BmatSimple(tag='BmatSp', ticket=t, **kw),
-                    BmatFlowDependent(tag='BmatWv', ticket=t, **kw),
+                    BmatSimple(tag='bmatsp', ticket=t, **kw),
+                    BmatFlowDependent(tag='bmatwv', ticket=t, **kw),
                     EnVarAdjoint(tag='EnVarAdjoint', ticket=t, **kw),
                     LoopFamily(tag='ensread', ticket=t,
                         loopconf='mpireads',
                         loopsuffix='-mpi{}',
                         nodes=[
                         Family('EnsRead', ticket=t, on_error='delayed_fail', nodes=[
-                            EnsembleRead(tag='EnsembleRead', ticket=t, **kw),
+                            EnsembleRead(tag='read_ensemble', ticket=t, **kw),
                             ], **kw),
                         ], **kw),
                     ], **kw),

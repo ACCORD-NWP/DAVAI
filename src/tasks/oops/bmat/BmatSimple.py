@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -13,17 +11,12 @@ import davai
 from common.util.hooks import arpifs_obs_error_correl_legacy2oops
 
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb
+from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fullpos, hook_disable_flowdependentb, hook_ensemble_build
 
 
-class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
+class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'oops:mix/test_adjoint'})] + davai.vtx.util.default_experts()
-
-    def output_block(self):
-        return '-'.join([self.conf.jobname,
-                         self.conf.model,
-                         self.tag])
+    experts = [FPDict({'kind':'fields_in_file'})] + davai.vtx.util.default_experts()
 
     def process(self):
         self._wrapped_init()
@@ -40,6 +33,19 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(**self._reference_continuity_expertise())
             self._wrapped_input(**self._reference_continuity_listing())
             #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'Reference',  # ModelState
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                format         = '[nativefmt]',
+                kind           = 'historic',
+                local          = 'ref.ICMSHM[member]+0000',
+                member         = [1,2,3,4,5,6,7,8],
+                nativefmt      = 'fa',
+                term           = '-3',
+                vconf          = self.conf.ref_vconf,
+            )
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -59,7 +65,7 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.appenv,
                 kind           = 'rrtm',
                 local          = 'rrtm.const.tgz',
-            )
+            )            
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='Coefmodel',
@@ -86,11 +92,12 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role='Config',
                 format='json',
                 genv=self.conf.appenv,
+                hook_nam=(hook_ensemble_build, self.conf.members),
                 intent='inout',
                 kind='config',
                 local='oops.[format]',
                 nativefmt='[format]',
-                objects='test_model',
+                objects='test_ensemble',
                 scope='oops',
             )
 
@@ -117,9 +124,9 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 hook_nofullpos=(hook_disable_fullpos,),
                 intent='inout',
                 kind='namelist',
-                object=['nonlinear','linear','traj'],
-                local='[object]_model.nam',                
-                source='objects/[object]_model_upd2.nam',
+                local='model.nam',
+                object=['nonlinear_model_upd2'],
+                source='objects/[object].nam',
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
@@ -142,8 +149,8 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 format='ascii',
                 genv=self.conf.appenv,
                 hook_nofullpos=(hook_disable_fullpos,),
-                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),                
                 hook_simpleb=(hook_disable_flowdependentb,),
+                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
                 hook_cvaraux=(hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent='inout',
                 kind='namelist',
@@ -163,7 +170,6 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.2/ Flow Resources (initial): theoretically flow-resources, but statically stored in input_shelf
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            #-------------------------------------------------------------------------------
             # TODO: Fix error_covariance_3d_mod.F90, then remove this unused resource
             self._wrapped_input(
                 role='BackgroundStdError',
@@ -205,7 +211,8 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 iomethod='4',
                 kind='ootest',
                 terms=[-3, ],
-                test_type='mix/test_adjoint',
+                members=range(1, int(self.conf.members) + 1),
+                test_type='ensemble/build',
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()
@@ -213,6 +220,21 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self.run_expertise()
             #-------------------------------------------------------------------------------
+
+        # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
+        if 'backup' in self.steps:
+            #-------------------------------------------------------------------------------
+            self._wrapped_output(
+                role='ModelState',
+                block=self.output_block(),
+                experiment=self.conf.xpid,
+                format='fa',
+                kind='historic',
+                local='ICMSHM[member]+0000',
+                term='-3',
+                member=[1,2,3,4,5,6,7,8],
+                namespace=self.REF_OUTPUT,
+            )
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:

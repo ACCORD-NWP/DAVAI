@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -17,22 +15,6 @@ class FinalizePGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'fields_in_file'})]
     _taskinfo_kind = 'statictaskinfo'
-
-    def _flow_input_pgd_block(self):
-        return '-'.join([self.conf.prefix,
-                         'pgd',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
-    def _flow_input_clim_block(self):
-        return '-'.join([self.conf.prefix,
-                         'c923',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-                         
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()
@@ -81,12 +63,10 @@ class FinalizePGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 2.1/ Flow Resources: produced by another task of the same job
         if 'fetch' in self.steps:
-
             # PGD file
             self._wrapped_input(
                 role           = 'InputPGD',
-                #block         = 'geo-pgd-arome-{}'.format(self.conf.geometry.tag),
-                block          = self._flow_input_pgd_block(),
+                block          = self.input_block('pgd'),
                 experiment     = self.conf.xpid,
                 intent         = 'inout',
                 format         = 'fa',
@@ -94,18 +74,15 @@ class FinalizePGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'PGD.[format]',
                 nativefmt      = 'fa',
             )
-
-            
             # CLIM file with spectrally fitted orography
             self._wrapped_input(
                 role           = 'Clim',
-                block          = self._flow_input_clim_block(),
+                block          = self.input_block('c923n1'),
                 experiment     = self.conf.xpid,
                 format         = 'fa',
                 kind           = 'clim_model',
                 local          = 'Const.Clim',
             )
-            
 
         self._notify_inputs_done()
         # 2.2/ Compute step
@@ -127,14 +104,14 @@ class FinalizePGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'backup' in self.steps:
             #-------------------------------------------------------------------------------
             self._wrapped_output(
-              role           = 'FinalPgd',
-              block          = self.output_block(),
-              experiment     = self.conf.xpid,
-              format         = 'fa',
-              kind           = 'pgdfa',
-              local          = 'PGD.[format]',
-              namespace      = self.REF_OUTPUT,
-              nativefmt      = 'fa',
+                role           = 'FinalPgd',
+                block          = self.output_block(),
+                experiment     = self.conf.xpid,
+                format         = 'fa',
+                kind           = 'pgdfa',
+                local          = 'PGD.[format]',
+                namespace      = self.REF_OUTPUT,
+                nativefmt      = 'fa',
             )
             #-------------------------------------------------------------------------------
 

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 from footprints.util import rangex
 
@@ -24,10 +22,6 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         return [FPDict({'kind':'norms', 'plot_spectral':True, 'hide_equal_norms':self.conf.hide_equal_norms}),
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
-
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()

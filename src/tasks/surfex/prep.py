@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
 from vortex import toolbox
-from vortex.layout.nodes import Task, Family, Driver
 from common.util.hooks import update_namelist
 import davai
 
@@ -16,16 +13,6 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     experts = [FPDict({'kind':'fields_in_file'})]
-
-    def _flow_input_pgd_block(self):
-        return '-'.join([self.conf.prefix,
-                         'finalize-pgd' if self.conf.get('filtered_orography_in_pgd') else 'pgd',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
-    def output_block(self):
-        return '-'.join([self.conf.prefix,
-                         self.tag])
 
     def process(self):
         self._wrapped_init()
@@ -137,7 +124,7 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 # else: 1.1.1
                 self._wrapped_input(
                     role           = 'Target Clim',  # PGD
-                    block          = self._flow_input_pgd_block(),
+                    block          = self.input_block('finalize_pgd' if self.conf.get('filtered_orography_in_pgd') else 'pgd'),
                     experiment     = self.conf.xpid,
                     format         = 'fa',
                     geometry       = self.conf.geometry,

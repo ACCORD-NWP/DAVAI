@@ -7,7 +7,7 @@ from vortex.layout.nodes import Driver, Family
 from .raw2odb.batodb import BatorODB
 from .screenings.screeningOOPS import Screening as ScreeningOOPS
 from .minims.minimOOPS import Minim as MinimOOPS
-from ..objects.opobs.Hscreened import Hscreened
+from ..objects.obsop.Hscreened import Hscreened
 
 
 def setup(t, **kw):

@@ -4,9 +4,9 @@ from footprints import FPDict
 
 import vortex
 from vortex import toolbox
-from common.util.hooks import update_namelist
-import davai
+from vortex.layout.nodes import Task
 
+import davai
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 

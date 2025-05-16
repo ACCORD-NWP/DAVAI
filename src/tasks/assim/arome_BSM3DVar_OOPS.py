@@ -19,8 +19,8 @@ def setup(t, **kw):
                         loopsuffix='.{}',
                         nodes=[
                             Family(tag='BSM', ticket=t, on_error='delayed_fail', nodes=[
-                                #BatorODB(tag='batodb', ticket=t, **kw),
-                                #ScreeningOOPS(tag='screening', ticket=t, **kw),
+                                BatorODB(tag='batodb', ticket=t, **kw),
+                                ScreeningOOPS(tag='screening', ticket=t, **kw),
                                 MinimOOPSNoVARBC(tag='minim_novarbc', ticket=t, **kw),
                             ], **kw),
                         ], **kw),

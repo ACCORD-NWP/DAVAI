@@ -34,6 +34,12 @@ class EnsembleRead(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(**self._reference_continuity_expertise())
             self._wrapped_input(**self._reference_continuity_listing())
             #-------------------------------------------------------------------------------
+        if 'fetch' in self.steps:
+            if int(self.conf.mpiread) != 1:  # compare to monoproc read if read in parallel
+                self.conf.consistency_ref_tag = self.tag.replace(self.conf.mpiread, '1')
+                self._wrapped_input(**self._reference_consistency_expertise(suffix=False))
+                self._wrapped_input(**self._reference_consistency_listing(suffix=False))
+            #-------------------------------------------------------------------------------
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -192,7 +198,7 @@ class EnsembleRead(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'fetch' in self.steps:
             self._wrapped_input(
                 role='ModelState',
-                block=self.input_block(),
+                block=self.input_block(suffix=False),
                 experiment=self.conf.xpid,
                 format='fa',
                 kind='historic',

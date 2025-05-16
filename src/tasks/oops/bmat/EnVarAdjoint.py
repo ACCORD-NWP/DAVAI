@@ -192,7 +192,7 @@ class EnVarAdjoint(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'fetch' in self.steps:
             self._wrapped_input(
                 role='ModelState',
-                block=self.input_block(),
+                block=self.input_block(suffix=False),
                 experiment=self.conf.xpid,
                 format='fa',
                 kind='historic',

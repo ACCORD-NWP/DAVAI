@@ -22,6 +22,7 @@ assim:
     # arome
     - arome_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
     - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
+    - arome_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
     # one obstype at a time -- Bator+Screening only
     - arpege_BS3D__obstype
     - arpege_BS4D__obstype

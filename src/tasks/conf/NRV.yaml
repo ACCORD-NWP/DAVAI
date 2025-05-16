@@ -18,7 +18,6 @@ assim:
     - arpege_BC  # BC = Bator(surf)+Canari
     - arome_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
     - arome_BA3DVar_OOPS  # BA = Bator+Analysis (all-in-one)
-    - arome_BSM3DVar_OOPS  # BSM = Bator+Screening+Minim
 
 misc:
     - Physiography_arome   # PGD + clim 923(N923=1) on a range of LAM geometries

@@ -1,8 +1,7 @@
 forecasts:
     # standalone forecasts = "pure" toy models forecasts without any extra component (DFI, IAU, Fullpos...)
-    - standalone_alaro0_antwrp1300
-    - standalone_alaro1_antwrp1300
-    - standalone_alaro1_sfx_chmh2325
+    - standalone_alaro_antwrp1300
+    - standalone_alaro1sfx_chmh2325
     - standalone_arome_corsica2500
     - standalone_arpege_globaltst149c24
     - standalone_arpege_nosfx_globaltst149c24

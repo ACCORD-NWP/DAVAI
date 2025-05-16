@@ -245,11 +245,21 @@ class DavaiTaskMixin(WrappedToolboxMixin):
         return '@'.join([self.conf.testjob,  # = job: family.driver
                          self.tag])          # = tag of the task (+suffix if LoopFamily)
 
-    def input_block(self, flow_input_task_tag=None):
+    def input_block(self, flow_input_task_tag=None, suffix=True):
         if flow_input_task_tag is None:
             flow_input_task_tag = self._flow_input_task_tag
+        if suffix:
+            flow_input_task_tag += self._tag_suffix()
         return '@'.join([self.conf.testjob,
-                         flow_input_task_tag + self._tag_suffix()])
+                         flow_input_task_tag])
+
+    def consistency_ref_block(self, suffix=True):
+        return self.input_block(self.conf.get('consistency_ref_tag', '__noref__'),
+                                suffix=suffix)
+
+    @property
+    def consistency_ref_task(self):
+        return self.conf.get('consistency_ref_tag', '__noref__')
 
     def _tag_suffix(self):
         """Get the suffix part of the tag, in case of a LoopFamily-ed task."""
@@ -288,11 +298,11 @@ class DavaiTaskMixin(WrappedToolboxMixin):
             task           = 'expertise',
             vconf          = self.conf.ref_vconf)
 
-    def _reference_consistency_expertise(self):
+    def _reference_consistency_expertise(self, suffix=True):
         """Standard description of the expertise of the "consistency" reference."""
         return dict(
             role           = 'ConsistencyReference',
-            block          = self.consistency_ref_block,
+            block          = self.consistency_ref_block(suffix=suffix),
             experiment     = self.conf.xpid,
             fatal          = False,
             format         = 'json',
@@ -412,12 +422,12 @@ class DavaiIALTaskMixin(DavaiTaskMixin, IncludesTaskMixin):
             task           = self._configtag,
             vconf          = self.conf.ref_vconf)
 
-    def _reference_consistency_listing(self):
+    def _reference_consistency_listing(self, suffix=True):
         """Standard description of the listing of the "consistency" reference."""
         return dict(
             role           = 'ConsistencyReference',
             binary         = '[model]',
-            block          = self.consistency_ref_block,
+            block          = self.consistency_ref_block(suffix=suffix),
             experiment     = self.conf.xpid,
             fatal          = False,
             format         = 'ascii',

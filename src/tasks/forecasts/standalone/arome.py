@@ -22,20 +22,6 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
 
-    def _flow_input_pgd_block(self):
-        """Block of PGD in case of a PPF flow-chained job."""
-        return '-'.join([self.conf.prefix,
-                         'pgd',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
-    def _flow_input_surf_ic_block(self):
-        """Block of surf IC in case of a PPF flow-chained job."""
-        return '-'.join([self.conf.prefix,
-                         'prep',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
     def process(self):
         self._wrapped_init()
         self._notify_start_inputs()
@@ -78,6 +64,10 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 vconf          = self.conf.ref_vconf,
             )
             #-------------------------------------------------------------------------------
+        if 'fetch' in self.steps:
+            # this task is also to be compared to another task of the same experiment
+            self._wrapped_input(**self._reference_consistency_expertise())
+            self._wrapped_input(**self._reference_consistency_listing())
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -147,7 +137,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             tboptions = self._wrapped_input(
                 role           = 'Namelist Deltas to add/remove options',
                 binary         = 'arpifs',
-                component      = 'noFPinline.nam,noDDH.nam,spnorms.nam',
+                component      = self.conf.namelist_components,
                 format         = 'ascii',
                 genv           = self.conf.davaienv,
                 intent         = 'in',
@@ -162,6 +152,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 format         = 'ascii',
                 genv           = self.conf.davaienv,
                 hook_options   = (update_namelist, tboptions),
+                hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
@@ -254,7 +245,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             if self.conf.pgd_source == 'flow':
                 self._wrapped_input(
                     role           = 'PGD',
-                    block          = self._flow_input_pgd_block(),
+                    block          = self.input_block('pgd'),
                     experiment     = self.conf.xpid,
                     format         = 'fa',
                     kind           = 'pgdfa',
@@ -265,7 +256,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             if self.conf.surf_ic_source == 'flow':
                 self._wrapped_input(
                     role           = 'Surface Initial conditions',
-                    block          = self._flow_input_surf_ic_block(),
+                    block          = self.input_block('prep'),
                     date           = self.conf.rundate,
                     experiment     = self.conf.xpid,
                     format         = '[nativefmt]',

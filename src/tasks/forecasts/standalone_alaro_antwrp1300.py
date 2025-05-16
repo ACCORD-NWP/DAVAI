@@ -2,7 +2,7 @@
 
 from vortex.layout.nodes import Family, Driver, LoopFamily
 
-from .standalone.ifs import StandaloneIFSForecast
+from .standalone.alaro import StandaloneAlaroForecast
 
 
 def setup(t, **kw):
@@ -10,11 +10,11 @@ def setup(t, **kw):
         LoopFamily(tag='gmkpack', ticket=t,
             loopconf='compilation_flavours',
             loopsuffix='.{}',
+            on_error='delayed_fail',
             nodes=[
-                Family(tag='ifs', ticket=t, on_error='delayed_fail', nodes=[
-                    Family(tag='global21', ticket=t, nodes=[
-                        StandaloneIFSForecast(tag='forecast', ticket=t, **kw),
-                        ], **kw),
+                Family(tag='antwrp1300', ticket=t, nodes=[
+                    StandaloneAlaroForecast(tag='alaro0', on_error='delayed_fail', ticket=t, **kw),
+                    StandaloneAlaroForecast(tag='alaro1', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
         ],

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -21,8 +19,14 @@ def setup(t, **kw):
             nodes=[
                 Family(tag='arpege', ticket=t, on_error='delayed_fail', nodes=[
                     Family(tag='globaltst149c24', ticket=t, nodes=[
-                        StandaloneArpegeForecast(tag='forecast-arpege-globaltst149c24', ticket=t, 
-                                                 on_error='delayed_fail', **kw),
+                        StandaloneArpegeForecast(tag='aplpar',
+                                                 ticket=t, on_error='delayed_fail', **kw),
+                        StandaloneArpegeForecast(tag='apl_arpege',
+                                                 ticket=t, on_error='delayed_fail', **kw),
+                        StandaloneArpegeForecast(tag='aplpar_nproma32',
+                                                 ticket=t, on_error='delayed_fail', **kw),
+                        StandaloneArpegeForecast(tag='aplpar_nosfx',
+                                                 ticket=t, **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

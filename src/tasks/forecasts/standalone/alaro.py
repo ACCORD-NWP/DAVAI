@@ -5,7 +5,7 @@ from footprints.util import rangex
 
 import vortex
 from vortex import toolbox
-from vortex.layout.nodes import Task, Family, Driver
+from vortex.layout.nodes import Task
 from common.util.hooks import update_namelist
 import davai
 
@@ -21,20 +21,6 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         return [FPDict({'kind':'norms', 'plot_spectral':True, 'hide_equal_norms':self.conf.hide_equal_norms}),
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
-
-    def _flow_input_pgd_block(self):
-        """Block of PGD in case of a PPF flow-chained job."""
-        return '-'.join([self.conf.prefix,
-                         'pgd',
-                         self.conf.model,
-                         self.conf.geometry.tag])
-
-    def _flow_input_surf_ic_block(self):
-        """Block of surf IC in case of a PPF flow-chained job."""
-        return '-'.join([self.conf.prefix,
-                         'prep',
-                         self.conf.model,
-                         self.conf.geometry.tag])
 
     def process(self):
         self._wrapped_init()
@@ -79,6 +65,10 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                     vconf          = self.conf.ref_vconf,
                   )
             #-------------------------------------------------------------------------------
+        if 'fetch' in self.steps:
+            # this task is also to be compared to another task of the same experiment
+            self._wrapped_input(**self._reference_consistency_expertise())
+            self._wrapped_input(**self._reference_consistency_listing())
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -263,7 +253,7 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 if self.conf.pgd_source == 'flow':
                     self._wrapped_input(
                         role           = 'PGD',
-                        block          = self._flow_input_pgd_block(),
+                        block          = self.input_block('pgd'),
                         experiment     = self.conf.xpid,
                         format         = 'fa',
                         kind           = 'pgdfa',
@@ -274,7 +264,7 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 if self.conf.surf_ic_source == 'flow':
                     self._wrapped_input(
                         role           = 'Surface Initial conditions',
-                        block          = self._flow_input_surf_ic_block(),
+                        block          = self.input_block('prep'),
                         date           = self.conf.rundate,
                         experiment     = self.conf.xpid,
                         format         = '[nativefmt]',

@@ -22,6 +22,7 @@ from .. import __version__
 from . import config
 from . import DAVAI_HOST, DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf, initialized
+from ..vtx.tasks import gmkpack_build_job
 
 
 class XPmaker(object):
@@ -539,8 +540,7 @@ class XP(object):
         """Launch build job."""
         os.environ['DAVAI_START_BUILD'] = str(time.time())
         # run build in batch/scheduler
-        build_job = 'build.gmkpack.pack2bin'
-        self._launch(build_job, 'build',
+        self._launch(gmkpack_build_job, 'build',
                      drymode=drymode,
                      cleanpack=cleanpack,
                      fake_build=fake_build,

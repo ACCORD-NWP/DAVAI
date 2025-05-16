@@ -3,37 +3,15 @@ from footprints import FPDict
 
 import vortex
 from vortex import toolbox
-from vortex.layout.nodes import Task, Driver, Family, LoopFamily
 
 from davai.vtx.tasks.mixins import DavaiTaskMixin, GmkpackMixin
 from davai.vtx.algo.build import binaries_syntax_in_workdir
-from tasks.build.wait4build import Wait4BuildInit
-
-
-def setup(t, **kw):
-    return Driver(tag='build', ticket=t, options=kw, nodes=[
-        Wait4BuildInit(tag='wait4build_init', ticket=t, **kw),  # (re-)initialize list of tasks to be waited for
-        Family(tag='gmkpack', ticket=t, nodes=[
-            LoopFamily(tag='loop_g2p', ticket=t,
-                loopconf='compilation_flavours',
-                loopsuffix='.{}',
-                nodes=[
-                    Pack2Bin(tag='pack2bin', ticket=t, **kw),
-                ], **kw),
-            ], **kw),
-        ],
-    )
 
 
 class Pack2Bin(Task, DavaiTaskMixin, GmkpackMixin):
 
     experts = [FPDict({'kind':'gmkpack_build'}),]
     _taskinfo_kind = 'statictaskinfo'
-
-    def output_block(self):
-        return self.executables_block()  # this method is now defined to mimic {tag}.{compilation_flavour.lower()} as
-                                         # the loop on compilation flavours does, so this shouldn't be useful, but kept
-                                         # to ensure consistency
 
     @property
     def programs(self):

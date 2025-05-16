@@ -11,7 +11,7 @@ from bronx.stdtypes.date import Period, utcnow
 
 from ..util import context_info_for_task_summary
 from ..hooks.summaries import take_the_DAVAI_train
-from . import gmkpack_executables_block_tag
+from . import gmkpack_executables_block_tag, gmkpack_build_job
 
 
 class IncludesTaskMixin(object):
@@ -196,11 +196,14 @@ class DavaiTaskMixin(WrappedToolboxMixin):
         """
         Return the block in which to find the binaries, wrt self.compilation_flavour or a provided such argument.
 
-        CAREFUL IN MODIFYING THIS: this method is defined to mimic what the loop on compilation flavours does.
+        CAREFUL IN MODIFYING THIS: this method is defined to mimic what:
+        - the loop on compilation flavours does
+        - output_block() does
         """
         if compilation_flavour is None:
             compilation_flavour = self.conf.compilation_flavour
-        return '{}.{}'.format(gmkpack_executables_block_tag, self.conf.compilation_flavour.lower())
+        tag = '{}.{}'.format(gmkpack_executables_block_tag, compilation_flavour.lower())
+        return '{}@{}'.format(gmkpack_build_job, tag)
 
     def executables_block(self, **kw):
         """

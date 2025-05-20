@@ -15,6 +15,7 @@ logger = loggers.getLogger(__name__)
 
 
 def take_the_DAVAI_train(t, rh,
+                         ciboulai_send_tries=1,
                          fatal=True,
                          wagons='__all__'):
     """Usual double put of summaries for DAVAI."""
@@ -24,7 +25,7 @@ def take_the_DAVAI_train(t, rh,
         wagons = wagons.split(',')
     # call sub-puts
     if 'ciboulai' in wagons:
-        send_to_DAVAI_server(t, rh, fatal=fatal)
+        send_to_DAVAI_server(t, rh, ciboulai_send_tries=ciboulai_send_tries, fatal=fatal)
     if 'stack' in wagons:
         throw_summary_on_stack(t, rh)
 
@@ -42,12 +43,15 @@ def throw_summary_on_stack(t, rh):
     stack.throw_on_stack(rh)
 
 
-def send_to_DAVAI_server(t, rh, fatal=True):  # @UnusedVariables
+def send_to_DAVAI_server(t, rh,
+                         ciboulai_send_tries=1,
+                         fatal=True):
     """
     Send a JSON summary to DAVAI server.
 
     :param t: The Ticket object representing the current session.
     :param rh: The resource's Handler on which the hook is called.
+    :param ciboulai_send_tries: number of tries to send to ciboulai
     :param fatal: If False, catch errors, log but do not raise.
     """
     server_syntax = 'http[s]://<host>[:<port>]/<url> (port is optional)'
@@ -73,6 +77,7 @@ def send_to_DAVAI_server(t, rh, fatal=True):  # @UnusedVariables
                                       rh.provider.experiment,
                                       json.dumps(jsonData),
                                       kind=rh.resource.kind,
+                                      tries=ciboulai_send_tries,
                                       fatal=fatal,
                                       proxies=proxies)
     except Exception as e:

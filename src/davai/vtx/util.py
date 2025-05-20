@@ -109,14 +109,21 @@ def bundle_guess_packname(bundle,
                                  to_bin=to_bin)
 
 
-def send_task_to_DAVAI_server(davai_server_post_url, xpid, jsonData, kind,
-                              fatal=True, proxies=None, **kwargs):
+def send_task_to_DAVAI_server(davai_server_post_url,
+                              xpid,
+                              jsonData,
+                              kind,
+                              tries=1,
+                              fatal=True,
+                              proxies=None,
+                              **kwargs):
     """
     Send JSON data to DAVAI server.
 
     :param xpid: experiment identifier
     :param jsonData: data to be sent, formatted as output from json.dumps(...)
     :param kind: kind of data, among 'xpinfo' or 'taskinfo'/'statictaskinfo'
+    :param tries: number of tries to send
     :param fatal: raise errors (or log them and ignore)
 
     Additional kwargs are passed to requests.post()
@@ -135,26 +142,32 @@ def send_task_to_DAVAI_server(davai_server_post_url, xpid, jsonData, kind,
             'type': kind,
             'token': token}
     # sending post request and saving response as response object
-    try:
-        rc, status, headers, rdata = http_post_data(url=davai_server_post_url, data=data,
-                                                    proxies=proxies, **kwargs)
-    except OSError as e:
-        logger.error('Connection with remote server: {} failed: {}'.format(
-            davai_server_post_url,
-            str(e)))
-        if fatal:
-            raise
-    else:
-        # success
-        if rc:
-            logger.info('HTTP Post suceeded: status=%d. data:\n%s',
-                        status, rdata)
-        # fail
+    for t in range(1, tries+1):
+        try:
+            rc, status, headers, rdata = http_post_data(url=davai_server_post_url, data=data,
+                                                        proxies=proxies, **kwargs)
+        except OSError as e:
+            logger.error('Connection with remote server: {} failed: {}'.format(
+                davai_server_post_url,
+                str(e)))
+            if t < tries:
+                logger.info("Try again: {}/{}".format(t, tries))
+            elif fatal:
+                raise
         else:
-            logger.error('HTTP post failed: status=%d. header:\n%s data:\n%s.',
-                         status, headers, rdata)
-            if fatal:
-                raise DavaiException('HTTP post failed')
+            # success
+            if rc:
+                logger.info('HTTP Post suceeded: status=%d. data:\n%s',
+                            status, rdata)
+                break
+            # fail
+            else:
+                logger.error('HTTP post failed: status=%d. header:\n%s data:\n%s.',
+                             status, headers, rdata)
+                if t < tries:
+                    logger.error("Try again: {}/{}".format(t, tries))
+                elif fatal:
+                    raise DavaiException('HTTP post failed')
 
 
 @contextlib.contextmanager

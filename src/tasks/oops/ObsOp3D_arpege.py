@@ -26,9 +26,9 @@ def setup(t, **kw):
                             H(tag='test_hop_with_jo', ticket=t, on_error='delayed_fail', **kw),
                             H(tag='test_adjoint', ticket=t, on_error='delayed_fail', **kw),
 
-                            #TODO: Tests with VARBC not implemented yet in CY48
-                            #H(tag='test_hop_with_jo+varbc', ticket=t, on_error='delayed_fail', **kw),
-                            #H(tag='test_adjoint+varbc', ticket=t, on_error='delayed_fail', **kw),
+                            # TODO: Tests with VARBC not implemented yet in CY48
+                            # H(tag='test_hop_with_jo+varbc', ticket=t, on_error='delayed_fail', **kw),
+                            # H(tag='test_adjoint+varbc', ticket=t, on_error='delayed_fail', **kw),
                             ], **kw),
                         ], **kw),
                     ], **kw),

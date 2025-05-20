@@ -6,9 +6,9 @@ Loop on obstypes to test BatorODB+H independantly on each obstypes.
 import vortex
 from vortex.layout.nodes import Driver, Family, LoopFamily
 
-from tasks.assim.raw2odb.batodb import BatorODB
-from .opobs.Hdirect import Hdirect
-from .opobs.H import H
+from ..assim.raw2odb.batodb import BatorODB
+from .obsop.Hdirect import Hdirect
+from .obsop.H import H
 
 
 def setup(t, **kw):
@@ -26,7 +26,7 @@ def setup(t, **kw):
                             H(tag='test_hop_with_jo', ticket=t, on_error='delayed_fail', **kw),
                             H(tag='test_adjoint', ticket=t, on_error='delayed_fail', **kw),
 
-                            #TODO: Tests with VARBC not implemented yet in CY48
+                            # TODO: Tests with VARBC not implemented yet in CY48
                             # H(tag='test_hop_with_jo+varbc', ticket=t, on_error='delayed_fail', **kw),
                             # H(tag='test_adjoint+varbc', ticket=t, on_error='delayed_fail', **kw),
                             ], **kw),

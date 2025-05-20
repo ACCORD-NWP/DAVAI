@@ -20,8 +20,10 @@ def setup(t, **kw):
                         loopconf='obstypes',
                         loopsuffix='.{}',
                         nodes=[
-                            BatorODB(tag='batodb', ticket=t, **kw),
-                            ScreeningOOPS(tag='screening', ticket=t, **kw),
+                            Family(tag='BSM', ticket=t, on_error='delayed_fail', nodes=[
+                                BatorODB(tag='batodb', ticket=t, **kw),
+                                ScreeningOOPS(tag='screening', ticket=t, **kw),
+                            ], **kw),
                         ], **kw),
                     ], **kw),
                 ], **kw),

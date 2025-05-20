@@ -4,18 +4,16 @@ forecasts:
     - standalone_alaro1sfx_chmh2325
     - standalone_arome_corsica2500
     - standalone_arpege_globaltst149c24
-    - standalone_arpege_nosfx_globaltst149c24
     - standalone_ifs_global21
     # canonical forecasts = close to operations, including extra components
     - canonical_arpege_global798c22
-    - canonical_arpege_apl_global798c22
 
 assim:
     # arpege
     - arpege_BA4DVar_OOPS  # BA = Bator+Analysis (all-in-one)
-    - arpege_BSHM4DVar_OOPS  # BSM = Bator+Screening+H(TL/AD)+Minim
+    - arpege_BSHM4DVar_OOPS  # BSHM = Bator+Screening+H(TL/AD)+Minim
     - arpege_BSM4DVar_CNT0  # BSM = Bator+Screening+Minim
-    - arpege_BSHM3DVar_OOPS  # BSM = Bator+Screening+H(TL/AD)+Minim
+    - arpege_BSHM3DVar_OOPS  # BSHM = Bator+Screening+H(TL/AD)+Minim
     - arpege_BSM3DVar_CNT0  # BSM = Bator+Screening+Minim
     - arpege_BC  # BC = Bator(surf)+Canari
     # arome
@@ -35,11 +33,11 @@ oops:
     - Bmat_arome  # Construction and reading of a B-matrix using an ensemble, EnVar unit tests
     - ModelTLAD_arpege # TL model, adjoint test
 
-misc:
-    - Physiography_arome   # PGD + clim 923(N923=1) on a range of LAM geometries
-
 fullpos:
     - LBC  # Fullpos creation of LBC files
+
+misc:
+    - Physiography_arome   # PGD + clim 923(N923=1) on a range of LAM geometries
 
 surfex:
     - PP_arome   # PP_arome  = PGD+Prep on a LAM geometry

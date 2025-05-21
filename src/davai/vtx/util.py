@@ -8,6 +8,7 @@ import re
 import tarfile
 import tempfile
 import contextlib
+import time
 
 from footprints import proxy as fpx
 from bronx.fancies import loggers
@@ -152,6 +153,7 @@ def send_task_to_DAVAI_server(davai_server_post_url,
                 str(e)))
             if t < tries:
                 logger.info("Try again: {}/{}".format(t, tries))
+                time.sleep(3)
             elif fatal:
                 raise
         else:
@@ -166,6 +168,7 @@ def send_task_to_DAVAI_server(davai_server_post_url,
                              status, headers, rdata)
                 if t < tries:
                     logger.error("Try again: {}/{}".format(t, tries))
+                    time.sleep(3)
                 elif fatal:
                     raise DavaiException('HTTP post failed')
 

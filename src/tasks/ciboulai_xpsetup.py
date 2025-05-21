@@ -54,6 +54,7 @@ class CiboulaiXpSetup(Task):
                 experiment     = self.conf.xpid,
                 format         = 'json',
                 hook_send      = (send_to_DAVAI_server,
+                                  int(self.conf.ciboulai_send_tries),
                                   self.conf.expertise_fatal_exceptions),
                 kind           = 'xpinfo',
                 local          = 'xpinfo.[format]',

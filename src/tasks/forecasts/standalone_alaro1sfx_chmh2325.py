@@ -11,7 +11,7 @@ def setup(t, **kw):
             loopconf='compilation_flavours',
             loopsuffix='.{}',
             nodes=[
-                Family(tag='chmh2325', ticket=t, nodes=[
+                Family(tag='chmh2325', ticket=t, on_error='delayed_fail', nodes=[
                     StandaloneAlaroForecast(tag='alaro1sfx', ticket=t, **kw),
                     ], **kw),
                 ], **kw),

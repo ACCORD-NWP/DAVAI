@@ -10,9 +10,8 @@ def setup(t, **kw):
         LoopFamily(tag='gmkpack', ticket=t,
             loopconf='compilation_flavours',
             loopsuffix='.{}',
-            on_error='delayed_fail',
             nodes=[
-                Family(tag='antwrp1300', ticket=t, nodes=[
+                Family(tag='antwrp1300', on_error='delayed_fail', ticket=t, nodes=[
                     StandaloneAlaroForecast(tag='alaro0', on_error='delayed_fail', ticket=t, **kw),
                     StandaloneAlaroForecast(tag='alaro1', ticket=t, **kw),
                     ], **kw),

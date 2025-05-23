@@ -4,7 +4,7 @@ from footprints import FPDict
 
 import vortex
 from vortex import toolbox
-from vortex.layout.nodes import Task, Family, Driver, LoopFamily
+from vortex.layout.nodes import Family, Driver, LoopFamily
 from common.util.hooks import update_namelist
 import davai
 

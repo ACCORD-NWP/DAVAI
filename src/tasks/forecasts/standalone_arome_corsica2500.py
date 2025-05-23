@@ -13,7 +13,7 @@ def setup(t, **kw):
             nodes=[
                 Family(tag='arome', ticket=t, on_error='delayed_fail', nodes=[
                     Family(tag='corsica2500', ticket=t, nodes=[
-                        StandaloneAromeForecast(tag='arome_nominal', ticket=t, on_error='delayed_fail', **kw),
+                        StandaloneAromeForecast(tag='arome_nominal', ticket=t, **kw),
                         StandaloneAromeForecast(tag='arome_nproma32', ticket=t, **kw),
                         ], **kw),
                     ], **kw),

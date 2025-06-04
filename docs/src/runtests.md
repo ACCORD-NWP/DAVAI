@@ -1,5 +1,14 @@
 ### Run tests
 
+!!! tip "In brief"
+    ```
+    module load davai/2
+    davai-new_xp <my_branch>
+    cd <path/to/experiment>
+    source venv/bin/activate
+    davai-run_xp
+    ```
+
 1. Create your experiment, specifying which version of the tests you need to use:
 
    ```

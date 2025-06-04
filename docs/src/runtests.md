@@ -28,8 +28,7 @@
    !!! tip "Useful function to put in your `.bashrc`:"
        ```
        function davai-activate() {
-         path="${1:-.}"
-         source $path/venv/bin/activate
+         source ${1:-.}/venv/bin/activate
          }
        ```
        so as to activate an experiment venv using `davai-activate` from within it, or `davai-activate path/to/xp`.

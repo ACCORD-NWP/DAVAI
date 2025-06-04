@@ -6,11 +6,11 @@ executables, running test cases, analysing the results and displaying
 them on a dashboard.
 
 For now, the only build system embedded is `gmkpack`, but we expect
-other systems to be plugged when required. The second limitation of this
-version is that the starting point is still an IAL[^1] Git reference
-only. The next version of the DAVAÏ system will include
-multi-projects/repositories fetching, using the *`bundle`* concept as
-starting point.
+other systems to be plugged when required.
+The source code to be provided can be either an IAL[^1] Git reference
+or an IAL bundle. In the first case, the rest of the projects/repositories
+will be infered from the latest official tagged ancestor, using the
+git history of IAL-bundle.
 
 The dimensioning of tests (grid sizes, number of observations,
 parallelization\...) is done in order to conceal representativity and

@@ -13,40 +13,19 @@ This repository is the result of the merge of:
 * the `DAVAI-env` repository (command-line interface)
 * the `DAVAI-tests` repository (utilities, tasks & jobs)
 
+Documentation
+-------------
+
+Documentation is deployed [here](https://accord-nwp.github.io/DAVAI/).
+
 Installation
 ------------
 
-* on [`belenos`@MF](docs/src/belenos.md)
+DAVAI is deployed on PyPI, or can be git-cloned and installed locally with pip.
 
-* on [`Atos/bologna`@ECMWF](docs/src/atos_bologna.md)
+It is also preinstalled on MF and ECMWF HPC clusters at MF and ECMWF.
 
-* or to setup your own install:
-  * Create a venv:
-    ```
-    python -m venv ~/venvs/davai`
-    source ~/venvs/davai
-    ```
-  * Then either install your own working version:
-    - Clone this repository, e.g. in `~/repositories/` and install it:
-      ```
-      git clone https://github.com/ACCORD-NWP/DAVAI.git
-      pip install [-e] DAVAI
-      ```
-    - Or from PyPI:
-      ```
-      pip install davai
-      ```
-
-> [!TIP]
-> Useful function to put in your `.bashrc`:
-> ```
-> function davai-activate() {
->   path="${1:-.}"
->   source $path/venv/bin/activate
->   }
-> ```
-> so as to activate an experiment venv using `davai-activate` from within it, or `davai-activate path/to/xp`.
-
+More information on [Installation](docs/src/installation.md) page of documentation.
 
 Quick start
 -----------
@@ -77,11 +56,6 @@ From CY50+, a default version of Davai can be found in IAL repo, file `.davai_de
 However, new versions can be recommended, unrelated to changes in the IAL.
 For that matter,  it will be referenced [here](docs/src/versions.md)
 
-Documentation
--------------
-
-Cf. [here](https://accord-nwp.github.io/DAVAI/).
-
 Dependencies
 ------------
 
@@ -103,6 +77,9 @@ procedures. These include:
 * [_**Vortex**_](https://opensource.umr-cnrm.fr/projects/vortex):
   scripting system used for the definition of tasks (resources, executables launch, ...) and the running
   of the jobs. It embeds a number of necesary-as-well sub-packages.
+  
+  _Note: A portable version of Vortex, still under progress, will be available and deployed on PyPI soon._
+
 * [_**Gmkpack**_](https://www.umr-cnrm.fr/gmapdoc/spip.php?article79):
   build system for IAL. Documentation is outdated.
 

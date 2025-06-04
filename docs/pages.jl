@@ -1,7 +1,14 @@
 pages = [
     "Home" => "index.md", 
-    "Getting Started" => [ 
+    "Setup" => [ 
+        "Install Davai" => "installation.md",
+    	"HPC Platforms" => [
+       	    "Belenos" => "belenos.md",
+            "Atos" => "atos_bologna.md"
+        ],
         "Creating a branch" => "create_branch.md",
+    ],
+    "Getting Started" => [ 
         "Running tests" => "runtests.md",
         "Monitoring results" => "ciboulai.md",
         "Ciboulaï navigation" => "ciboulai_navigation.md"
@@ -34,10 +41,5 @@ pages = [
          "Setting reference exp" => "setting_reference.md",
          "Internal organization" => "internalorganization.md"
     ],
-    "HPC Platforms" => [
-       "Belenos" => "belenos.md",
-       "Atos" => "atos_bologna.md"
-    ],
 ]
-
 

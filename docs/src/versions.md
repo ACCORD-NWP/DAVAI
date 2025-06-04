@@ -16,5 +16,6 @@ Versions from 2.0.0
 
 | Davai version | IAL Cycle of reference experiment | Note |
 |:--------------|:----------------------------------|:-----|
-| 2.0.0 | CY50 | :warning: issue with `davai-new_xp_from_bundle` |
+| 2.0.0 | CY50 | Warning: issue with `davai-new_xp_from_bundle` |
 | 2.0.1 | CY50 | |
+| DV50_T1rc.02 | CY50_T1rc.02 | |

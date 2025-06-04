@@ -13,6 +13,8 @@ requested profile parameters to the jobs scheduler:
 
 -   `partition` : category of nodes
 
+-   `qos` : quality of service (nodes)
+
 -   `mem` : memory (helps to prevent OOM)
 
 The total number of MPI tasks is therefore `nnodes \times ntasks`, and

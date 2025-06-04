@@ -11,5 +11,3 @@ tune the behaviour of the experiment:
 -   `ignore_reference` to force to ignore reference outputs (and so
     deactivate comparison)
 
--   `archive_as_ref` to archive the outputs (saving of a reference only)
-

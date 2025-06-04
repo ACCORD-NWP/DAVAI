@@ -10,7 +10,13 @@ The `davai-build` command does 2 sequential things:
 
 Tasks:
 
-- `gitref2pack` : fetch/pull the sources from the requested Git reference and set one or several incremental `gmkpack`'s pack(s) -- depending on `compilation_flavours` as set in config. The packs are then populated with the set of modifications, from the latest official tag to the contents of your branch (including non-commited modifications).
+- Fetch sources:
+
+  - from an IAL git ref:
+    `gitref2pack` : fetch/pull the sources from the requested Git reference and set one or several incremental `gmkpack`'s pack(s) -- depending on `compilation_flavours` as set in config. The packs are then populated with the set of modifications, from the latest official tag to the contents of your branch (including non-commited modifications).
+
+  - from a bundle:
+    `bundle2pack` : fetch the sources of the projects as described in the bundle and set one or several `gmkpack`'s pack(s) -- depending on `compilation_flavours` as set in config -- and populate them with the projects.
 
 - `pack2bin` : compile sources and link necessary executables (i.e. those used in the tests), for each pack flavour.
 

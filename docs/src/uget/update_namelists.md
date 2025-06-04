@@ -2,7 +2,7 @@
 
 In this example, we need to update namelists of Davai for the needs of a code modification
 (e.g. renaming of a variable, or adding a new block).
-Cf. "uget" section of this documentation for installation and a more thorough tutorial.
+Cf. [uget](uget.md) section of this documentation for installation and a more thorough tutorial.
 
 #### Setup a custom catalogue
 

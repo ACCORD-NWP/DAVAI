@@ -19,8 +19,6 @@ In the `[gmkpack]` section of config file `conf/davai_.ini`:
     define it, as well as the `programs_by_flavour` that define the
     executables to be built for specific flavours
 
-In the `[gitref2pack]` section:
-
 -   to use a different `$ROOTPACK` (i.e. a different source of ancestor
     packs, for incremental packs)\
     $\hookrightarrow$ use `rootpack`\

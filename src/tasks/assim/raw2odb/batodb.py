@@ -14,10 +14,6 @@ class BatorODB(Task, DavaiTaskMixin):
 
     experts = [FPDict({'kind':'bator_obscount'}), FPDict({'kind':'bator_profile'})]
 
-    #def output_block(self):
-    #    return '-'.join([self.conf.testjob,
-    #                     self.tag])
-
     def process(self):
         self._wrapped_init()
         self._obstype_rundate_association()

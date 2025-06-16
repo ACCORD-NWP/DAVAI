@@ -38,14 +38,14 @@
   ```
   davai-run_tests -l
   ```
-  
+
   to list the jobs and then
 
   ```
   davai-run_tests -j <job>
   ```
-  
-  !!! note "Example" 
+
+  !!! note "Example"
       ```
       davai-run_tests -j forecasts.standalone_alaro_antwrp1300
       ```
@@ -55,3 +55,8 @@
 
 - **Eventually**, after code modifications and fixing particular tests, you should re-run **the whole set of tests**, to make sure your fix does not break any other test.
 
+- If you want to change things in the scripts, you will need to create an experiment in _**editable**_ mode (`-e`):
+  ```
+  davai-new_xp -e <...>
+  ```
+  For more information, cf. [here](runtests.md#DAVAI-editable-mode).

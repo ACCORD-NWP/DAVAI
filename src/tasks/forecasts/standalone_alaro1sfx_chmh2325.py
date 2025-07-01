@@ -12,7 +12,9 @@ def setup(t, **kw):
             loopsuffix='.{}',
             nodes=[
                 Family(tag='chmh2325', ticket=t, on_error='delayed_fail', nodes=[
-                    StandaloneAlaroForecast(tag='alaro1sfx', ticket=t, **kw),
+                    Family(tag='alaro1sfx', ticket=t, on_error='delayed_fail', nodes=[
+                        StandaloneAlaroForecast(tag='aplpar', ticket=t, **kw),
+                        ], **kw),
                     ], **kw),
                 ], **kw),
         ],

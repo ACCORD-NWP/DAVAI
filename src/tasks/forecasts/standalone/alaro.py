@@ -143,7 +143,7 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             tboptions = self._wrapped_input(
                 role           = 'Namelist Deltas to add/remove options',
                 binary         = 'arpifs',
-                component      = 'noFPinline.nam,noDDH.nam,spnorms.nam',
+                component      = self.conf.namelist_components,
                 format         = 'ascii',
                 genv           = self.conf.davaienv,
                 intent         = 'in',
@@ -158,6 +158,7 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 format         = 'ascii',
                 genv           = self.conf.davaienv,
                 hook_options   = (update_namelist, tboptions),
+                hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',

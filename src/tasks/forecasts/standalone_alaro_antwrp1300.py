@@ -12,8 +12,13 @@ def setup(t, **kw):
             loopsuffix='.{}',
             nodes=[
                 Family(tag='antwrp1300', on_error='delayed_fail', ticket=t, nodes=[
-                    StandaloneAlaroForecast(tag='alaro0', on_error='delayed_fail', ticket=t, **kw),
-                    StandaloneAlaroForecast(tag='alaro1', ticket=t, **kw),
+                    Family(tag='alaro0', on_error='delayed_fail', ticket=t, nodes=[
+                        StandaloneAlaroForecast(tag='aplpar', on_error='delayed_fail', ticket=t, **kw),
+                        ], **kw),
+                    Family(tag='alaro1', ticket=t, nodes=[
+                        StandaloneAlaroForecast(tag='aplpar', on_error='delayed_fail', ticket=t, **kw),
+                        StandaloneAlaroForecast(tag='apl_alaro', ticket=t, **kw),
+                        ], **kw),
                     ], **kw),
                 ], **kw),
         ],

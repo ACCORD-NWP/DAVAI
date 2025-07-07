@@ -18,7 +18,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     @property
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
-        return [FPDict({'kind':'norms', 'plot_spectral':True, 'hide_equal_norms':self.conf.hide_equal_norms}),
+        return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
 

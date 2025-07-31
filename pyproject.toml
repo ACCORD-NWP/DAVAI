@@ -20,6 +20,7 @@ dependencies=[
     # indirect dependencies from vortex, to remove with vortex-2:
     "requests[socks]",
     "jinja2",
+    "pygit2==1.17.0",
     ]
 
 [project.urls]

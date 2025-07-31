@@ -36,33 +36,45 @@ class BatorODB(Task, DavaiTaskMixin):
                 genv           = self.conf.commonenv,
                 kind           = 'avgmask',
                 local          = 'mask.[sensor]',
-                sensor         = 'atms,ssmis,mwts2',
+                sensor         = 'atms,ssmis,mwts2,amsub,gmi,mwhsx,amsr',
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'BatodbConfigurationFile',
-                format         = 'ascii',
-                genv           = self.conf.commonenv,
                 kind           = 'batodbconf',
                 local          = 'param.cfg',
+                path           = 'bator/param_bator.cfg',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'CreateIoassignScript',
-                format         = 'ascii',
-                genv           = self.conf.commonenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create',
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'GPSList',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'gpslist',
                 local          = 'list_gpssol',
+                path           = f'whitelist/{self.conf.suite_app}/list.gpssol',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'Mode-SList',
+                kind           = 'modeslist',
+                local          = 'list_modes',
+                path           = f'whitelist/{self.conf.suite_app}/list.modes',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -70,37 +82,32 @@ class BatorODB(Task, DavaiTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             tbnamreduc = self._wrapped_input(
                 role           = 'BatodbReductionDelta',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 kind           = 'namelist',
-                local          = 'delta-bator_reduction.[model].davai.nam',
-                source         = 'davai/[local]',
+                local          = f'bator_reduction.{self.conf.model}.nam',
+                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'NamelistBatodb',
-                binary         = 'batodb',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_obs_reduc = (update_namelist, tbnamreduc),
                 intent         = 'inout',
                 kind           = 'namutil',
                 local          = 'NAMELIST',
-                source         = self.conf.bator_namelist,
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/{self.conf.bator_namelist}',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             if self.conf.LAM:
                 self._wrapped_input(
                     role           = 'NamelistLamflag',
-                    #binary         = self.conf.model,
-                    binary         = 'arpifs',
-                    format         = 'ascii',
-                    genv           = self.conf.davaienv,
                     kind           = 'namelist',
                     local          = 'NAM_lamflag',
-                    #source         = 'namel_lamflag_odb',
-                    source         = 'geometries/france10km.lamflag_odb.nam',
+                    path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/{self.conf.geometry.tag}.lamflag_odb.nam',
+                    ref            = self.conf.gitenv_ref,
+                    repo           = self.conf.gitenv_repo,
                 )
             #-------------------------------------------------------------------------------
 

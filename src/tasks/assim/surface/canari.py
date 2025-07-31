@@ -53,10 +53,11 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Isba Parameters',
-                format         = 'ascii',
-                genv           = self.conf.commonenv,
                 kind           = 'isbaan',
                 local          = 'fort.61',
+                path           = 'analyse.isba',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -110,25 +111,23 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelistsurf',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_sic       = (hook_gnam, {'NAM_SEAICEn':{'LSIC_CST':True}}),  # FIXME: until update CI
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                source         = 'namel_ana_surfex',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_ana_surfex',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = '[model]',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'namel_canari',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_canari',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

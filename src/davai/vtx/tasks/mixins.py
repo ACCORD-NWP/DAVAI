@@ -21,11 +21,21 @@ class IncludesTaskMixin(object):
         if 'early-fetch' in self.steps:
             self.sh.title('Toolbox usual-tools tb_ut01')
             tb_ut01 = toolbox.input(
-                role           = 'LFIScripts',
-                format         = 'unknown',
-                genv           = self.conf.commonenv,
+                role           = 'LFIScripts(main)',
                 kind           = 'lfiscripts',
-                local          = 'usualtools/tools.lfi.tgz',
+                local          = 'usualtools/lfi_',
+                path           = 'lfi_scripts/lfi_',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
+            tb_ut01bis = toolbox.input(
+                role           = 'LFIScripts',
+                kind           = 'lfiscripts',
+                local          = 'usualtools/lfi_[function]',
+                function       = ['copy', 'index', 'merge', 'move', 'pack', 'remove', 'size'],
+                path           = 'lfi_scripts/lfi_[function]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             print(self.ticket.prompt, 'tb_ut01 =', tb_ut01)
             print()
@@ -33,11 +43,12 @@ class IncludesTaskMixin(object):
             self.sh.title('Toolbox usual-tools tb_ut02')
             tb_ut02 = toolbox.input(
                 role           = 'IOPoll',
-                format         = 'unknown',
-                genv           = self.conf.commonenv,
                 kind           = 'iopoll',
                 language       = 'perl',
                 local          = 'usualtools/io_poll',
+                path           = 'lfi_scripts/io_poll',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             print(self.ticket.prompt, 'tb_ut02 =', tb_ut02)
             print()
@@ -57,11 +68,14 @@ class IncludesTaskMixin(object):
             self.sh.title('Toolbox usual-tools tb_ut04')
             tb_ut04 = toolbox.input(
                 role           = 'AdditionalGribAPIDefinitions',
-                format         = 'unknown',
-                genv           = self.conf.commonenv,
+                #format         = 'unknown',
+                #genv           = self.conf.commonenv,
                 kind           = 'gribapiconf',
-                local          = 'extra_grib_defs/gribdef.tgz',
-                target         = 'definitions',
+                local          = 'extra_grib_defs',
+                #target         = 'definitions',
+                path           = 'grib_api.def',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             print(self.ticket.prompt, 'tb_ut04 =', tb_ut04)
             print()

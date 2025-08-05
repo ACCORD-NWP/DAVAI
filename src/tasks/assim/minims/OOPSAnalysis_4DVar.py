@@ -197,14 +197,13 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Config',
-                format         = 'json',
                 intent         = 'inout',
                 kind           = 'config',
-                local          = 'oops.[format]',
-                #nativefmt      = '[format]',
+                local          = 'oops.[nativefmt]',
+                nativefmt      = 'json',
                 objects        = 'analyse-4DVar',
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[format]',
+                path           = f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

@@ -168,14 +168,13 @@ class ScreeningOOPS(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Config',
-                format         = 'json',
                 intent         = 'inout',
                 kind           = 'config',
-                local          = 'oops.[format]',
-                nativefmt      = '[format]',
+                local          = 'oops.[nativefmt]',
+                nativefmt      = 'json',
                 objects        = 'screening3D_aro',
                 scope          = 'oops',
-                path           = 'namelist/{self.conf.vapp}/{self.conf.vconf}/[objects].[format]',
+                path           = 'namelist/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

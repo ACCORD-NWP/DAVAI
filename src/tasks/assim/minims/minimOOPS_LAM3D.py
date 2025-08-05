@@ -112,90 +112,91 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(
                 role           = 'Config',
                 format         = 'json',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'config',
                 local          = 'oops.[format]',
                 nativefmt      = '[format]',
                 objects        = 'minim-3DVar_aro',
                 scope          = 'oops',
+                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[format]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = 'arpege',
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry','bmatrix_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObsObjectsNamelists',
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSGomNamelists',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_hres'],  #, 'jb_cov'
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/naml_[object]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSWriteObjectsNamelists',
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
                 object         = ['write_analysis_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_cvaraux   = (hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'objects/naml_leftovers_aro',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/naml_leftovers_aro',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

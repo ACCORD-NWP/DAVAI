@@ -36,7 +36,7 @@ class BatorODB(Task, DavaiTaskMixin):
                 genv           = self.conf.commonenv,
                 kind           = 'avgmask',
                 local          = 'mask.[sensor]',
-                sensor         = 'atms,ssmis,mwts2,amsub,gmi,mwhsx,amsr',
+                sensor         = self.conf.avg_masks_sensors,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -105,7 +105,8 @@ class BatorODB(Task, DavaiTaskMixin):
                     role           = 'NamelistLamflag',
                     kind           = 'namelist',
                     local          = 'NAM_lamflag',
-                    path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/{self.conf.geometry.tag}.lamflag_odb.nam',
+                    path           =
+                        f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/{self.conf.geometry.tag}.lamflag_odb.nam',
                     ref            = self.conf.gitenv_ref,
                     repo           = self.conf.gitenv_repo,
                 )

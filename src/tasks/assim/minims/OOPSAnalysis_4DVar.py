@@ -84,7 +84,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'coverparams',
                 local          = 'ecoclimap_covers_param.tgz',
                 source         = 'ecoclimap',
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'AmvError',
@@ -117,7 +117,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'odbraw',
                 layout         = 'RSTBIAS,COUNTRYRSTRHBIAS,SONDETYPERSTRHBIAS',
                 local          = '[layout:upper]',
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Coefmodel',
@@ -151,16 +151,17 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 level          = '96',
                 local          = 'stabal[level].[stat]',
                 stat           = 'bal,cv',
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'IoassignScripts',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -179,7 +180,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'clim_model',
                 local          = 'Const.Clim',
                 month          = self.conf.rundate.ymdh,
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'ClimAtmLR',
@@ -189,7 +190,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 geometry       = 'global63',
                 local          = 'const.t[geometry:truncation].000',
                 month          = self.conf.rundate.ymdh,
-            )    
+            )
             #-------------------------------------------------------------------------------
 
         # 1.1.2/ Static Resources (namelist(s) & config):
@@ -197,80 +198,76 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(
                 role           = 'Config',
                 format         = 'json',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'config',
                 local          = 'oops.[format]',
-                nativefmt      = '[format]',
+                #nativefmt      = '[format]',
                 objects        = 'analyse-4DVar',
                 scope          = 'oops',
+                path           = f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[format]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = self.conf.model,
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelistsurf',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_sic       = (hook_gnam, {'NAM_SEAICEn':{'LSIC_CST':True}}),  # FIXME: until update CI
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                source         = 'namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_previ_surfex',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['geometry','write_filtered_ana','jc_cov'],
-                source         = 'objects/naml_[object]',
-            )            
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSGomNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_1', 'gom_setup_hres'],
-                source         = 'objects/namelist_[object]',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSLowResolution',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['t63'],
-                source         = 'OOPS/naml_[object]',
+                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/[object].nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSFullposNamelists',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 object         = ['149','63'],
                 kind           = 'namelist',
                 local          = 'fp_change_resol_[object].nam',
-                source         = 'OOPS/fp_change_resol_[object].nam',
+                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
 
             #-------------------------------------------------------------------------------
@@ -278,42 +275,39 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             # Disable FullPos use everywhere
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_model     = (hook_fix_model,self.NDVar,False),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['observations', 'hr_model', 'nonlinear_model_upd1', 'linear_model_upd1', 'traj_model_upd1', 'nonlinear_model_upd2', 'linear_model_upd2', 'traj_model_upd2'],
-                source         = 'objects/[object].nam',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object].nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(
                 role           = 'OOPSBmatrixNamelist',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
-                hook_simpleb   = (hook_disable_flowdependentb,),                                
-                intent         = 'inout', 
+                hook_simpleb   = (hook_disable_flowdependentb,),
+                intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['bmatrix'],
-                source         = 'objects/[object].nam',
-            )                        
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object].nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
-                hook_simpleb   = (hook_disable_flowdependentb,),                
+                hook_simpleb   = (hook_disable_flowdependentb,),
                 hook_nstrin    = (hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'objects/leftovers_assim.nam',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/leftovers_assim.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -323,7 +317,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'odbioassign',
                 local          = 'ioassign.x',
             )
-            #-------------------------------------------------------------------------------                        
+            #-------------------------------------------------------------------------------
             tbx = self.flow_executable(
                 kind           = 'oopsbinary',
                 run            = 'oovar',
@@ -362,7 +356,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 variable       = ['vo','ucdv','lnsp','t','q'],
                 vapp           = self.conf.shelves_vapp,
                 vconf          = self.conf.shelves_vconf,
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'SurfaceGuess',
@@ -452,7 +446,7 @@ class Analysis4dvar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self.component_runner(tbalgo, tbx)
             #-------------------------------------------------------------------------------
             self.run_expertise()
-            #------------------------------------------------------------------------------- 
+            #-------------------------------------------------------------------------------
         # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
         if 'backup' in self.steps:
             self._wrapped_output(

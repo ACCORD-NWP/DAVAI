@@ -51,7 +51,7 @@ class Bundle2Pack(Task, DavaiTaskMixin, GmkpackMixin):
             else:
                 # TODO: use git provider when available
                 IALbundles = TmpIALbundleRepo(self.conf.IAL_bundle_repository, verbose=True)
-                b = IALbundles.get_bundle(self.IAL_bundle_ref, to_file='__tmp__')
+                b = IALbundles.get_bundle(self.conf.IAL_bundle_ref, to_file='__tmp__')
                 bundle_provider['remote'] = b.bundle_file
             self._wrapped_input(
                 role           = 'Bundle',

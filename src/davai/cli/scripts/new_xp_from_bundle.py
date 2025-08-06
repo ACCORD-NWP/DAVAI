@@ -34,21 +34,22 @@ def main():
 def get_args():
     parser = argparse.ArgumentParser(description='Create a Davai experiment to test an IAL bundle.')
     parser.add_argument('bundle',
-                        help=" ".join([
-                            "An IAL bundle, either as a local bundle file (.yml or .yaml) or",
-                            "a git ref (tag, commit) in the IAL-bundle repository.",
-                            "First guess will be to check if the local file exists,",
-                            "if not will assume the provided 'bundle' argument is a reference",
-                            "in the IAL-bundle repository, in which case",
-                            "the repository has to be specified via arg -r."]))
+                        help="Path to a local IAL bundle file (.yml or .yaml).",
+                        #help=" ".join([
+                        #    "An IAL bundle, either as a local bundle file (.yml or .yaml) or",
+                        #    "a git ref (tag, commit) in the IAL-bundle repository.",
+                        #    "First guess will be to check if the local file exists,",
+                        #    "if not will assume the provided 'bundle' argument is a reference",
+                        #    "in the IAL-bundle repository, in which case",
+                        #    "the repository has to be specified via arg -r."]))
     parser.add_argument('-e', '--editable',
                         action='store_true',
                         help="Editable: use an editable version of Davai sources (hence a brand new venv).")
-    parser.add_argument('-r', '--IAL_bundle_repo',
-                        default=None,
-                        dest='IAL_bundle_repository',
-                        help="URL or path of IAL-bundle repository in which to find the given reference of bundle. " +
-                             "E.g. 'https://github.com/ACCORD-NWP/IAL-bundle' or '~/repositories/IAL-bundle'.")
+    #parser.add_argument('-r', '--IAL_bundle_repo',
+    #                    default=None,
+    #                    dest='IAL_bundle_repository',
+    #                    help="URL or path of IAL-bundle repository in which to find the given reference of bundle. " +
+    #                         "E.g. 'https://github.com/ACCORD-NWP/IAL-bundle' or '~/repositories/IAL-bundle'.")
     parser.add_argument('-v', '--davai_version',
                         dest='davai_version',
                         help="Version of the Davai test bench to be used.")
@@ -85,20 +86,21 @@ def get_args():
         # local bundle file
         sources_to_test = dict(IAL_bundle_file=os.path.abspath(args.bundle))
     else:
-        if args.IAL_bundle_repository is None:
-            if args.bundle.endswith('.yml') or args.bundle.endswith('.yaml'):
-                # seems like an invalid path
-                raise IOError("Bundle '{}' is not a path to an existing file".format(args.bundle))
-            else:
-                # git ref in an IAL-bundle repo
-                raise IOError("If 'bundle' is an IAL-bundle git ref, you must provide a repository (-r) where to find it.")
-        local_repo = os.path.abspath(args.IAL_bundle_repository)
-        if os.path.isdir(local_repo):
-            IAL_bundle_repository = local_repo
-        else:
-            IAL_bundle_repository = args.IAL_bundle_repository
-        sources_to_test = dict(IAL_bundle_ref=args.bundle,
-                               IAL_bundle_repository=IAL_bundle_repository)
+        raise ValueError(f"Invalid path to bundle {args.bundle}.")
+        #if args.IAL_bundle_repository is None:
+        #    if args.bundle.endswith('.yml') or args.bundle.endswith('.yaml'):
+        #        # seems like an invalid path
+        #        raise IOError("Bundle '{}' is not a path to an existing file".format(args.bundle))
+        #    else:
+        #        # git ref in an IAL-bundle repo
+        #        raise IOError("If 'bundle' is an IAL-bundle git ref, you must provide a repository (-r) where to find it.")
+        #local_repo = os.path.abspath(args.IAL_bundle_repository)
+        #if os.path.isdir(local_repo):
+        #    IAL_bundle_repository = local_repo
+        #else:
+        #    IAL_bundle_repository = args.IAL_bundle_repository
+        #sources_to_test = dict(IAL_bundle_ref=args.bundle,
+        #                       IAL_bundle_repository=IAL_bundle_repository)
     sources_to_test['comment'] = args.comment
     args.sources_to_test = sources_to_test
     args.bundle_src_dir = os.path.expanduser(os.path.expandvars(args.bundle_src_dir))

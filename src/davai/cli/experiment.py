@@ -558,22 +558,34 @@ class XP(object):
                     drymode=False,
                     mpiname=None,
                     archive_as_ref=False):
-        """Launch jobs, either all, or only the one requested."""
+        """Launch jobs, either all, or only the one(s) requested."""
         extra_params = {}
         if mpiname is not None:
             extra_params['mpiname'] = mpiname
         extra_params['archive_as_ref'] = archive_as_ref
         only_job_launched = False
+        # build full family.job identifiers
+        all_task_name = {}
         for family, jobs in self.all_jobs.items():
             for job in jobs:
                 task = '.'.join([family, job])
                 name = job
-                if only_job in (None, task):
-                    self._launch(task, name, drymode=drymode, **extra_params)
-                    if only_job is not None:
-                        only_job_launched = True
-        if only_job is not None and not only_job_launched:
-            raise ValueError("Unknown job: {}".format(only_job))
+                all_task_name[task] = name
+        # list of jobs to run
+        if isinstance(only_job, str):
+            jobs = [j.strip() for j in only_job.split(',')]
+        elif isinstance(only_job, list):
+            jobs = only_job
+        elif only_job is None:
+            jobs = list(all_task_name.keys())
+        # make sure requested jobs exist
+        for j in jobs:
+            assert j in all_task_name.keys(), f"Job '{j}' is unknown"
+        # filter
+        to_launch = [(t, n) for t, n in all_task_name.items() if t in jobs]
+        # launch
+        for (t, n) in to_launch:
+            self._launch(t, n, drymode=drymode, **extra_params)
 
     def afterlaunch_prompt(self):
         print("=" * 100)

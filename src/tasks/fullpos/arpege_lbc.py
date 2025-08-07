@@ -81,27 +81,26 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ObjectNamelist',
-                #binary         = 'aladin',
-                format         = 'ascii',
                 fp_terms       = {'geotag':{g.tag:FPList(self.conf.terms) for g in self.conf.target_geometries}},
-                genv           = self.conf.appenv_fullpos_partners,
                 geotag         = [g.tag for g in self.conf.target_geometries],
-                intent         = 'inout',
                 kind           = 'namelist_fpobject',
                 local          = 'namelist_obj_[geotag]',
-                source         = 'geometries/[geotag]_[cutoff].nam',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/geometries/' +\
+                                 f'[geotag]_{self.conf.cutoff}.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                #binary         = 'aladin',
-                format         = 'ascii',
-                genv           = self.conf.appenv_fullpos_partners,
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
                 source         = 'e903_noMCUF.nam',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/e903_noMCUF.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

@@ -81,13 +81,12 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
-                source         = 'SFX/{}/namel_prep'.format(self.conf.model),
+                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/SFX/prep_arome.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

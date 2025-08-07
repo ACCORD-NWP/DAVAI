@@ -84,7 +84,7 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.prep_suite_conf}/namelist_prep_surfex',
+                path           = f'namelist/{self.conf.suite_app}/{self.conf.prep_suite_conf}/{self.conf.prep_namelist}',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

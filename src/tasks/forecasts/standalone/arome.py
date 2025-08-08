@@ -129,7 +129,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'EXSEG1.nam',
                 #TODO: update with a more recent oper Arome config
                 #path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namelist_previ_surfex',
-                path           =  f'namelist/{self.conf.vapp}/{self.conf.vconf}/model/' +\
+                path           =  f'namelist/davai/model/' +\
                                   f'{self.conf.model}/{self.conf.geometry.tag}/fcst.assistances.nam_surfex',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
@@ -141,7 +141,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 component      = self.conf.namelist_components,
                 kind           = 'namelist',
                 local          = '[component]',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/[component]',
+                path           = f'namelist/davai/[component]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -156,7 +156,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'fort.4',
                 #TODO: update with a more recent oper Arome config
                 #path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namelist_previ_dyn',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/model/' +\
+                path           = f'namelist/davai/model/' +\
                                  f'{self.conf.model}/{self.conf.geometry.tag}/fcst.assistances.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,

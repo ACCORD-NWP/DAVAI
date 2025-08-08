@@ -144,7 +144,7 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 component      = self.conf.namelist_components,
                 kind           = 'namelist',
                 local          = '[component]',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/[component]',
+                path           = f'namelist/davai/[component]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

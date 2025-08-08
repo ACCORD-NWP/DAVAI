@@ -88,7 +88,7 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role           = 'PortabilityNamelist',
                 kind           = 'namelist',
                 local          = 'portability.nam',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/portability/{self.conf.target_host}.nam',
+                path           = f'namelist/davai/portability/{self.conf.target_host}.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

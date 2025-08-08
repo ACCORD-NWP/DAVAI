@@ -84,7 +84,7 @@ class BatorODB(Task, DavaiTaskMixin):
                 role           = 'BatodbReductionDelta',
                 kind           = 'namelist',
                 local          = f'bator_reduction.{self.conf.model}.nam',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/[local]',
+                path           = f'namelist/davai/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -106,7 +106,7 @@ class BatorODB(Task, DavaiTaskMixin):
                     kind           = 'namelist',
                     local          = 'NAM_lamflag',
                     path           =
-                        f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/{self.conf.geometry.tag}.lamflag_odb.nam',
+                        f'namelist/davai/geometries/{self.conf.geometry.tag}.lamflag_odb.nam',
                     ref            = self.conf.gitenv_ref,
                     repo           = self.conf.gitenv_repo,
                 )

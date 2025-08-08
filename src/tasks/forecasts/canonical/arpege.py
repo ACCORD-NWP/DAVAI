@@ -144,7 +144,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[component]',
                 source         = 'model/options_delta/[component]',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/[component]',
+                path           = f'namelist/davai/[component]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

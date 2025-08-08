@@ -174,7 +174,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = 'analyse-3DVar_aro',
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
+                path           = f'config_oops/davai/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

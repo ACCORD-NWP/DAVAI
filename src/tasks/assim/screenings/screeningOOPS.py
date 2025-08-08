@@ -203,7 +203,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = f'screening{self.ND}',
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
+                path           = f'config_oops/davai/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -254,7 +254,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['t63'],
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/[object].nam',
+                path           = f'namelist/davai/geometries/[object].nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -264,7 +264,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 object         = ['149','63'],
                 kind           = 'namelist',
                 local          = 'fp_change_resol_[object].nam',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/geometries/[local]',
+                path           = f'namelist/davai/geometries/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

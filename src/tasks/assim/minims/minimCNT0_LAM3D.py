@@ -150,7 +150,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_tlad','standard_geometry','bmatrix'],
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS_ARO/[local]',
+                path           = f'namelist/davai/OOPS_ARO/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -161,7 +161,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = 'nonlinear_model',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS_ARO/[local]',
+                path           = f'namelist/davai/OOPS_ARO/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -172,7 +172,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_oops',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS_ARO/namelist_oops_leftovers',
+                path           = f'namelist/davai/OOPS_ARO/namelist_oops_leftovers',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

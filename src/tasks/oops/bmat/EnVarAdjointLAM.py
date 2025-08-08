@@ -69,7 +69,7 @@ class EnVarAdjoint(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = 'test_envar_aro',
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
+                path           = f'config_oops/davai/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

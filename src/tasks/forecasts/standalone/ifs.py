@@ -84,7 +84,7 @@ class StandaloneIFSForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role           = 'PortabilityNamelist',
                 kind           = 'namelist',
                 local          = 'portability.nam',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/portability/{self.conf.target_host}.nam',
+                path           = f'namelist/davai/portability/{self.conf.target_host}.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -100,7 +100,7 @@ class StandaloneIFSForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 source         = 'IFS/namelist_fc',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/model/' +\
+                path           = f'namelist/davai/model/' +\
                                  f'{self.conf.model}/{self.conf.geometry.tag}/forecast.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,

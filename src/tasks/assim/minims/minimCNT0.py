@@ -205,7 +205,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_cnt0',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS/cnt0.nam',
+                path           = f'namelist/davai/OOPS/cnt0.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -217,7 +217,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS/empty.nam',
+                path           = f'namelist/davai/OOPS/empty.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

@@ -81,7 +81,7 @@ class BuildEnsemble(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -92,7 +92,7 @@ class BuildEnsemble(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['bmatrix_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -105,7 +105,7 @@ class BuildEnsemble(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':1800.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -117,7 +117,7 @@ class BuildEnsemble(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 hook_nstrin    = (hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/naml_leftovers_aro',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_leftovers_aro',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

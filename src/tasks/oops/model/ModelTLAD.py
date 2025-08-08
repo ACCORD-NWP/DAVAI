@@ -94,7 +94,7 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='namelist',
                 local='naml_[object]',
                 object=['geometry'],
-                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref=self.conf.gitenv_ref,
                 repo=self.conf.gitenv_repo,
             )
@@ -109,7 +109,7 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='namelist',
                 local='[object]_model.nam',
                 object=['nonlinear','linear','traj'],
-                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object]_model_upd2.nam',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object]_model_upd2.nam',
                 ref=self.conf.gitenv_ref,
                 repo=self.conf.gitenv_repo,
             )
@@ -122,7 +122,7 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='namelist',
                 local='[object].nam',
                 object=['bmatrix'],
-                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref=self.conf.gitenv_ref,
                 repo=self.conf.gitenv_repo,
             )
@@ -136,7 +136,7 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent='inout',
                 kind='namelist',
                 local='fort.4',
-                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/leftovers_assim.nam',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
                 ref=self.conf.gitenv_ref,
                 repo=self.conf.gitenv_repo,
             )

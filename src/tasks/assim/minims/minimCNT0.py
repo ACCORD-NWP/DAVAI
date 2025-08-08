@@ -154,7 +154,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['geometry'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -167,7 +167,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['bmatrix'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -181,7 +181,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['nonlinear_model_upd2', 'observations_ccma'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -195,7 +195,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_oops',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/leftovers_assim.nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

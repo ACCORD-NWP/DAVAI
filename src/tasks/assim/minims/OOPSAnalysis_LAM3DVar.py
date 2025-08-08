@@ -195,7 +195,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry','bmatrix_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -206,7 +206,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -216,7 +216,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_hres'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_[object]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -228,7 +228,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -240,7 +240,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
                 object         = ['write_analysis_aro'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -250,7 +250,7 @@ class OOPSAnalysisLAM3DVar(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/naml_leftovers_aro',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_leftovers_aro',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

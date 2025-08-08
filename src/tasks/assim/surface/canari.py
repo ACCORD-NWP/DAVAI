@@ -115,7 +115,7 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_ana_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_ana_surfex',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -125,7 +125,7 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_canari',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_canari',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

@@ -63,7 +63,7 @@ class BatorODB(Task, DavaiTaskMixin):
                 role           = 'GPSList',
                 kind           = 'gpslist',
                 local          = 'list_gpssol',
-                path           = f'whitelist/{self.conf.suite_app}/list.gpssol',
+                path           = f'whitelist/{self.conf.suite_vapp}/list.gpssol',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -72,7 +72,7 @@ class BatorODB(Task, DavaiTaskMixin):
                 role           = 'Mode-SList',
                 kind           = 'modeslist',
                 local          = 'list_modes',
-                path           = f'whitelist/{self.conf.suite_app}/list.modes',
+                path           = f'whitelist/{self.conf.suite_vapp}/list.modes',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -95,7 +95,7 @@ class BatorODB(Task, DavaiTaskMixin):
                 intent         = 'inout',
                 kind           = 'namutil',
                 local          = 'NAMELIST',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/{self.conf.bator_namelist}',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/{self.conf.bator_namelist}',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

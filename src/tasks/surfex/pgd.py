@@ -112,7 +112,7 @@ class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
                 source         = '{}/namel_buildpgd'.format(self.conf.model),
-                path           = f'namelist/{self.conf.suite_app}/clim/namel_buildpgd',
+                path           = f'namelist/{self.conf.suite_vapp}/clim/namel_buildpgd',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

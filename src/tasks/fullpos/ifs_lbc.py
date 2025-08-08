@@ -100,7 +100,7 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namelist_903_nwp',
+                path           = f'namelist/cplifs/nwp/namelist_903_nwp',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

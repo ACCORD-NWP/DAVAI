@@ -81,7 +81,7 @@ class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/clim/namel_c923_orography',
+                path           = f'namelist/{self.conf.suite_vapp}/clim/namel_c923_orography',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

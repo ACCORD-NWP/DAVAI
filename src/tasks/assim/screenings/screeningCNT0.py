@@ -181,7 +181,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -192,7 +192,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namelistscreen_assim',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelistscreen_assim',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

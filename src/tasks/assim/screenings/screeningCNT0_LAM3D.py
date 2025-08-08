@@ -161,7 +161,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_screen',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_screen',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

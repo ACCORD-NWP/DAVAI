@@ -85,7 +85,7 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 geotag         = [g.tag for g in self.conf.target_geometries],
                 kind           = 'namelist_fpobject',
                 local          = 'namelist_obj_[geotag]',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/geometries/' +\
+                path           = f'namelist/arpege/cpl/geometries/' +\
                                  f'[geotag]_{self.conf.cutoff}.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
@@ -98,7 +98,7 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 source         = 'e903_noMCUF.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/e903_noMCUF.nam',
+                path           = f'namelist/arpege/cpl/e903_noMCUF.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

@@ -132,7 +132,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -155,7 +155,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namelistfc',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelistfc',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -164,7 +164,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role           = 'FullPos Mapping',
                 kind           = 'namselectdef',
                 local          = 'xxt.def',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/xxt.def.{self.conf.cutoff}',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/xxt.def.{self.conf.cutoff}',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -175,7 +175,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namselect',
                 local          = '[helper::xxtnam]',
                 term           = rangex(0, self.conf.fcst_term, 1),
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/[helper::xxtsrc]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/[helper::xxtsrc]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

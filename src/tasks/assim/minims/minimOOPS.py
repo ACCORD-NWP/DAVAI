@@ -177,7 +177,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -187,7 +187,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['geometry','write_filtered_ana'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -197,7 +197,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_hres'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -212,7 +212,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['observations', 'nonlinear_model_upd2', 'linear_model_upd2', 'traj_model_upd2'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object].nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -225,7 +225,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['bmatrix'],
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object].nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -239,7 +239,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/leftovers_assim.nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

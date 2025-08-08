@@ -68,14 +68,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
-                role           = 'WaveletTable',
-                format         = 'unknown',
-                genv           = self.conf.appenv,
-                kind           = 'wtable',
-                local          = 'rtable.tar',
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
                 role='Coefmodel',
                 format='unknown',
                 genv=self.conf.appenv,
@@ -186,32 +178,6 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local='errgrib_[geometry:truncation]',
                 stage='vor',
                 term='3',  # FIXME: self.guess_term(force_window_start=True),
-                vapp=self.conf.shelves_vapp,
-                vconf=self.conf.shelves_vconf,
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role='Wavelet',
-                block='sigmab',
-                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
-                experiment=self.conf.input_shelf,
-                format='unknown',
-                kind='wavelet',
-                local='wavelet_[geometry:truncation].cv',
-                term='3',
-                vapp=self.conf.shelves_vapp,
-                vconf=self.conf.shelves_vconf,
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role='Srenorm',
-                block='sigmab',
-                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
-                experiment=self.conf.input_shelf,
-                format='grib',
-                kind='bgstdrenorm',
-                local='srenorm_[geometry:truncation]',
-                term='3',
                 vapp=self.conf.shelves_vapp,
                 vconf=self.conf.shelves_vconf,
             )

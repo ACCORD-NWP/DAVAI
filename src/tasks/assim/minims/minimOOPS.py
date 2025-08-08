@@ -157,7 +157,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = '{}_1minim'.format((self.NDVar).lower()),
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[nativefmt]',
+                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

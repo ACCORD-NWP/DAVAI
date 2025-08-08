@@ -150,8 +150,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_tlad','standard_geometry','bmatrix'],
-                source         = 'OOPS_ARO/naml_[object]',
-                path           = f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                path           = f'namelist/{self.conf.vapp}/{self.conf.vconf}/OOPS_ARO/[local]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

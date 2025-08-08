@@ -203,7 +203,7 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = f'screening{self.ND}',
                 scope          = 'oops',
-                path           = f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[nativefmt]',
+                path           = f'config_oops/{self.conf.vapp}/{self.conf.vconf}/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

@@ -65,7 +65,15 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 genv           = self.conf.appenv,
                 kind           = 'rrtm',
                 local          = 'rrtm.const.tgz',
-            )            
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'WaveletTable',
+                format         = 'unknown',
+                genv           = self.conf.appenv,
+                kind           = 'wtable',
+                local          = 'rtable.tar',
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='Coefmodel',
@@ -90,64 +98,59 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role='Config',
-                format='json',
-                genv=self.conf.appenv,
                 hook_nam=(hook_ensemble_build, self.conf.members),
                 intent='inout',
                 kind='config',
-                local='oops.[format]',
-                nativefmt='[format]',
+                local='oops.[nativefmt]',
+                nativefmt='json',
                 objects='test_ensemble',
                 scope='oops',
+                path=f'config_oops/{self.conf.suite_app}/{self.conf.suite_conf}/[objects].[nativefmt]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
 
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='OOPSObjectsNamelists',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 kind='namelist',
                 local='naml_[object]',
                 object=['geometry'],
-                source='objects/naml_[object]',
+                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # Fix TSTEP,CSTOP in Model objects
             # Disable FullPos use everywhere
             self._wrapped_input(
                 role='OOPSModelObjectsNamelists',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_model=(hook_fix_model, '4dvar', False),
                 hook_nofullpos=(hook_disable_fullpos,),
                 intent='inout',
                 kind='namelist',
                 local='model.nam',
                 object=['nonlinear_model_upd2'],
-                source='objects/[object].nam',
+                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[object].nam',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(
                 role='OOPSBmatrixNamelist',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_simpleb=(hook_disable_flowdependentb,),
                 intent='inout',
                 kind='namelist',
                 local='[object].nam',
                 object=['bmatrix'],
-                source='objects/[object].nam',
+                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/[local]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='NamelistLeftovers',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_nofullpos=(hook_disable_fullpos,),
                 hook_simpleb=(hook_disable_flowdependentb,),
                 hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
@@ -155,7 +158,9 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent='inout',
                 kind='namelist',
                 local='fort.4',
-                source='objects/leftovers_assim.nam',
+                path=f'namelist/{self.conf.suite_app}/{self.conf.suite_conf}/objects/leftovers_assim.nam',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -181,6 +186,32 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local='errgrib_[geometry:truncation]',
                 stage='vor',
                 term='3',  # FIXME: self.guess_term(force_window_start=True),
+                vapp=self.conf.shelves_vapp,
+                vconf=self.conf.shelves_vconf,
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role='Wavelet',
+                block='sigmab',
+                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
+                experiment=self.conf.input_shelf,
+                format='unknown',
+                kind='wavelet',
+                local='wavelet_[geometry:truncation].cv',
+                term='3',
+                vapp=self.conf.shelves_vapp,
+                vconf=self.conf.shelves_vconf,
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role='Srenorm',
+                block='sigmab',
+                date='{}/-{}'.format(self.conf.rundate.ymdh, self.conf.cyclestep),
+                experiment=self.conf.input_shelf,
+                format='grib',
+                kind='bgstdrenorm',
+                local='srenorm_[geometry:truncation]',
+                term='3',
                 vapp=self.conf.shelves_vapp,
                 vconf=self.conf.shelves_vconf,
             )

@@ -78,14 +78,13 @@ class EnVarAdjoint(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             # Geometry
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(

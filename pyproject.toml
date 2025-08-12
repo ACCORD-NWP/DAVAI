@@ -16,6 +16,7 @@ dependencies=[
     "epygram==2.0.4",
     "ial_build==1.3.4",
     "ial_expertise==1.2.7",
+    "matplotlib",  # FIXME: remove when bronx>2.0.0 does not fail on matplotlib import
     #"vortex",
     # indirect dependencies from vortex, to remove with vortex-2:
     "requests[socks]",

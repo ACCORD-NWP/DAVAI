@@ -174,7 +174,7 @@ class ScreeningOOPS(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 nativefmt      = 'json',
                 objects        = 'screening3D_aro',
                 scope          = 'oops',
-                path           = 'namelist/davai/[objects].[nativefmt]',
+                path           = 'config_oops/davai/[objects].[nativefmt]',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )

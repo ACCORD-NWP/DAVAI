@@ -8,6 +8,7 @@ forecasts:
     - standalone_ifs_global21
     # canonical forecasts = close to operations, including extra components
     - canonical_arpege_global798c22
+    - mitra_global31c1
 
 assim:
     # arpege

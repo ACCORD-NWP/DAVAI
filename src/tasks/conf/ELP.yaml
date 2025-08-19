@@ -37,7 +37,7 @@ oops:
 fullpos:
     - LBC  # Fullpos creation of LBC files
 
-misc:
+clim:
     - Physiography_arome   # PGD + clim 923(N923=1) on a range of LAM geometries
 
 surfex:

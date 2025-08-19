@@ -4,7 +4,7 @@ import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Driver, Family, LoopFamily
 
-from .raw2odb.batodbNew import BatorODB
+from .raw2odb.batodb import BatorODB
 from .screenings.screeningOOPS_LAM3D import ScreeningOOPS
 from .minims.minimOOPS_LAM3D import MinimNoVARBC as MinimOOPSNoVARBC
 

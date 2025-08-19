@@ -137,61 +137,56 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = 'arpege',
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_objects = self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_tlad','standard_geometry','bmatrix'],
-                source         = 'OOPS_ARO/naml_[object]',
+                path           = f'namelist/davai/OOPS_ARO/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_modelobjects = self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = 'nonlinear_model',
-                source         = 'OOPS_ARO/naml_[object]',
+                path           = f'namelist/davai/OOPS_ARO/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 hook_oops2cnt0 = (hook_OOPS_2_CNT0,),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_oops',
-                source         = 'OOPS_ARO/namelist_oops_leftovers',
+                path           = f'namelist/davai/OOPS_ARO/namelist_oops_leftovers',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_merge_nam = (update_namelist,
                                   tbnam_leftovers, tbnam_modelobjects, tbnam_objects),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'namel_minim',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_minim',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

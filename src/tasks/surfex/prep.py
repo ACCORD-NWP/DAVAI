@@ -8,6 +8,7 @@ from vortex.layout.nodes import Task
 
 import davai
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
+from davai.vtx.hooks.namelists import hook_gnam
 
 
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -81,13 +82,15 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
+                # FIXME: update PGD so as to be able to have gelato seaice scheme ?
+                hook_halo      = (hook_gnam, {'NAM_PREP_SURF_ATM':{'NHALO_PREP':0},
+                                              'NAM_PREP_SEAFLUX':{'CSEAICE_SCHEME':'NONE'},}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
-                source         = 'SFX/{}/namel_prep'.format(self.conf.model),
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.prep_suite_vconf}/{self.conf.prep_namelist}',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

@@ -141,92 +141,85 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = self.conf.model,
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_objects = self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['geometry'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
             tbnam_bmatrix = self._wrapped_input(
                 role           = 'OOPSBmatrixNamelist',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
-                hook_simpleb   = (hook_disable_flowdependentb,),                                
-                intent         = 'inout', 
+                hook_simpleb   = (hook_disable_flowdependentb,),
+                intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['bmatrix'],
-                source         = 'objects/[object].nam',
-            )                        
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             tbnam_modelobjects = self._wrapped_input(
                 role           = 'OOPSModelObsObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_model     = (hook_fix_model,self.NDVar,True),
                 hook_jo        = (hook_gnam, {'NAMCOSJO':{'LVARQCG':False}}),
-                hook_nofullpos = (hook_disable_fullpos,),                
+                hook_nofullpos = (hook_disable_fullpos,),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['nonlinear_model_upd2', 'observations_ccma'],
-                source         = 'objects/[object].nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_nofullpos = (hook_disable_fullpos,),
                 hook_simpleb   = (hook_disable_flowdependentb,),
                 hook_nstrin    = (hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
-                hook_cvaraux   = (hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),                                
+                hook_cvaraux   = (hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_oops',
-                source         = 'objects/leftovers_assim.nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_cnt0 = self._wrapped_input(
                 role           = 'NamelistCNT0',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'namelist_cnt0',
-                source         = 'OOPS/namelist_cnt0',
+                path           = f'namelist/davai/OOPS/cnt0.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
-                hook_merge_nam = (update_namelist, tbnam_leftovers, tbnam_cnt0, 
+                hook_merge_nam = (update_namelist, tbnam_leftovers, tbnam_cnt0,
                                   tbnam_bmatrix, tbnam_modelobjects, tbnam_objects),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'OOPS/namelist_empty',                
+                path           = f'namelist/davai/OOPS/empty.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -237,7 +230,7 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.2/ Flow Resources (initial): theoretically flow-resources, but statically stored in input_shelf
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            # TODO: Fix error_covariance_3d_mod.F90, then remove this unused resource            
+            # TODO: Fix error_covariance_3d_mod.F90, then remove this unused resource
             self._wrapped_input(
                 role           = 'BackgroundStdError',
                 block          = 'sigmab',

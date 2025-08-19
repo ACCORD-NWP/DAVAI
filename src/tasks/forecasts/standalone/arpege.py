@@ -123,40 +123,36 @@ class StandaloneArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'NamelistSurfex',
-                binary         = '[model]',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                source         = 'namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # deactivate FPinline & DDH, activate spnorms:
             tboptions = self._wrapped_input(
                 role           = 'Namelist Deltas to add/remove options',
-                binary         = 'arpifs',
                 component      = self.conf.namelist_components,
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
-                intent         = 'in',
                 kind           = 'namelist',
                 local          = '[component]',
-                source         = 'model/options_delta/[component]',
+                path           = f'namelist/davai/[component]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = '[model]',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_options   = (update_namelist, tboptions),
                 hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'namelistfc',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelistfc',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

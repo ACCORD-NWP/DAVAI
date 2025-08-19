@@ -144,12 +144,13 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'IoassignScripts',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -166,37 +167,34 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = 'arpege',
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelistsurf',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_sic       = (hook_gnam, {'NAM_SEAICEn':{'LSIC_CST':True}}),  # FIXME: until update CI
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
-                source         = 'namel_previ_surfex',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = '[model]',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_dfi       = (hook_adjust_DFI, self.NDVar),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'namelistscreen_assim',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelistscreen_assim',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

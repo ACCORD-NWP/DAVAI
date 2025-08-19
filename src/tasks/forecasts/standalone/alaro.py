@@ -130,41 +130,36 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             if self.conf.alaro_version == '1_sfx':  # Alaro with Surfex
                 self._wrapped_input(
                     role           = 'NamelistSurfex',
-                    binary         = 'arpifs',
-                    format         = 'ascii',
-                    genv           = self.conf.davaienv,
                     intent         = 'inout',
                     kind           = 'namelist',
                     local          = 'EXSEG1.nam',
-                    alaro_version  = self.conf.alaro_version,
-                    source         = 'model/[model]/fcst.alaro[alaro_version].nam_surfex',
+                    path           =
+                        f'namelist/{self.conf.model}/fcst.{self.conf.model}{self.conf.alaro_version}.nam_surfex',
+                    ref            = self.conf.gitenv_ref,
+                    repo           = self.conf.gitenv_repo,
                 )
             # deactivate FPinline & DDH, activate spnorms:
             tboptions = self._wrapped_input(
                 role           = 'Namelist Deltas to add/remove options',
-                binary         = 'arpifs',
                 component      = self.conf.namelist_components,
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
-                intent         = 'in',
                 kind           = 'namelist',
                 local          = '[component]',
-                source         = 'model/options_delta/[component]',
+                path           = f'namelist/davai/[component]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 hook_options   = (update_namelist, tboptions),
                 hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                alaro_version  = self.conf.alaro_version,
-                source         = 'model/[model]/fcst.alaro[alaro_version].nam',
+                path           = f'namelist/{self.conf.model}/fcst.{self.conf.model}{self.conf.alaro_version}.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

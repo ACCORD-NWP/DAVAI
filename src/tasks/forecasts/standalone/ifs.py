@@ -67,7 +67,6 @@ class StandaloneIFSForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            self._load_usual_tools()  # LFI tools, ecCodes defs, ...
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'RrtmConst',
@@ -83,13 +82,11 @@ class StandaloneIFSForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             tbport = self._wrapped_input(
                 role           = 'PortabilityNamelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
-                intent         = 'in',
                 kind           = 'namelist',
                 local          = 'portability.nam',
-                source         = 'portability/{}'.format(self.conf.target_host),
+                path           = f'namelist/davai/portability/{self.conf.target_host}.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -103,6 +100,10 @@ class StandaloneIFSForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 source         = 'IFS/namelist_fc',
+                path           = f'namelist/davai/model/' +\
+                                 f'{self.conf.model}/{self.conf.geometry.tag}/forecast.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

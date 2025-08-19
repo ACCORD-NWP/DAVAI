@@ -73,39 +73,36 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ObjectNamelist',  # target geometries definitions
-                binary         = 'arpege',  # Despite this is IFS, in this genv, geometry namelists are in NAMELIST_ARPEGE
-                format         = 'ascii',
                 fp_terms       = {'geotag':{g.tag:FPList(self.conf.terms) for g in self.conf.target_geometries}},
-                genv           = self.conf.appenv_fullpos_partners,
                 geotag         = [g.tag for g in self.conf.target_geometries],
-                intent         = 'inout',
                 kind           = 'namelist_fpobject',
                 local          = 'namelist_obj_[geotag]',
-                source         = 'geometries/[geotag]_[cutoff].nam',
+                # use same domains as in arpege/cpl
+                path           = f'namelist/arpege/cpl/geometries/' +\
+                                 f'[geotag]_{self.conf.cutoff}.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbport = self._wrapped_input(
                 role           = 'PortabilityNamelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
-                intent         = 'in',
                 kind           = 'namelist',
                 local          = 'portability.nam',
-                source         = 'portability/{}'.format(self.conf.target_host),
+                path           = f'namelist/davai/portability/{self.conf.target_host}.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = 'arpifs',
-                format         = 'ascii',
-                genv           = self.conf.davaienv,
                 hook_port      = (update_namelist, tbport),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'IFS/e903.nam',
+                path           = f'namelist/cplifs/nwp/namelist_903_nwp',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

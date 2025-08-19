@@ -61,68 +61,65 @@ class BuildEnsemble(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Config',
-                format         = 'json',
-                genv           = self.conf.appenv,
                 hook_nam       = (hook_ensemble_build, self.conf.members),  # generate namelist to write member
                 intent         = 'inout',
                 kind           = 'config',
-                local          = 'oops.[format]',
-                nativefmt      = '[format]',
+                local          = 'oops.[nativefmt]',
+                nativefmt      = 'json',
                 objects        = 'build_ensemble_aro',
                 scope          = 'oops',
+                path           = f'config_oops/davai/[objects].[nativefmt]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
 
             #-------------------------------------------------------------------------------
             # Geometry
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['bmatrix_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # Set TSTEP in Model objects
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':1800.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 hook_cvaraux   = (hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 hook_nstrin    = (hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'objects/naml_leftovers_aro',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_leftovers_aro',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

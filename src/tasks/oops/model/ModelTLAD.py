@@ -77,71 +77,68 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role='Config',
-                format='json',
-                genv=self.conf.appenv,
                 intent='inout',
                 kind='config',
-                local='oops.[format]',
-                nativefmt='[format]',
+                local='oops.[nativefmt]',
+                nativefmt='json',
                 objects='test_model',
                 scope='oops',
+                path=f'config_oops/davai/[objects].[nativefmt]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
 
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='OOPSObjectsNamelists',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 kind='namelist',
                 local='naml_[object]',
                 object=['geometry'],
-                source='objects/naml_[object]',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # Fix TSTEP,CSTOP in Model objects
             # Disable FullPos use everywhere
             self._wrapped_input(
                 role='OOPSModelObjectsNamelists',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_model=(hook_fix_model, '4dvar', False),
                 hook_nofullpos=(hook_disable_fullpos,),
                 intent='inout',
                 kind='namelist',
+                local='[object]_model.nam',
                 object=['nonlinear','linear','traj'],
-                local='[object]_model.nam',                
-                source='objects/[object]_model_upd2.nam',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object]_model_upd2.nam',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(
                 role='OOPSBmatrixNamelist',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_simpleb=(hook_disable_flowdependentb,),
                 intent='inout',
                 kind='namelist',
                 local='[object].nam',
                 object=['bmatrix'],
-                source='objects/[object].nam',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role='NamelistLeftovers',
-                binary=self.conf.model,
-                format='ascii',
-                genv=self.conf.appenv,
                 hook_nofullpos=(hook_disable_fullpos,),
-                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),                
+                hook_nstrin=(hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
                 hook_simpleb=(hook_disable_flowdependentb,),
                 hook_cvaraux=(hook_gnam, {'NAMVAR':{'LVARBC':False, 'LTOVSCV':False}}),
                 intent='inout',
                 kind='namelist',
                 local='fort.4',
-                source='objects/leftovers_assim.nam',
+                path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
+                ref=self.conf.gitenv_ref,
+                repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

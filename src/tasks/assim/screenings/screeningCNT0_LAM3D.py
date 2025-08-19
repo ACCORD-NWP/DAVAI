@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 from footprints import FPDict
 
 import vortex
@@ -72,7 +70,6 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'atlas_emissivity',
                 local          = 'ATLAS_[targetname:upper].BIN',
                 month          = self.conf.rundate,
-                #targetname     = 'ssmis,iasi,an1,an2',  # ,seviri', FIXME: not anymore in Arpege cycle / commonenv
                 targetname     = 'ssmis,iasi,an1,an2,seviri',
             )
             #-------------------------------------------------------------------------------
@@ -135,12 +132,13 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'IoassignScripts',
-                format         = 'ascii',
-                genv           = self.conf.commonenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -148,27 +146,24 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = 'arpege',
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                binary         = '[model]',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_dfi       = (hook_adjust_DFI, self.NDVar),
-                #hook_nprof    = cf. Olive, set NAMNPROF/NOBSPROFS(13)=25 ?
                 hook_nprof     = (hook_gnam, {'NAMNPROF':{'NOBSPROFS(13)':25}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'namel_screen',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_screen',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

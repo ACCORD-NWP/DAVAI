@@ -154,12 +154,13 @@ class ScreeningOOPS(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'IoassignScripts',
-                format         = 'ascii',
-                genv           = self.conf.commonenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -167,84 +168,79 @@ class ScreeningOOPS(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Config',
-                format         = 'json',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'config',
-                local          = 'oops.[format]',
-                nativefmt      = '[format]',
+                local          = 'oops.[nativefmt]',
+                nativefmt      = 'json',
                 objects        = 'screening3D_aro',
                 scope          = 'oops',
+                path           = 'config_oops/davai/[objects].[nativefmt]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = 'arpege',
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = 'arome',
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['standard_geometry','bmatrix_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObsObjectsNamelists',
-                binary         = 'arome',
-                format         = 'ascii',
                 intent         = 'inout',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['observations_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSGomNamelists',
-                binary         = 'arome',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
-                object         = ['gom_setup_0', 'gom_setup_hres'], #, 'gom_setup'
-                source         = 'objects/naml_[object]',
+                object         = ['gom_setup_0', 'gom_setup_hres'],
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_[object]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = 'arome',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'naml_[object]',
-                hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
+                hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),  # FIXME: shouldn't be hardcoded !
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
-                source         = 'objects/naml_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_[object]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = 'arome',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'objects/naml_leftovers_aro',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_leftovers_aro',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

@@ -33,7 +33,10 @@ def get_args():
                                        default='.')
     parser.add_argument('-j', '--only_job',
                         default=None,
-                        help="Restrict the launch to the given job only (which may contain several tests)")
+                        help=" ".join(["Restrict the launch to one or several job(s), separated by commas.",
+                                       "Note that each job may contain several tests.",
+                                       "List of available jobs using option -l."]
+                                      ))
     parser.add_argument('-l', '--list_jobs',
                         action='store_true',
                         help="List the jobs supposed to be launched")

@@ -117,7 +117,7 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'odbraw',
                 layout         = 'RSTBIAS,COUNTRYRSTRHBIAS,SONDETYPERSTRHBIAS',
                 local          = '[layout:upper]',
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Coefmodel',
@@ -151,110 +151,106 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 level          = '96',
                 local          = 'stabal[level].[stat]',
                 stat           = 'bal,cv',
-            )            
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'IoassignScripts',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'ioassign_script',
                 language       = 'ksh',
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
-            )            
+                path           = 'ioassign_scripts/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
 
         # 1.1.2/ Static Resources (namelist(s) & config):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._wrapped_input(
                 role           = 'Config',
-                format         = 'json',
-                genv           = self.conf.appenv,
                 intent         = 'inout',
                 kind           = 'config',
-                local          = 'oops.[format]',
-                nativefmt      = '[format]',
+                local          = 'oops.[nativefmt]',
+                nativefmt      = 'json',
                 objects        = 'h_'+self.ND+self._suffix_vbc,
                 scope          = 'oops',
+                path           = f'config_oops/davai/[objects].[nativefmt]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'ChannelsNamelist',
-                binary         = self.conf.model,
                 channel        = 'cris331,iasi314',
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
-                source         = 'namelist[channel]',
+                path           = 'namelist/arpege/4dvarfr/namelist[channel]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'naml_[object]',
                 object         = ['geometry'],
-                source         = 'objects/naml_[object]',
-            )            
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'OOPSGomNamelist',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 kind           = 'namelist',
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup', 'gom_setup_hres'],
-                source         = 'objects/namelist_[object]',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
             # Fix TSTEP,CSTOP in Model objects
             # Disable FullPos use everywhere
             self._wrapped_input(
                 role           = 'OOPSModelObjectsNamelists',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_model     = (hook_fix_model,self.NDVar,False),
-                hook_nofullpos = (hook_disable_fullpos,),                                
+                hook_nofullpos = (hook_disable_fullpos,),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['observations', 'nonlinear_model_upd2','linear_model_upd2','traj_model_upd2'],
-                source         = 'objects/[object].nam',
-            )            
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
             self._wrapped_input(
                 role           = 'OOPSBmatrixNamelist',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
-                hook_simpleb   = (hook_disable_flowdependentb,),                                
-                intent         = 'inout', 
+                hook_simpleb   = (hook_disable_flowdependentb,),
+                intent         = 'inout',
                 kind           = 'namelist',
                 local          = '[object].nam',
                 object         = ['bmatrix'],
-                source         = 'objects/[object].nam',
-            )                        
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
+            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'NamelistLeftovers',
-                binary         = self.conf.model,
-                format         = 'ascii',
-                genv           = self.conf.appenv,
                 hook_nofullpos = (hook_disable_fullpos,),
                 hook_simpleb   = (hook_disable_flowdependentb,),
-                hook_varbc     = (hook_fix_varbc, self._withvarbc, ),                
+                hook_varbc     = (hook_fix_varbc, self._withvarbc, ),
                 hook_nstrin    = (hook_gnam, {'NAMPAR1':{'NSTRIN':'NBPROC'}}),
-                hook_cvaraux   = (hook_gnam, {'NAMVAR':{'NUPTRA':0}, 'NAMARG':{'NCONF':2}}),                
+                hook_cvaraux   = (hook_gnam, {'NAMVAR':{'NUPTRA':0}, 'NAMARG':{'NCONF':2}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                source         = 'objects/leftovers_assim.nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
 

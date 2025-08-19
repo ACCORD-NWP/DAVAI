@@ -56,12 +56,14 @@ class IncludesTaskMixin(object):
             #-------------------------------------------------------------------------------
             self.sh.title('Toolbox usual-tools tb_ut04')
             tb_ut04 = toolbox.input(
-                role           = 'AdditionalGribAPIDefinitions',
-                format         = 'unknown',
-                genv           = self.conf.commonenv,
+                role           = 'AdditionalEcCodesDefinitions',
                 kind           = 'gribapiconf',
-                local          = 'extra_grib_defs/gribdef.tgz',
+                local          = '[concept].def',
                 target         = 'definitions',
+                concept        = ['faFieldName', 'faLevelName', 'faModelName'],
+                path           = 'eccodes_definitions/grib2/localConcepts/lfpw/[concept].def',
+                ref            = self.conf.gitenv_ref,
+                repo           = self.conf.gitenv_repo,
             )
             print(self.ticket.prompt, 'tb_ut04 =', tb_ut04)
             print()

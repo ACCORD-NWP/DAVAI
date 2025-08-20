@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from footprints import FPDict
-
-import vortex
-from vortex import toolbox
 from vortex.layout.nodes import Family, Driver, LoopFamily
-from common.util.hooks import update_namelist
-import davai
 
 from .mitra.arpege import Forecast
 
@@ -23,8 +17,12 @@ def setup(t, **kw):
                 loopconf='compilation_flavours',
                 loopsuffix='.{}',
                 nodes=[
-                    Forecast(tag='GM_FCTI_HYD_EUL_VFD_ARPPHYISBA_TL030S', ticket=t, on_error='delayed_fail', **kw),
-                    Forecast(tag='GM_FCTI_HYD_SL3_VFD_ARPPHYISBA_TL030S', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_EUL_VFD_ADIAB_TL031U', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_SL2_VFD_ADIAB_EXTCLA_VESL_TL031U', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_SL2_VFD_ADIAB_EXTCLA_XIDT_TL031U', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_SL2_VFD_ADIAB_SETTLS_VESL_TL031U', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_SL2_VFD_ADIAB_SETTLS_XIDT_TL031U', ticket=t, on_error='delayed_fail', **kw),
+                    Forecast(tag='GM_FCST_HYD_SL3_VFD_ADIAB_TL031U', ticket=t, on_error='delayed_fail', **kw),
                     ],
                 **kw
                 ),

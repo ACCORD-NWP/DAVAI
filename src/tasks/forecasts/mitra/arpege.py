@@ -21,6 +21,15 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
 
+    @property
+    def _ic_block(self):
+        if '_nhe_' in self._configtag or '_nhq_' in self._configtag:
+            return 'nh'
+        elif '_sprtgpq_' in self._configtag:
+            return 'gpq'
+        else:
+            return 'hyd'
+
     def process(self):
         self._wrapped_init()
         self._notify_start_inputs()
@@ -58,6 +67,7 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._load_usual_tools()  # LFI tools, ecCodes defs, ...
             #-------------------------------------------------------------------------------
+            # only for jobs with radiation
             self._wrapped_input(
                 role           = 'RrtmConst',
                 format         = 'unknown',
@@ -104,7 +114,7 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Atmospheric Initial Conditions',
-                block          = self.conf.ic_block,
+                block          = self._ic_block,
                 date           = self.conf.rundate,
                 experiment     = self.conf.input_shelf,
                 format         = '[nativefmt]',

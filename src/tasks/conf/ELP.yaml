@@ -9,6 +9,15 @@ forecasts:
     # canonical forecasts = close to operations, including extra components
     - canonical_arpege_global798c22
     - mitra_global31c1
+    - mitra_global30c24_hyd_adiab
+    - mitra_global30c24_nhe_adiab
+    - mitra_global30c24_nhq_adiab
+    - mitra_global30c24_hyd_arpphy
+    - mitra_global30c24_nhe_arpphy
+    - mitra_global30c24_nhq_arpphy
+    - mitra_lam_hyd_adiab
+    - mitra_lam_nhe_adiab
+    - mitra_lam_nhq_adiab
 
 assim:
     # arpege

@@ -21,6 +21,11 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 FPDict({'kind':'fields_in_file'})
                 ] + davai.vtx.util.default_experts()
 
+    @property
+    def model(self):
+        """ASSUMES task tag starts with model !!!"""
+        return self._configtag.split('_')[0]
+
     def process(self):
         self._wrapped_init()
         self._notify_start_inputs()
@@ -151,8 +156,7 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                #path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/{self._configtag}.nam',
-                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/{self.conf.model_config}.nam',
+                path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/{self._configtag}.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -174,7 +178,7 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 experiment     = self.conf.input_shelf,
                 kind           = 'initial_condition',
                 local          = 'ICMSHARPEINIT',
-                model          = self.conf.model_config.split('_')[0],
+                model          = self.model,
                 nativefmt      = 'fa',
                 vapp           = self.conf.shelves_vapp,
                 vconf          = self.conf.shelves_vconf,
@@ -207,7 +211,7 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                     format         = 'fa',
                     kind           = 'pgdfa',
                     local          = 'Const.Clim.sfx',
-                    model          = self.conf.model_config.split('_')[0],
+                    model          = self.model,
                 )
                 # else: 1.1.1
             #-------------------------------------------------------------------------------

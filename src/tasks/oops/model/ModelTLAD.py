@@ -99,10 +99,14 @@ class TLAD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 repo=self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
+            adiab = {'NAMPHY':{'LMPHYS':False, 'LSOLV':False},
+                     'NAMSIMPHL':{'LSIMPH':False, 'LTRAJPS':False},
+                     }#'NAERAD':{'LRRTM':False, 'LSRTM':False, }}
             # Fix TSTEP,CSTOP in Model objects
             # Disable FullPos use everywhere
             self._wrapped_input(
                 role='OOPSModelObjectsNamelists',
+                hook_adiab=(hook_gnam, adiab if 'adiab' in self.tag else {}),
                 hook_model=(hook_fix_model, '4dvar', False),
                 hook_nofullpos=(hook_disable_fullpos,),
                 intent='inout',

@@ -12,6 +12,7 @@ def setup(t, **kw):
             Family(tag='4dvar6h', ticket=t, nodes=[
                 Family(tag='default_compilation_flavour', ticket=t, nodes=[
                     ModelTLAD(tag='model_tlad', ticket=t, **kw),
+                    ModelTLAD(tag='model_tlad_adiab', ticket=t, **kw),
                     ], **kw),
                 ], **kw),
             ], **kw),

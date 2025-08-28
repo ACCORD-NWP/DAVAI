@@ -18,7 +18,8 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
-                FPDict({'kind':'fields_in_file'})
+                #FPDict({'kind':'fields_in_file'}),  # FIXME: epygram not able to read them yet
+                FPDict({'kind':'ddh'})
                 ] + davai.vtx.util.default_experts()
 
     @property
@@ -37,30 +38,29 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
 
         # 1.1.0/ Reference resources, to be compared to:
-        #if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            #self._wrapped_input(**self._reference_continuity_expertise())
-            #self._wrapped_input(**self._reference_continuity_listing())
-            ##-------------------------------------------------------------------------------
-            #self._wrapped_input(
-            #    role           = 'Reference',  # ModelState (continuity)
-            #    block          = self.output_block(),
-            #    experiment     = self.conf.ref_xpid,
-            #    fatal          = False,
-            #    format         = '[nativefmt]',
-            #    kind           = 'historic',
-            #    local          = 'ref.ICMSHFCST+[term:fmthm]',
-            #    model          = self.conf.model_config.split('_')[0]
-            #    nativefmt      = 'fa',
-            #    term           = self.conf.expertise_term,
-            #    vconf          = self.conf.ref_vconf,
-            #)
+        if 'early-fetch' in self.steps or 'fetch' in self.steps:
+            self._wrapped_input(**self._reference_continuity_expertise())
+            self._wrapped_input(**self._reference_continuity_listing())
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'Reference',  # ModelState (continuity)
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                format         = '[nativefmt]',
+                kind           = 'historic',
+                local          = 'ref.ICMSHARPE+[term:fmthm]',
+                model          = self.model,
+                nativefmt      = 'fa',
+                term           = self.conf.expertise_term,
+                vconf          = self.conf.ref_vconf,
+            )
             #-------------------------------------------------------------------------------
             #self._wrapped_input(
             #    role           = 'Reference',  # SurfState (continuity)
             #    block          = self.output_block(),
             #    experiment     = self.conf.ref_xpid,
             #    fatal          = False,
-            #    format         = '[nativefmt]',
             #    kind           = 'historic',
             #    local          = 'ref.ICMSHFCST+[term:fmthm].sfx',
             #    model          = 'surfex',
@@ -69,10 +69,20 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #    vconf          = self.conf.ref_vconf,
             #)
             ##-------------------------------------------------------------------------------
-        #if 'fetch' in self.steps:
-        #    # this task is also to be compared to another task of the same experiment
-        #    self._wrapped_input(**self._reference_consistency_expertise())
-        #    self._wrapped_input(**self._reference_consistency_listing())
+            # These are not exactly DDH but considered as such for the sake of the DDH expert comparison
+            self._wrapped_input(
+                role           = 'Reference',  # MUSC special output
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                kind           = 'ddh',
+                local          = 'ref.Out.[term:fmth].0000.lfa',  # 0000: we save (and compare) only round hours
+                model          = self.model,
+                nativefmt      = 'lfa',
+                scope          = 'dlimited',
+                term           = self.conf.expertise_term,
+                vconf          = self.conf.ref_vconf,
+            )
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
@@ -86,14 +96,6 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'rrtm.const.tgz',
             )
             #-------------------------------------------------------------------------------
-            #self._wrapped_input(
-            #    role           = 'RtCoef',
-            #    format         = 'unknown',
-            #    genv           = self.conf.commonenv,
-            #    kind           = 'rtcoef',
-            #    local          = 'var.sat.misc_rtcoef.01.tgz',
-            #)
-            #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'CoverParams',
                 format         = 'foo',
@@ -106,22 +108,13 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             if self.conf.pgd_source == 'static':
                 self._wrapped_input(
                     role           = 'ClimPGD',
-                    format         = 'fa',
+                    nativefmt      = 'fa',
                     genv           = self.conf.davaienv,
                     gvar           = 'pgd_fa_[geometry::tag]',
                     kind           = 'pgdfa',
                     local          = 'Const.Clim.sfx',
                 )
-                # else: 2.1
-            #-------------------------------------------------------------------------------
-            #self._wrapped_input(
-            #    role           = 'Global Clim',
-            #    format         = 'fa',
-            #    genv           = self.conf.davaienv,
-            #    kind           = 'clim_model',
-            #    local          = 'Const.Clim',
-            #    month          = self.conf.rundate,
-            #)
+            # else: 2.1
             #-------------------------------------------------------------------------------
 
         # 1.1.2/ Static Resources (namelist(s) & config):
@@ -137,20 +130,8 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 repo           = self.conf.gitenv_repo,
             )
             #-------------------------------------------------------------------------------
-            # deactivate FPinline & DDH, activate spnorms:
-            #tboptions = self._wrapped_input(
-            #    role           = 'Namelist Deltas to add/remove options',
-            #    component      = self.conf.namelist_components,
-            #    kind           = 'namelist',
-            #    local          = '[component]',
-            #    path           = f'namelist/davai/[component]',
-            #    ref            = self.conf.gitenv_ref,
-            #    repo           = self.conf.gitenv_repo,
-            #)
-            #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                #hook_options   = (update_namelist, tboptions),
                 hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
@@ -208,7 +189,7 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                     role           = 'PGD',
                     block          = self.input_block('pgd'),
                     experiment     = self.conf.xpid,
-                    format         = 'fa',
+                    nativefmt      = 'fa',
                     kind           = 'pgdfa',
                     local          = 'Const.Clim.sfx',
                     model          = self.model,
@@ -221,7 +202,6 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                     block          = self.input_block('prep'),
                     date           = self.conf.rundate,
                     experiment     = self.conf.xpid,
-                    format         = '[nativefmt]',
                     filling        = 'surf',
                     kind           = 'ic',
                     local          = 'ICMSHARPEINIT.sfx',
@@ -240,10 +220,7 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 crash_witness  = True,
                 drhookprof     = self.conf.drhook_profiling,
                 engine         = 'parallel',
-                kind           = 'forecast',
-                #fcterm         = self.conf.fcst_term,
-                #fcunit         = 'h',
-                #timestep       = self.conf.timestep,
+                kind           = 'musc',
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()
@@ -261,23 +238,39 @@ class MUSCForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 experiment     = self.conf.xpid,
                 format         = '[nativefmt]',
                 kind           = 'historic',
-                local          = 'ICMSHFCST+{glob:term:\d+(?::\d+)?}',
+                local          = 'ICMSHARPE+{glob:term:\d+(?::\d+)?}',
+                model          = self.model,
                 namespace      = self.REF_OUTPUT,
                 nativefmt      = 'fa',
                 term           = '[glob:term]',
                 fatal          = False
             )
             #-------------------------------------------------------------------------------
+            #self._wrapped_output(
+            #    role           = 'SurfState',
+            #    block          = self.output_block(),
+            #    experiment     = self.conf.xpid,
+            #    format         = '[nativefmt]',
+            #    kind           = 'historic',
+            #    local          = 'ICMSHFCST+{glob:term:\d+(?::\d+)?}.sfx',
+            #    model          = 'surfex',
+            #    namespace      = self.REF_OUTPUT,
+            #    nativefmt      = 'fa',
+            #    term           = '[glob:term]',
+            #    fatal          = False
+            #)
+            #-------------------------------------------------------------------------------
+            # These are not exactly DDH but considered as such for the sake of the DDH expert comparison
             self._wrapped_output(
-                role           = 'SurfState',
+                role           = 'DDHoutput',
+                scope          = 'dlimited',
                 block          = self.output_block(),
                 experiment     = self.conf.xpid,
-                format         = '[nativefmt]',
-                kind           = 'historic',
-                local          = 'ICMSHFCST+{glob:term:\d+(?::\d+)?}.sfx',
-                model          = 'surfex',
+                kind           = 'ddh',
+                local          = 'Out.{glob:term:\d+}.0000.lfa',  # 0000: we save (and compare) only round hours
+                model          = self.model,
                 namespace      = self.REF_OUTPUT,
-                nativefmt      = 'fa',
+                nativefmt      = 'lfa',
                 term           = '[glob:term]',
                 fatal          = False
             )

@@ -13,7 +13,7 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})]
+    experts = [FPDict({'expert':'fields_in_file', 'kind':'pgdfa'}),]
     _taskinfo_kind = 'statictaskinfo'
     _flow_input_task_tag = 'make_domain'
 

@@ -18,7 +18,7 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
-                #FPDict({'kind':'fields_in_file'})
+                #FPDict({'expert':'fields_in_file', 'kind':'historic'}),  # should we ?
                 ] + davai.vtx.util.default_experts()
 
     @property

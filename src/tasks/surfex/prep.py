@@ -13,7 +13,7 @@ from davai.vtx.hooks.namelists import hook_gnam
 
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})]
+    experts = [FPDict({'expert':'fields_in_file', 'kind':'initial_condition'}),]
 
     def process(self):
         self._wrapped_init()

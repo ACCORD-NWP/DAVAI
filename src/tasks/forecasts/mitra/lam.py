@@ -19,7 +19,7 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
-                #FPDict({'kind':'fields_in_file'})
+                #FPDict({'expert':'fields_in_file', 'kind':'historic'}),  # should we ?
                 ] + davai.vtx.util.default_experts()
 
     @property
@@ -46,17 +46,17 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(**self._reference_continuity_expertise())
             self._wrapped_input(**self._reference_continuity_listing())
             #-------------------------------------------------------------------------------
-            #self._wrapped_input(
-            #    role           = 'Reference',  # ModelState (continuity)
-            #    block          = self.output_block(),
-            #    experiment     = self.conf.ref_xpid,
-            #    fatal          = False,
-            #    kind           = 'historic',
-            #    local          = 'ref.ICMSHARPE+[term:fmthm]',
-            #    nativefmt      = 'fa',
-            #    term           = self.conf.expertise_term,
-            #    vconf          = self.conf.ref_vconf,
-            #)
+            self._wrapped_input(
+                role           = 'Reference',  # ModelState (continuity)
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                kind           = 'historic',
+                local          = 'ref.ICMSHARPE+[term:fmthm]',
+                nativefmt      = 'fa',
+                term           = self.conf.expertise_term,
+                vconf          = self.conf.ref_vconf,
+            )
             #-------------------------------------------------------------------------------
         if 'fetch' in self.steps:
             # this task is also to be compared to another task of the same experiment
@@ -172,9 +172,6 @@ class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 engine         = 'parallel',
                 kind           = 'lamfc',
                 xpname         = 'ARPE',
-                #fcterm         = self.conf.fcst_term,
-                #fcunit         = 'h',
-                #timestep       = self.conf.timestep,
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()

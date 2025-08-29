@@ -16,7 +16,7 @@ from davai.vtx.hooks.namelists import hook_fix_model, hook_gnam, hook_disable_fu
 
 class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})] + davai.vtx.util.default_experts()
+    experts = [FPDict({'expert':'fields_in_file', 'kind':'historic'})] + davai.vtx.util.default_experts()
 
     def process(self):
         self._wrapped_init()

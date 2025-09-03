@@ -72,6 +72,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 role           = 'Reference',  # GRIB
                 block          = self.output_block(),
                 experiment     = self.conf.ref_xpid,
+                fatal          = False,
                 geometry       = self.conf.pp_area,
                 kind           = 'gridpoint',
                 local          = 'ref.GRIBPFFCST[geometry:tag:upper]+[term:fmthm]',
@@ -79,20 +80,19 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 origin         = 'historic',
                 term           = self.conf.expertise_term,
                 vconf          = self.conf.ref_vconf,
-                fatal          = True,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Reference',  # DDH
                 block          = self.output_block(),
                 experiment     = self.conf.ref_xpid,
+                fatal          = False,
                 nativefmt      = 'lfa',
                 kind           = 'ddh',
                 local          = 'ref.DHFZOFCST+[term:fmth]',
                 term           = self.conf.expertise_term,
                 scope          = 'zonal',
                 vconf          = self.conf.ref_vconf,
-                fatal          = True,
             )
             #-------------------------------------------------------------------------------
 

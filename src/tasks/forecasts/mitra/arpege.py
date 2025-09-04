@@ -1,25 +1,34 @@
 # -*- coding: utf-8 -*-
 
-import footprints.util
-from footprints import FPDict, FPList
+from footprints import FPDict
 
 import vortex
 from vortex import toolbox
-from vortex.layout.nodes import Task, Driver
+from vortex.layout.nodes import Task
 from common.util.hooks import update_namelist
 import davai
+
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 from davai.vtx.hooks.namelists import hook_gnam
 
 
-class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
+class Forecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
     @property
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
-        return [FPDict({'expert':'fields_in_file', 'kind':'boundary'}),
-                FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms})
+        return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
+                #FPDict({'expert':'fields_in_file', 'kind':'historic'}),  # should we ?
                 ] + davai.vtx.util.default_experts()
+
+    @property
+    def _ic_block(self):
+        if '_nhe_' in self._configtag or '_nhq_' in self._configtag:
+            return 'nh'
+        elif '_sprtgpq_' in self._configtag:
+            return 'gpq'
+        else:
+            return 'hyd'
 
     def process(self):
         self._wrapped_init()
@@ -36,53 +45,40 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self._wrapped_input(**self._reference_continuity_expertise())
             self._wrapped_input(**self._reference_continuity_listing())
             #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'Reference',  # LBC files
-                block          = self.output_block(),
-                experiment     = self.conf.ref_xpid,
-                fatal          = False,
-                format         = 'fa',
-                geometry       = self.conf.target_geometries,
-                kind           = 'boundary',
-                local          = 'ref.[geometry::tag]/ATM_SP+[term::fmthm].[geometry::area::upper].out',
-                source_app     = self.conf.source_vapp,
-                source_conf    = self.conf.source_vconf,
-                source_cutoff  = self.conf.cutoff,
-                term           = self.conf.terms,
-                vconf          = self.conf.ref_vconf,
-            )
+            #self._wrapped_input(
+            #    role           = 'Reference',  # ModelState (continuity)
+            #    block          = self.output_block(),
+            #    experiment     = self.conf.ref_xpid,
+            #    fatal          = False,
+            #    format         = '[nativefmt]',
+            #    kind           = 'historic',
+            #    local          = 'ref.ICMSHARPE+[term:fmthm]',
+            #    nativefmt      = 'fa',
+            #    term           = self.conf.expertise_term,
+            #    vconf          = self.conf.ref_vconf,
+            #)
             #-------------------------------------------------------------------------------
+        if 'fetch' in self.steps:
+            # this task is also to be compared to another task of the same experiment
+            self._wrapped_input(**self._reference_consistency_expertise())
+            self._wrapped_input(**self._reference_consistency_listing())
 
         # 1.1.1/ Static Resources:
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             self._load_usual_tools()  # LFI tools, ecCodes defs, ...
             #-------------------------------------------------------------------------------
+            # only for jobs with radiation
             self._wrapped_input(
-                role           = 'Target Clim',
-                format         = 'fa',
-                genv           = self.conf.appenv_fullpos_partners,
-                geometry       = self.conf.target_geometries,
-                kind           = 'clim_model',
-                local          = 'const.clim.[geometry::area::upper].m[month]',
-                model          = 'aladin',
-                month          = [self.conf.rundate.month, self.conf.rundate.month +1],
+                role           = 'RrtmConst',
+                format         = 'unknown',
+                genv           = self.conf.commonenv,
+                kind           = 'rrtm',
+                local          = 'rrtm.const.tgz',
             )
             #-------------------------------------------------------------------------------
 
         # 1.1.2/ Static Resources (namelist(s) & config):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            self._wrapped_input(
-                role           = 'ObjectNamelist',  # target geometries definitions
-                fp_terms       = {'geotag':{g.tag:FPList(self.conf.terms) for g in self.conf.target_geometries}},
-                geotag         = [g.tag for g in self.conf.target_geometries],
-                kind           = 'namelist_fpobject',
-                local          = 'namelist_obj_[geotag]',
-                # use same domains as in arpege/cpl
-                path           = f'namelist/arpege/cpl/geometries/' +\
-                                 f'[geotag]_{self.conf.cutoff}.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
-            )
             #-------------------------------------------------------------------------------
             tbport = self._wrapped_input(
                 role           = 'PortabilityNamelist',
@@ -95,12 +91,13 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             #-------------------------------------------------------------------------------
             self._wrapped_input(
                 role           = 'Namelist',
-                hook_port      = (update_namelist, tbport),
+                hook_options   = (update_namelist, tbport),
+                hook_conf      = (hook_gnam, self.conf.get('nam_hook', {})),
                 #hook_z         = (hook_gnam, {'NAMBLOCK':{'LKEY':True, RVALUE:0.}}),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'fort.4',
-                path           = f'namelist/cplifs/nwp/namelist_903_nwp',
+                path           = f'namelist/mitra/global/{self._configtag.upper()}.nam',
                 ref            = self.conf.gitenv_ref,
                 repo           = self.conf.gitenv_repo,
             )
@@ -109,52 +106,21 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
         # 1.1.3/ Static Resources (executables):
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
             #-------------------------------------------------------------------------------
-            tbx = self.flow_executable()
+            tbx = self.flow_executable(kind='mfmodel')
             #-------------------------------------------------------------------------------
 
-        # 1.2/ Initial Flow Resources: theoretically flow-resources, but statically stored in input_shelf
+        # 1.2/ Flow Resources (initial): theoretically flow-resources, but statically stored in input_shelf
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            self._wrapped_input(
-                role           = 'ModelState SH',  # spectral atmospheric fields
-                block          = 'mars_nwp',
-                date           = self.conf.rundate,
-                experiment     = self.conf.input_shelf,
-                format         = '[nativefmt]',
-                kind           = 'historic',
-                local          = 'ATM_SP+[term::fmthm]',
-                nativefmt      = 'grib',
-                subset         = 'specatm',
-                term           = self.conf.terms,
-                vapp           = self.conf.shelves_vapp,
-                vconf          = self.conf.shelves_vconf,
-            )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
-                role           = 'ModelState UA', # gridpoint atmospheric fields
-                block          = 'mars_nwp',
+                role           = 'Atmospheric Initial Conditions',
+                block          = self._ic_block,
                 date           = self.conf.rundate,
                 experiment     = self.conf.input_shelf,
                 format         = '[nativefmt]',
-                kind           = 'historic',
-                local          = 'ATM_GP+[term::fmthm]',
-                nativefmt      = 'grib',
-                subset         = 'gpatm',
-                term           = self.conf.terms,
-                vapp           = self.conf.shelves_vapp,
-                vconf          = self.conf.shelves_vconf,
-            )
-            #-------------------------------------------------------------------------------
-            self._wrapped_input(
-                role           = 'ModelState GG',  # surface gridpoint fields
-                block          = 'mars_nwp',
-                date           = self.conf.rundate,
-                experiment     = self.conf.input_shelf,
-                format         = '[nativefmt]',
-                kind           = 'historic',
-                local          = 'SURF_GP+[term::fmthm]',
-                nativefmt      = 'grib',
-                subset         = 'gpsurf',
-                term           = self.conf.terms,
+                kind           = 'initial_condition',
+                local          = 'ICMSHARPEINIT',
+                nativefmt      = 'fa',
                 vapp           = self.conf.shelves_vapp,
                 vconf          = self.conf.shelves_vconf,
             )
@@ -174,8 +140,10 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 crash_witness  = True,
                 drhookprof     = self.conf.drhook_profiling,
                 engine         = 'parallel',
-                kind           = 'fpserver',
-                outdirectories = [g.tag for g in self.conf.target_geometries],
+                kind           = 'forecast',
+                #fcterm         = self.conf.fcst_term,
+                #fcunit         = 'h',
+                #timestep       = self.conf.timestep,
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()
@@ -186,19 +154,18 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
         # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
         if 'backup' in self.steps:
+            #-------------------------------------------------------------------------------
             self._wrapped_output(
-                role           = 'LBC files',
+                role           = 'ModelState',
                 block          = self.output_block(),
                 experiment     = self.conf.xpid,
-                format         = 'fa',
-                geometry       = self.conf.target_geometries,
-                kind           = 'boundary',
-                local          = '[geometry::tag]/ATM_SP+[term::fmthm].[geometry::area::upper].out',
+                format         = '[nativefmt]',
+                kind           = 'historic',
+                local          = 'ICMSHARPE+{glob:term:\d+(?::\d+)?}',
                 namespace      = self.REF_OUTPUT,
-                source_app     = self.conf.source_vapp,
-                source_conf    = self.conf.source_vconf,
-                source_cutoff  = self.conf.cutoff,
-                term           = self.conf.terms,
+                nativefmt      = 'fa',
+                term           = '[glob:term]',
+                fatal          = False
             )
             #-------------------------------------------------------------------------------
 

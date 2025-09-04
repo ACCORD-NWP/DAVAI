@@ -20,7 +20,10 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
-                FPDict({'kind':'fields_in_file'})
+                FPDict({'expert':'fields_in_file', 'kind':'historic'}),
+                # FIXME: issue with multiple fields appearing with the same fid
+                # FPDict({'expert':'fields_in_file', 'kind':'gridpoint', 'parallel':True}),
+                FPDict({'expert':'fields_in_file', 'kind':'ddh'}),
                 ] + davai.vtx.util.default_experts()
 
     def process(self):
@@ -62,6 +65,33 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 model          = 'surfex',
                 nativefmt      = 'fa',
                 term           = self.conf.expertise_term,
+                vconf          = self.conf.ref_vconf,
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'Reference',  # GRIB
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                geometry       = self.conf.pp_area,
+                kind           = 'gridpoint',
+                local          = 'ref.GRIBPFFCST[geometry:tag:upper]+[term:fmthm]',
+                nativefmt      = 'grib',
+                origin         = 'historic',
+                term           = self.conf.expertise_term,
+                vconf          = self.conf.ref_vconf,
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_input(
+                role           = 'Reference',  # DDH
+                block          = self.output_block(),
+                experiment     = self.conf.ref_xpid,
+                fatal          = False,
+                nativefmt      = 'lfa',
+                kind           = 'ddh',
+                local          = 'ref.DHFZOFCST+[term:fmth]',
+                term           = self.conf.expertise_term,
+                scope          = 'zonal',
                 vconf          = self.conf.ref_vconf,
             )
             #-------------------------------------------------------------------------------
@@ -231,7 +261,7 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             self.sh.title('Toolbox algo = tbalgo')
             tbalgo = toolbox.algo(
                 crash_witness  = True,
-                ddhpack        = True,
+                ddhpack        = False,
                 drhookprof     = self.conf.drhook_profiling,
                 engine         = 'parallel',
                 fcterm         = self.conf.fcst_term,
@@ -278,14 +308,30 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
             )
             #-------------------------------------------------------------------------------
             self._wrapped_output(
+                role           = 'Gridpoint',
+                block          = self.output_block(),
+                experiment     = self.conf.xpid,
+                geometry       = '[glob:area]',
+                kind           = 'gridpoint',
+                local          = 'GRIBPFFCST{glob:area:\w+}+{glob:term:\d+(?::\d+)?}',
+                namespace      = self.REF_OUTPUT,
+                nativefmt      = 'grib',
+                origin         = 'historic',
+                term           = '[glob:term]',
+                fatal          = False
+            )
+            #-------------------------------------------------------------------------------
+            self._wrapped_output(
                 role           = 'DDH',
                 block          = self.output_block(),
                 experiment     = self.conf.xpid,
-                format         = 'ddhpack',
+                nativefmt      = 'lfa',
                 kind           = 'ddh',
-                local          = 'ddhpack_{glob:s:\w+}',
-                nativefmt      = '[format]',
-                scope          = '[glob:s]',
+                local          = 'DHFZOFCST+{glob:term:\d+(?::\d+)?}',
+                term           = '[glob:term]',
+                namespace      = self.REF_OUTPUT,
+                scope          = 'zonal',
+                fatal          = False
             )
             #-------------------------------------------------------------------------------
 

@@ -19,7 +19,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
     def experts(self):
         """Redefinition as property because of runtime/conf-determined values."""
         return [FPDict({'kind':'norms', 'hide_equal_norms':self.conf.hide_equal_norms}),
-                FPDict({'kind':'fields_in_file'})
+                FPDict({'expert':'fields_in_file', 'kind':'historic'}),
                 ] + davai.vtx.util.default_experts()
 
     def process(self):
@@ -283,6 +283,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'lamfc',
                 fcterm         = self.conf.fcst_term,
                 fcunit         = 'h',
+                outputid       = 'none',  # fpos only but needed to replace macro in namelist
                 timestep       = self.conf.timestep,
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)

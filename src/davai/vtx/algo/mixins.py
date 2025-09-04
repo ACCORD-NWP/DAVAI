@@ -12,7 +12,7 @@ from common.algo.oopsroot import OOPSAnalysis, OOPSAnalysisWithScreening
 from common.algo.assim import (Screening, Minim, Canari)
 from common.algo.odbtools import (Raw2ODBparallel)
 from common.algo.forecasts import (Forecast, LAMForecast, DFIForecast,
-                                   FullPosBDAP, FullPosGeo)
+                                   FullPosBDAP, FullPosGeo, MUSCForecast)
 from common.algo.clim import (BuildPGD, BuildPGD_MPI, C923)
 from common.algo.coupling import Coupling, Prep
 from common.algo.fpserver import FullPosServer
@@ -167,3 +167,8 @@ class Coupling_CrashWitness(Coupling, _CrashWitnessDecoMixin):
 
 class Canari_CrashWitness(Canari, _CrashWitnessDecoMixin):
     pass
+
+
+class MUSCForecast_CrashWitness(MUSCForecast, _CrashWitnessDecoMixin):
+    pass
+

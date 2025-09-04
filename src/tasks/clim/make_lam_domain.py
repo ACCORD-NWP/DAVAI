@@ -13,7 +13,7 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 class MakeLamDomain(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = []  # [FPDict({'kind':'fields_in_file'})]
+    experts = []
     _taskinfo_kind = 'statictaskinfo'
 
     def geom_params(self):

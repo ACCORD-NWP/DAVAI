@@ -13,7 +13,7 @@ from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
 
 class C923(Task, DavaiIALTaskMixin, IncludesTaskMixin):
 
-    experts = [FPDict({'kind':'fields_in_file'})]
+    experts = [FPDict({'expert':'fields_in_file', 'kind':'clim_model'}),]
     _taskinfo_kind = 'statictaskinfo'
 
     def process(self):

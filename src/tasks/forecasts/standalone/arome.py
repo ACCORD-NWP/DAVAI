@@ -283,6 +283,7 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'lamfc',
                 fcterm         = self.conf.fcst_term,
                 fcunit         = 'h',
+                outputid       = 'none',  # fpos only but needed to replace macro in namelist
                 timestep       = self.conf.timestep,
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)

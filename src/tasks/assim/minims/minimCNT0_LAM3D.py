@@ -141,8 +141,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
                 path           = 'namelist/arpege/4dvarfr/namelist[channel]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_objects = self._wrapped_input(
@@ -151,8 +151,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['observations_tlad','standard_geometry','bmatrix'],
                 path           = f'namelist/davai/OOPS_ARO/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_modelobjects = self._wrapped_input(
@@ -162,8 +162,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = 'nonlinear_model',
                 path           = f'namelist/davai/OOPS_ARO/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
@@ -173,8 +173,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namelist_oops',
                 path           = f'namelist/davai/OOPS_ARO/namelist_oops_leftovers',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -185,8 +185,8 @@ class Minim(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_minim',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

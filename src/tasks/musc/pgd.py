@@ -111,8 +111,8 @@ class MUSC_PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/surfex.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

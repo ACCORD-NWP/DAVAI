@@ -160,8 +160,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
                 path           = 'ioassign_scripts/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -204,8 +204,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 objects        = f'screening{self.ND}',
                 scope          = 'oops',
                 path           = f'config_oops/davai/[objects].[nativefmt]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -214,8 +214,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
                 path           = 'namelist/arpege/4dvarfr/namelist[channel]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -225,8 +225,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -235,8 +235,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['geometry','write_filtered_ana'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -245,8 +245,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_hres'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -255,8 +255,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['t63'],
                 path           = f'namelist/davai/geometries/[object].nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -265,8 +265,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fp_change_resol_[object].nam',
                 path           = f'namelist/davai/geometries/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
 
             #-------------------------------------------------------------------------------
@@ -280,8 +280,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[object].nam',
                 object         = ['observations', 'hr_model', 'nonlinear_model_upd1', 'linear_model_upd1', 'traj_model_upd1'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
@@ -293,8 +293,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[object].nam',
                 object         = ['bmatrix'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -305,8 +305,8 @@ class Screening(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

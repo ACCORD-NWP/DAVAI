@@ -118,8 +118,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 objects        = 'minim-3DVar_aro',
                 scope          = 'oops',
                 path           = f'config_oops/davai/[objects].[nativefmt]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -128,8 +128,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
                 path           = 'namelist/arpege/4dvarfr/namelist[channel]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -138,8 +138,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['standard_geometry','bmatrix_aro'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -149,8 +149,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['observations_aro'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -159,8 +159,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup_hres'],  #, 'jb_cov'
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_[object]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -171,8 +171,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 hook_tstep     = (hook_gnam, {'NAMRIP':{'TSTEP':7200.}}),
                 object         = ['nonlinear_model_3dv_aro', 'linear_model_aro', 'traj_model_3dv_aro'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -183,8 +183,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 hook_write     = (hook_gnam, {'NAMOOPSWRITE':{'CDMEXP':'MXMINI'}}),
                 object         = ['write_analysis_aro'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbnam_leftovers = self._wrapped_input(
@@ -194,8 +194,8 @@ class MinimNoVARBC(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/naml_leftovers_aro',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

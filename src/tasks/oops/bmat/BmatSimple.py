@@ -98,8 +98,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 objects='test_ensemble',
                 scope='oops',
                 path=f'config_oops/davai/[objects].[nativefmt]',
-                ref=self.conf.gitenv_ref,
-                repo=self.conf.gitenv_repo,
+                ref=self.conf.ial_config_ref,
+                repo=self.conf.ial_config_repo,
             )
 
             #-------------------------------------------------------------------------------
@@ -109,8 +109,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local='naml_[object]',
                 object=['geometry'],
                 path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref=self.conf.gitenv_ref,
-                repo=self.conf.gitenv_repo,
+                ref=self.conf.ial_config_ref,
+                repo=self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # Fix TSTEP,CSTOP in Model objects
@@ -124,8 +124,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local='model.nam',
                 object=['nonlinear_model_upd2'],
                 path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
-                ref=self.conf.gitenv_ref,
-                repo=self.conf.gitenv_repo,
+                ref=self.conf.ial_config_ref,
+                repo=self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
@@ -137,8 +137,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local='[object].nam',
                 object=['bmatrix'],
                 path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref=self.conf.gitenv_ref,
-                repo=self.conf.gitenv_repo,
+                ref=self.conf.ial_config_ref,
+                repo=self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -151,8 +151,8 @@ class Bmat(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind='namelist',
                 local='fort.4',
                 path=f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
-                ref=self.conf.gitenv_ref,
-                repo=self.conf.gitenv_repo,
+                ref=self.conf.ial_config_ref,
+                repo=self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

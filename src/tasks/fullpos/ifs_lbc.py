@@ -80,8 +80,8 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 # use same domains as in arpege/cpl
                 path           = f'namelist/arpege/cpl/geometries/' +\
                                  f'[geotag]_{self.conf.cutoff}.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbport = self._wrapped_input(
@@ -89,8 +89,8 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'portability.nam',
                 path           = f'namelist/davai/portability/{self.conf.target_host}.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -101,8 +101,8 @@ class IFS_LBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/cplifs/nwp/namelist_903_nwp',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

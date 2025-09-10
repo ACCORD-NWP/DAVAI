@@ -163,8 +163,8 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_previ_surfex',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # deactivate FPinline & DDH, activate spnorms:
@@ -175,8 +175,8 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[component]',
                 source         = 'model/options_delta/[component]',
                 path           = f'namelist/davai/[component]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -186,8 +186,8 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelistfc',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbdef = self._wrapped_input(
@@ -195,8 +195,8 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namselectdef',
                 local          = 'xxt.def',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/xxt.def.{self.conf.cutoff}',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             tbdef = self._wrapped_input(
@@ -206,8 +206,8 @@ class CanonicalArpegeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[helper::xxtnam]',
                 term           = rangex(0, self.conf.fcst_term, 1),
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/[helper::xxtsrc]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

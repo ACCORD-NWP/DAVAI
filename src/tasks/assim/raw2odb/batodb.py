@@ -44,8 +44,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 kind           = 'batodbconf',
                 local          = 'param.cfg',
                 path           = 'bator/param_bator.cfg',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -55,8 +55,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 local          = '[purpose]_ioassign',
                 purpose        = 'create',
                 path           = 'ioassign_scripts/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -64,8 +64,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 kind           = 'gpslist',
                 local          = 'list_gpssol',
                 path           = f'whitelist/{self.conf.suite_vapp}/list.gpssol',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -73,8 +73,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 kind           = 'modeslist',
                 local          = 'list_modes',
                 path           = f'whitelist/{self.conf.suite_vapp}/list.modes',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -85,8 +85,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 kind           = 'namelist',
                 local          = f'bator_reduction.{self.conf.model}.nam',
                 path           = f'namelist/davai/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -96,8 +96,8 @@ class BatorODB(Task, DavaiTaskMixin):
                 kind           = 'namutil',
                 local          = 'NAMELIST',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/{self.conf.bator_namelist}',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             if self.conf.LAM:
@@ -107,8 +107,8 @@ class BatorODB(Task, DavaiTaskMixin):
                     local          = 'NAM_lamflag',
                     path           =
                         f'namelist/davai/geometries/{self.conf.geometry.tag}.lamflag_odb.nam',
-                    ref            = self.conf.gitenv_ref,
-                    repo           = self.conf.gitenv_repo,
+                    ref            = self.conf.ial_config_ref,
+                    repo           = self.conf.ial_config_repo,
                 )
             #-------------------------------------------------------------------------------
 

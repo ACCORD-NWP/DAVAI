@@ -56,8 +56,8 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'isbaan',
                 local          = 'fort.61',
                 path           = 'analyse.isba',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -116,8 +116,8 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'EXSEG1.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_ana_surfex',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -126,8 +126,8 @@ class Canari(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namel_canari',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

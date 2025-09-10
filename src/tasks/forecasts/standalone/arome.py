@@ -131,8 +131,8 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 #path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelist_previ_surfex',
                 path           =  f'namelist/davai/model/' +\
                                   f'{self.conf.model}/{self.conf.geometry.tag}/fcst.assistances.nam_surfex',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # deactivate FPinline & DDH, activate spnorms:
@@ -142,8 +142,8 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[component]',
                 path           = f'namelist/davai/[component]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -158,8 +158,8 @@ class StandaloneAromeForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 #path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/namelist_previ_dyn',
                 path           = f'namelist/davai/model/' +\
                                  f'{self.conf.model}/{self.conf.geometry.tag}/fcst.assistances.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

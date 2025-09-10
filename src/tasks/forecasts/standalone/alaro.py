@@ -135,8 +135,8 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                     local          = 'EXSEG1.nam',
                     path           =
                         f'namelist/{self.conf.model}/fcst.{self.conf.model}{self.conf.alaro_version}.nam_surfex',
-                    ref            = self.conf.gitenv_ref,
-                    repo           = self.conf.gitenv_repo,
+                    ref            = self.conf.ial_config_ref,
+                    repo           = self.conf.ial_config_repo,
                 )
             # deactivate FPinline & DDH, activate spnorms:
             tboptions = self._wrapped_input(
@@ -145,8 +145,8 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = '[component]',
                 path           = f'namelist/davai/[component]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -158,8 +158,8 @@ class StandaloneAlaroForecast(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.model}/fcst.{self.conf.model}{self.conf.alaro_version}.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

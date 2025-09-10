@@ -58,7 +58,7 @@ def get_args():
     parser.add_argument('--origin', '--davai_remote_repo',
                         default=config['defaults']['davai_remote_repo'],
                         dest='davai_remote_repo',
-                        help=("URL of the DAVAI-tests origin repository to be cloned in XP. " +
+                        help=("URL of the DAVAI origin repository to be cloned in XP (in case -e). " +
                               "Default ({}) can be set through section [defaults] " +
                               "of user config file").format(config['defaults']['davai_remote_repo']))
     parser.add_argument('--host',

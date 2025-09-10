@@ -87,8 +87,8 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'namelist_obj_[geotag]',
                 path           = f'namelist/arpege/cpl/geometries/' +\
                                  f'[geotag]_{self.conf.cutoff}.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -99,8 +99,8 @@ class ArpegeLBCbyFullpos(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'fort.4',
                 source         = 'e903_noMCUF.nam',
                 path           = f'namelist/arpege/cpl/e903_noMCUF.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

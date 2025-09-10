@@ -57,7 +57,7 @@ surfex:
 
 musc:
     - armcu
-    - armcu_PPM  # PPM = PGD+Prep+Model
+#    - armcu_PPM  # PPM = PGD+Prep+Model
 
 # mixs: jobs containing several tasks of various families
 #mixs:

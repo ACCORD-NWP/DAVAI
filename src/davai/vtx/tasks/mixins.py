@@ -62,8 +62,8 @@ class IncludesTaskMixin(object):
                 target         = 'definitions',
                 concept        = ['faFieldName', 'faLevelName', 'faModelName'],
                 path           = 'eccodes_definitions/grib2/localConcepts/lfpw/[concept].def',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = os.path.expanduser(os.path.expandvars(self.conf.ial_config_repo)),
             )
             print(self.ticket.prompt, 'tb_ut04 =', tb_ut04)
             print()
@@ -100,6 +100,9 @@ class WrappedToolboxMixin(object):
         """Wrapping of input resource."""
         input_number = len(self._tb_input) + 1
         self.sh.title('Toolbox input {:02}'.format(input_number))
+        for k, v in description.items():
+            if isinstance(v, str):
+                description[k] = os.path.expanduser(os.path.expandvars(v))
         try:
             r = toolbox.input(**description)
         except Exception:

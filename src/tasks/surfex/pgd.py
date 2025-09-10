@@ -112,8 +112,8 @@ class PGD(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/clim/namel_buildpgd',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
                 #-------------------------------------------------------------------------------
             if self.conf.geonam_source == 'static':

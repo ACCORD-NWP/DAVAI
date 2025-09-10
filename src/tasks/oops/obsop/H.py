@@ -160,8 +160,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[purpose]_ioassign',
                 purpose        = 'create,merge',
                 path           = 'ioassign_scripts/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 
@@ -176,8 +176,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 objects        = 'h_'+self.ND+self._suffix_vbc,
                 scope          = 'oops',
                 path           = f'config_oops/davai/[objects].[nativefmt]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -186,8 +186,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'namchannels_[channel]',
                 path           = 'namelist/arpege/4dvarfr/namelist[channel]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -196,8 +196,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'naml_[object]',
                 object         = ['geometry'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -206,8 +206,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = 'namelist_[object]',
                 object         = ['gom_setup_0', 'gom_setup', 'gom_setup_hres'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[local]',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # Fix TSTEP,CSTOP in Model objects
@@ -221,8 +221,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[object].nam',
                 object         = ['observations', 'nonlinear_model_upd2','linear_model_upd2','traj_model_upd2'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             # BMatrix without flow-dependent sigma_b and correlations
@@ -234,8 +234,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 local          = '[object].nam',
                 object         = ['bmatrix'],
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/[object].nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
             self._wrapped_input(
@@ -249,8 +249,8 @@ class H(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'fort.4',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.suite_vconf}/objects/leftovers_assim.nam',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

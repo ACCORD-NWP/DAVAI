@@ -89,8 +89,8 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',
                 path           = f'namelist/{self.conf.suite_vapp}/{self.conf.prep_suite_vconf}/{self.conf.prep_namelist}',
-                ref            = self.conf.gitenv_ref,
-                repo           = self.conf.gitenv_repo,
+                ref            = self.conf.ial_config_ref,
+                repo           = self.conf.ial_config_repo,
             )
             #-------------------------------------------------------------------------------
 

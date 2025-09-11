@@ -7,8 +7,8 @@ import socket
 
 from . import DAVAI_HOST_FILE
 
-hosts_re_patterns = dict(belenos_re_pattern = "^belenoslogin\d\.belenoshpc\.meteo\.fr$",
-                         taranis_re_pattern = "^taranislogin\d\.taranishpc\.meteo\.fr$",
+hosts_re_patterns = dict(belenos_re_pattern = "^belenos((login)|(transfert))*\d+\.belenoshpc\.meteo\.fr$",
+                         taranis_re_pattern = "^taranis((login)|(transfert))*\d+\.taranishpc\.meteo\.fr$",
                          atos_bologna_re_pattern = "^a[abcd]\d-\d+(.bullx)?$",
                          )
 

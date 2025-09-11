@@ -503,6 +503,7 @@ class XP(object):
                 self._gmkpack_fetch_sources(drymode=drymode,
                                             preexisting_pack=preexisting_pack,
                                             cleanpack=cleanpack)
+            self._fetch_IAL_config()
             # launch build in batch/scheduler
             self._gmkpack_launch_build(drymode=drymode,
                                        cleanpack=cleanpack,
@@ -510,6 +511,16 @@ class XP(object):
                                        archive_as_ref=archive_as_ref)
         else:
             raise NotImplementedError("compiling_system == {}".format(compiling_system))
+
+    def _fetch_IAL_config(self):
+        """Ensure IAL-config is available"""
+        repo = os.path.expanduser(os.path.expandvars(self.conf['DEFAULT']['ial_config_repo']))
+        if not os.path.exists(repo):
+            subprocess.check_call(['git', 'clone',
+                                   config['defaults']['IAL_config_remote'],
+                                   repo])
+        else:
+            subprocess.check_call(['git', 'fetch'])
 
     def _gmkpack_fetch_sources(self,
                                drymode=False,

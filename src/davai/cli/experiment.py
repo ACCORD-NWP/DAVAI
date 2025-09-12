@@ -516,11 +516,12 @@ class XP(object):
         """Ensure IAL-config is available"""
         repo = os.path.expanduser(os.path.expandvars(self.conf['DEFAULT']['ial_config_repo']))
         if not os.path.exists(repo):
-            subprocess.check_call(['git', 'clone',
-                                   config['defaults']['IAL_config_remote'],
-                                   repo])
+            cmd = ['git', 'clone', config['defaults']['IAL_config_remote'], repo]
+            print("Getting IAL-config:")
+            print(' '.join(cmd))
+            subprocess.check_call(cmd)
         else:
-            subprocess.check_call(['git', 'fetch'], cwd=repo)
+            subprocess.check_call(['git', 'fetch', '--all'], cwd=repo)
 
     def _gmkpack_fetch_sources(self,
                                drymode=False,

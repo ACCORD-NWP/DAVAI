@@ -520,7 +520,7 @@ class XP(object):
                                    config['defaults']['IAL_config_remote'],
                                    repo])
         else:
-            subprocess.check_call(['git', 'fetch'])
+            subprocess.check_call(['git', 'fetch'], cwd=repo)
 
     def _gmkpack_fetch_sources(self,
                                drymode=False,

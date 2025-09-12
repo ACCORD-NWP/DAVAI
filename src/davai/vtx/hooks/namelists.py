@@ -116,6 +116,14 @@ def hook_nam_delvars(t, rh, d):
         rh.save()
 
 
+def hook_nam_delblocks(t, rh, blocks):
+    """Remove blocks from namelist, from a list of blocks"""
+    for b in blocks:
+        if b in rh.contents:
+            del(rh.contents[b])
+        rh.save()
+
+
 def hook_OOPS_2_CNT0(t, rh):
     """Hook to turn OOPS namelist into CNT0 namelist."""
     gnam = {'NAMARG': {'CNMEXP':'MINI'},

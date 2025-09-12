@@ -8,7 +8,7 @@ from vortex.layout.nodes import Task
 
 import davai
 from davai.vtx.tasks.mixins import DavaiIALTaskMixin, IncludesTaskMixin
-from davai.vtx.hooks.namelists import hook_gnam
+from davai.vtx.hooks.namelists import hook_gnam, hook_nam_delblocks
 
 
 class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
@@ -85,6 +85,7 @@ class Prep(Task, DavaiIALTaskMixin, IncludesTaskMixin):
                 # FIXME: update PGD so as to be able to have gelato seaice scheme ?
                 hook_halo      = (hook_gnam, {'NAM_PREP_SURF_ATM':{'NHALO_PREP':0},
                                               'NAM_PREP_SEAFLUX':{'CSEAICE_SCHEME':'NONE'},}),
+                hook_delgeo    = (hook_nam_delblocks, ['NAM_CONF_PROJ', 'NAM_CONF_PROJ_GRID']),
                 intent         = 'inout',
                 kind           = 'namelist',
                 local          = 'OPTIONS.nam',

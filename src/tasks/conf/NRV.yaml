@@ -35,8 +35,8 @@ surfex:
     - PP_arome   # PP_arome  = PGD+Prep on a LAM geometry
     - PP_arpege  # PP_arpege = PGD+Prep on Gauss grids
 
-musc:
-    - armcu
+#musc:
+#    - armcu
 
 # mixs: jobs containing several tasks of various families
 #mixs:

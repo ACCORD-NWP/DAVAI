@@ -34,7 +34,7 @@ def main():
 def get_args():
     parser = argparse.ArgumentParser(description='Create a Davai experiment to test an IAL bundle.')
     parser.add_argument('bundle',
-                        help="Path to a local IAL bundle file (.yml or .yaml).",
+                        help="Path to a local IAL bundle file (.yml or .yaml).",)
                         #help=" ".join([
                         #    "An IAL bundle, either as a local bundle file (.yml or .yaml) or",
                         #    "a git ref (tag, commit) in the IAL-bundle repository.",

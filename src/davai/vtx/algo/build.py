@@ -381,6 +381,18 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
             print(' + {} -> {}'.format(self.system.path.join(bindir, p), outname))
             self.system.copyfile(self.system.path.join(bindir, p),
                                  outname)
+        # special case from 50T2 onwards : lfitools
+        hub = self.system.path.join(GmkpackTool.get_homepack(self.homepack), self.packname, 'hub')
+        path2lfitools = 'install/FALFILFA/bin'
+        for v in ('local', 'main'):
+            path = self.system.path.join(hub, v, path2lfitools, 'lfitools_dp')
+            if self.system.path.exists(path):
+                self.system.copyfile(path, 'LFITOOLS')
+                break
+            path = self.system.path.join(hub, v, path2lfitools, 'lfitools_sp')
+            if self.system.path.exists(path):
+                self.system.copyfile(path, 'LFITOOLS')
+                break
 
 
 class PackBuildExecutables_CrashWitness(PackBuildExecutables, _CrashWitnessDecoMixin):

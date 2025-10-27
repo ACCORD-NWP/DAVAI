@@ -384,14 +384,17 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
         # special case from 50T2 onwards : lfitools
         hub = self.system.path.join(GmkpackTool.get_homepack(self.homepack), self.packname, 'hub')
         path2lfitools = 'install/FALFILFA/bin'
+        outname = binaries_syntax_in_workdir.format('lfitools')
         for v in ('local', 'main'):
             path = self.system.path.join(hub, v, path2lfitools, 'lfitools_dp')
             if self.system.path.exists(path):
-                self.system.copyfile(path, 'LFITOOLS')
+                print(' + {} -> {}'.format(path, outname))
+                self.system.copyfile(path, outname)
                 break
             path = self.system.path.join(hub, v, path2lfitools, 'lfitools_sp')
             if self.system.path.exists(path):
-                self.system.copyfile(path, 'LFITOOLS')
+                print(' + {} -> {}'.format(path, outname))
+                self.system.copyfile(path, outname)
                 break
 
 

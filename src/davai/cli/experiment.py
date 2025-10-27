@@ -419,6 +419,9 @@ class XP(object):
             elif 'IAL_bundle_file' in c:
                 # sources to be tested taken from an IAL bundle file
                 if c.get('comment', None) is None:
+                    in_xp = os.path.join(self.xp_path, 'bundle.yml')
+                    shutil.copyfile(c['IAL_bundle_file'], in_xp)
+                    c['IAL_bundle_file'] = in_xp
                     c['comment'] = c['IAL_bundle_file']
             elif 'IAL_bundle_ref' in c:
                 # sources to be tested taken from IAL_bundle_ref@IAL_bundle_repository

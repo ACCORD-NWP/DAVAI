@@ -2,6 +2,7 @@
 
 from __future__ import print_function, absolute_import, unicode_literals, division
 
+from footprints import FPDict
 import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Task, Driver, Family, LoopFamily
@@ -25,13 +26,16 @@ def setup(t, **kw):
 
 class GitRef2Pack(Task, DavaiTaskMixin, GmkpackMixin):
 
+    experts = [FPDict({'kind':'codingnorms'}),]
+    _taskinfo_kind = 'statictaskinfo'
+
     def process(self):
         self._set_gmkpack_env()
         self._wrapped_init()
 
         # 0./ Promises
         if 'early-fetch' in self.steps or 'fetch' in self.steps:
-            pass
+            self._wrapped_promise(**self._promised_expertise())
             #-------------------------------------------------------------------------------
 
         # 1.1.0/ Reference resources, to be compared to:
@@ -79,12 +83,14 @@ class GitRef2Pack(Task, DavaiTaskMixin, GmkpackMixin):
                 pack_type      = self.conf.packtype,
                 preexisting_pack = self.conf.preexisting_pack,
                 repository     = self.conf.IAL_repository,
-                rootpack       = self.conf.get('rootpack', None)
+                rootpack       = self.conf.get('rootpack', None),
+                check_coding_norms = self.conf.get('check_coding_norms',False),
             )
             print(self.ticket.prompt, 'tbalgo =', tbalgo)
             print()
             self.component_runner(tbalgo, [None])
             #-------------------------------------------------------------------------------
+            self.run_expertise()
             #-------------------------------------------------------------------------------
 
         # 2.3/ Flow Resources: produced by this task and possibly used by a subsequent flow-dependant task
@@ -94,7 +100,7 @@ class GitRef2Pack(Task, DavaiTaskMixin, GmkpackMixin):
 
         # 3.0.1/ Davai expertise:
         if 'late-backup' in self.steps or 'backup' in self.steps:
-            pass
+            self._wrapped_output(**self._output_expertise())
             #-------------------------------------------------------------------------------
 
         # 3.0.2/ Other output resources of possible interest:

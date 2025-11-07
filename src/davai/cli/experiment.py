@@ -502,8 +502,10 @@ class XP(object):
                 # fetch sources (interactively)
                 self._gmkpack_fetch_sources(drymode=drymode,
                                             preexisting_pack=preexisting_pack,
-                                            cleanpack=cleanpack)
+                                            cleanpack=cleanpack,
+                                            archive_as_ref=archive_as_ref)
             self._fetch_IAL_config()
+
             # launch build in batch/scheduler
             self._gmkpack_launch_build(drymode=drymode,
                                        cleanpack=cleanpack,
@@ -526,7 +528,8 @@ class XP(object):
     def _gmkpack_fetch_sources(self,
                                drymode=False,
                                preexisting_pack=False,
-                               cleanpack=False):
+                               cleanpack=False,
+                               archive_as_ref=False):
         """Fetch sources for build with gmkpack."""
         if 'IAL_git_ref' in self.sources_to_test:
             # build from a single IAL Git reference
@@ -542,6 +545,7 @@ class XP(object):
                      profile='rd',  # interactive, not in batch/scheduler
                      preexisting_pack=preexisting_pack,
                      cleanpack=cleanpack,
+                     archive_as_ref=archive_as_ref,
                      **self.sources_to_test)
 
     def _gmkpack_launch_build(self,

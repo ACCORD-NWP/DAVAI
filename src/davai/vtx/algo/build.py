@@ -184,12 +184,18 @@ class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                     optional = True,
                     default = None,
                 ),
+                check_coding_norms = dict(
+                    info = "Run coding norms checker on local sources",
+                    optional = True,
+                    default = False,
+                )
             )
         )
     ]
 
     def execute(self, rh, kw):  # @UnusedVariable
         from ial_build.algos import IALgitref2pack  # @UnresolvedImport
+
         IALgitref2pack(self.git_ref,
                        self.repository,
                        pack_type=self.pack_type,
@@ -198,7 +204,8 @@ class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                        compiler_label=self.compiler_label,
                        compiler_flag=self.compiler_flag,
                        homepack=self.homepack,
-                       rootpack=self.rootpack)
+                       rootpack=self.rootpack,
+                       check_coding_norms=self.check_coding_norms)
 
 
 class IALgitref2Pack_CrashWitness(IALgitref2Pack, _CrashWitnessDecoMixin):

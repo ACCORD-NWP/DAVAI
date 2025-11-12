@@ -37,7 +37,7 @@ def initialized():
     """
     # import inside function because of circular dependency
     # Setup directories
-    for d in ('experiments', 'logs', 'default_mtooldir'):
+    for d in ('experiments', 'logs','build', 'default_mtooldir'):
         p = expandpath(config.get('paths', d))
         if os.path.exists(p):
             if not os.path.isdir(p):

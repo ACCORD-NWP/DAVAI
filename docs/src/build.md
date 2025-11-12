@@ -33,7 +33,24 @@ In case the compilation fails, or if you need to (re-)modify the sources for any
 
 3. and then if build successful `davai-run_tests`
 
-### Build with \[cmake/ecbuild\...\]
+### Build with ecbundle/cmake
+
+Davai will build IAL and any required dependencies listed in the bundle in a path defined in the platform config file (*e.g.* `DAVAI/src/davai/cli/conf/atos_bologna.ini`) under the key `build` of section `paths`. The build path will be complemented with the experiment name and compilation flavour (*e.g.* `$SCRATCH/davai/build/dv-0004-atos_bologna@user`)
+
+
+Tasks:
+
+- Fetch sources (`ecbundle create`):
+
+  - from an IAL local repository:
+    `bundle_create.py` : uses ecbundle to create a `source` direcotry in the experiment build folder with the sources requestend in the bundle file present in the `bundle/` folder of the IAL repository set by `IAL_dir` in the config file.
+
+  - from a bundle repository:
+    `bundle_create.py` : clones the IAL-bundle repository set by the config variables `IAL_bundle_repository` and `IAL_bundle_ref` in the config file and uses ecbundle to create a `source` direcotry in the experiment build folder with the sources requestend in the bundle file present in the IAL-bundle repository.
+
+    
+- `pack2bin` : compile sources and link necessary executables (i.e. those used in the tests), for each pack flavour.
+
 
 Not implemented yet.
 

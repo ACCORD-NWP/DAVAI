@@ -4,6 +4,8 @@ forecasts:
     - standalone_alaro1_antwrp1300
     - standalone_alaro1sfx_chmh2325
     - standalone_arome_corsica2500
+    - standalone_harmoniearome_deode_nl1000
+      #    - standalone_harmoniearome_nl2500
     - standalone_arpege_globaltst149c24
     - standalone_ifs_global21
     # canonical forecasts = close to operations, including extra components

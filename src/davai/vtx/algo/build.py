@@ -353,6 +353,15 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
         )
     ]
 
+
+    def bin_vtxkind(self, binary):
+        binary = binary.lower()
+        b2kind = {'masterodb': 'ifsmodel',
+                  'pgd': 'buildpgd',
+                  'ootestvar': 'oopsbinary-ootestcomponent',
+                  'oovar': 'oopsbinary-oovar'}
+        return binaries_syntax_in_workdir.format(b2kind.get(binary, binary))
+
     def execute(self, rh, kw):  # @UnusedVariable
         from ial_build.algos import pack_build_executables  # @UnresolvedImport
         if self.fake_build:
@@ -369,33 +378,36 @@ class PackBuildExecutables(AlgoComponent, GmkpackDecoMixin):
                                    dump_build_report=True)
 
     def postfix(self, rh, kw):  # @UnusedVariable
+        self._postfix_gmkbin()
+        self._postfix_hubbin()
+
+    def _postfix_hubbin(self):
+        from ial_build.pygmkpack import GmkpackTool  # @UnresolvedImport
+        hubbins = {'lfitools':'install/FALFILFA/bin',
+                   'prep':'install/SURFEX/bin',
+                   'pgd':'install/SURFEX/bin',
+                   }
+        hub = self.system.path.join(GmkpackTool.get_homepack(self.homepack), self.packname, 'hub')
+        for b in hubbins.keys():
+            outname = self.bin_vtxkind(b)
+            for v in ('local', 'main'):
+                for p in ('', '_dp', '_sp'):
+                    path = self.system.path.join(hub, v, hubbins.get(b), b+p)
+                    if self.system.path.exists(path):
+                        print(' + {} -> {}'.format(path, outname))
+                        self.system.copyfile(path, outname)
+                        break
+
+    def _postfix_gmkbin(self):
         from ial_build.pygmkpack import GmkpackTool  # @UnresolvedImport
         bindir = self.system.path.join(GmkpackTool.get_homepack(self.homepack), self.packname, 'bin')
-        b2kind = {'MASTERODB': 'ifsmodel', 'PGD': 'buildpgd',
-                  'OOTESTVAR': 'oopsbinary-ootestcomponent',
-                  'OOVAR': 'oopsbinary-oovar'}
         # copy binaries on workdir
         print("Copy binaries on workdir:")
         for p in self.system.listdir(bindir):
-            outname = binaries_syntax_in_workdir.format(b2kind.get(p, p.lower()))
+            outname = self.bin_vtxkind(p)
             print(' + {} -> {}'.format(self.system.path.join(bindir, p), outname))
             self.system.copyfile(self.system.path.join(bindir, p),
                                  outname)
-        # special case from 50T2 onwards : lfitools
-        hub = self.system.path.join(GmkpackTool.get_homepack(self.homepack), self.packname, 'hub')
-        path2lfitools = 'install/FALFILFA/bin'
-        outname = binaries_syntax_in_workdir.format('lfitools')
-        for v in ('local', 'main'):
-            path = self.system.path.join(hub, v, path2lfitools, 'lfitools_dp')
-            if self.system.path.exists(path):
-                print(' + {} -> {}'.format(path, outname))
-                self.system.copyfile(path, outname)
-                break
-            path = self.system.path.join(hub, v, path2lfitools, 'lfitools_sp')
-            if self.system.path.exists(path):
-                print(' + {} -> {}'.format(path, outname))
-                self.system.copyfile(path, outname)
-                break
 
 
 class PackBuildExecutables_CrashWitness(PackBuildExecutables, _CrashWitnessDecoMixin):

@@ -307,7 +307,7 @@ class XP(object):
                     prompt='venv@davai:{}'.format(self.xpid))
         print("... virtualenv created.")
         # install DAVAI and dependencies in the venv
-        print("Setup virtualenv...")a
+        print("Setup virtualenv...")
         req = os.path.join(self.davai_repo_absdir, 'requirements.txt')
         if os.path.exists(req):
             subprocess.check_call([self.venv_python, '-m', 'pip', 'install', '-r', req])

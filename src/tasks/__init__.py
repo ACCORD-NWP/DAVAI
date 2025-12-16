@@ -24,6 +24,7 @@ class DavaiJobAssistantPlugin(JobAssistantPlugin):
     )
 
     def plugable_env_setup(self, t, **kw):  # @UnusedVariable
+        t.env.POSNAMEF_DEFAULT_FATAL = '0'
         t.env.MPIAUTOCONFIG = self.masterja.conf.mpiautoconfig
         t.env.DAVAI_SERVER = self.masterja.conf.davai_server
         t.env.LD_LIBRARY_PATH = '/opt/softs/intel/oneapi/2023.2/mpi/2021.10.0/libfabric/lib'

@@ -19,7 +19,7 @@ import shutil
 from ial_build.bundle import IALBundle, TmpIALbundleRepo
 
 from .. import __version__
-from ..util import gmkpack_build_job
+from ..util import gmkpack_build_job,cmake_build_job
 from . import config
 from . import DAVAI_HOST, DAVAI_XPID_SYNTAX, DAVAI_XP_COUNTER, DAVAI_XPID_RE, usecases, vapp
 from .util import expandpath, set_default_mtooldir, vconf2usecase, usecase2vconf, initialized
@@ -105,7 +105,8 @@ class XP(object):
     sources_to_test_filename = os.path.join('conf', 'sources.yaml')
     sources_to_test_minimal_keys = (set(('IAL_git_ref',)),
                                     set(('IAL_bundle_ref', 'IAL_bundle_repository')),
-                                    set(('IAL_bundle_file',))
+                                    set(('IAL_bundle_file',)),
+                                    set(('IAL_dir',))
                                     )
     davai_version_file_in_IAL = '.davai_default_version'
     venv_dir = 'venv'
@@ -200,6 +201,7 @@ class XP(object):
             self._link_venv(venv_path)
         self._setup_packages()  # remaining, not on PyPI: vortex
         self._setup_logs()
+        self._setup_build()
         # configuration files
         self._setup_conf_usecase(editable)
         self._setup_conf_general(editable, host=host)
@@ -356,6 +358,13 @@ class XP(object):
         os.makedirs(logs)
         os.symlink(logs, os.path.join(self.xp_path, 'logs'))
 
+    def _setup_build(self):
+        """Deport 'build' directory."""
+        build_directory = expandpath(config['paths']['build'])
+        build = os.path.join(build_directory, self.xpid)
+        os.makedirs(build)
+
+
     def _setup_final_prompt(self):
         """Final prompt for the setup of the experiment."""
         print("-" * 80)
@@ -509,6 +518,17 @@ class XP(object):
                                        cleanpack=cleanpack,
                                        fake_build=fake_build,
                                        archive_as_ref=archive_as_ref)
+        elif compiling_system == 'cmake':
+            if not skip_fetching_sources:
+                # fetch sources (interactively)
+                self._cmake_fetch_sources(drymode=drymode,
+                                            preexisting_pack=preexisting_pack,
+                                            cleanpack=cleanpack)
+            self._fetch_IAL_config()
+            self._cmake_launch_build(drymode=drymode,
+                                       cleanpack=cleanpack,
+                                       fake_build=fake_build,
+                                       archive_as_ref=archive_as_ref)
         else:
             raise NotImplementedError("compiling_system == {}".format(compiling_system))
 
@@ -564,6 +584,47 @@ class XP(object):
         self._launch('build.wait4build', 'build',
                      drymode=drymode,
                      profile='rd')
+
+    def _cmake_fetch_sources(self,
+                               drymode=False,
+                               preexisting_pack=False,
+                               cleanpack=False):
+        """Fetch sources for build with gmkpack."""
+        if any([k in self.sources_to_test for k in ["IAL_bundle_repository",'IAL_repository', 'IAL_bundle_file','IAL_dir']]):
+            # build from a bundle
+            build_job = 'build.cmake.bundle_create'
+        else:
+            msg = "Config file '{}' should contain one of: ('IAL_repository', 'IAL_bundle_file')"
+            raise KeyError(msg.format(self.sources_to_test_filename))
+        self._launch(build_job, 'build',
+                     drymode=drymode,
+                     profile='rd',  # interactive, not in batch/scheduler
+                     preexisting_pack=preexisting_pack,
+                     cleanpack=cleanpack,
+                     **self.sources_to_test)
+
+
+    def _cmake_launch_build(self,
+                              drymode=False,
+                              cleanpack=False,
+                              fake_build=False,
+                              archive_as_ref=False):
+        """Launch build job."""
+        os.environ['DAVAI_START_BUILD'] = str(time.time())
+        # run build in batch/scheduler
+        self._launch(cmake_build_job, 'build',
+                     drymode=drymode,
+                     cleanpack=cleanpack,
+                     fake_build=fake_build,
+                     archive_as_ref=archive_as_ref,
+                     **self.sources_to_test)
+        # run build monitoring (interactively)
+        if DAVAI_HOST != 'atos_bologna':  # FIXME: dirty
+            set_default_mtooldir()
+        self._launch('build.wait4build', 'build',
+                     drymode=drymode,
+                     profile='rd')
+
 
     def launch_jobs(self,
                     only_job=None,

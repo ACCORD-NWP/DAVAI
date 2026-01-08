@@ -11,7 +11,7 @@ from bronx.stdtypes.date import Period, utcnow
 
 from ..util import context_info_for_task_summary
 from ..hooks.summaries import take_the_DAVAI_train
-from ...util import gmkpack_executables_block_tag, gmkpack_build_job
+from ...util import gmkpack_executables_block_tag, gmkpack_build_job,cmake_executables_block_tag, cmake_build_job
 
 
 class IncludesTaskMixin(object):
@@ -143,6 +143,7 @@ class WrappedToolboxMixin(object):
         output_number = len(self._tb_output) + 1
         self.sh.title('Toolbox output {:02}'.format(output_number))
         description['namespace'] = self.output_namespace(description.get('namespace'))
+        print(description)
         r = toolbox.output(**description)
         self._tb_output.append(r)
         print(self.ticket.prompt, 'tb output {:02} ='.format(output_number), r)
@@ -210,12 +211,27 @@ class DavaiTaskMixin(WrappedToolboxMixin):
         tag = '{}.{}'.format(gmkpack_executables_block_tag, compilation_flavour.lower())
         return '{}@{}'.format(gmkpack_build_job, tag)
 
+    def executables_block_cmake(self, compilation_flavour=None):
+        """
+        Return the block in which to find the binaries, wrt self.compilation_flavour or a provided such argument.
+
+        CAREFUL IN MODIFYING THIS: this method is defined to mimic what:
+        - the loop on compilation flavours does
+        - output_block() does
+        """
+        if compilation_flavour is None:
+            compilation_flavour = self.conf.compilation_flavour
+        tag = '{}.{}'.format(cmake_executables_block_tag, compilation_flavour.lower())
+        return '{}@{}'.format(cmake_build_job, tag)
+
     def executables_block(self, **kw):
         """
         Return the block in which to find the binaries, wrt self.compilation_flavour or a provided such argument.
         """
         if self.conf.compiling_system == 'gmkpack':
             return self.executables_block_gmkpack(**kw)
+        elif self.conf.compiling_system == 'cmake':
+            return self.executables_block_cmake(**kw)
         else:
             raise NotImplementedError("conf.compiling_system == {}".format(self.conf.compiling_system))
 
@@ -617,3 +633,28 @@ class GmkpackMixin(BuildMixin):
         else:
             return None
 
+
+
+class BundleMixin(BuildMixin):
+    """A mixin for tasks that deal with building of executables with ial-bundle."""
+
+    @property
+    def bundle_xp_build_dir(self):
+        build_dir    = os.path.expandvars(self.conf.build_dir)
+        return os.path.join(build_dir,self.conf.xpid)
+
+    @property
+    def bundle_dir(self):
+        if 'IAL_bundle_file' in self.conf and 'IAL_dir' not in self.conf:
+            return os.path.dirname(self.conf.get("IAL_bundle_file"))
+        elif 'IAL_dir' in self.conf and 'IAL_bundle_file' not in self.conf:
+            return os.path.join(self.conf.get("IAL_dir"),"bundle")
+        else:
+            raise KeyError("One and only one of ('IAL_bundle_file', 'IAL_repository') has to be provided in config file")
+
+    @property
+    def bundle_src_dir(self):
+        if 'bundle_src_dir' in self.conf:
+            return os.path.expanduser(os.path.expandvars(self.conf.bundle_src_dir))
+        else:
+            return os.path.join(self.bundle_xp_build_dir,"source")

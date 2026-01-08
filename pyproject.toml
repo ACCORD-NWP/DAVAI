@@ -13,6 +13,7 @@ dependencies=[
     "footprints",
     "pyyaml",
     "bronx",
+    "ecbundle==2.3.0",
     "epygram==2.0.4",
     "ial_build==1.4.1",
     "ial_expertise==1.3.1",

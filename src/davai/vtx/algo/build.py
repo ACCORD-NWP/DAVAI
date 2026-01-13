@@ -11,6 +11,7 @@ from bronx.fancies import loggers
 
 from vortex.algo.components import (AlgoComponent, AlgoComponentDecoMixin,
                                     algo_component_deco_mixin_autodoc)
+from IAL-build.config import DEFAULT_BUNDLE_RELPATH, DEFAULT_BUNDLE_CACHE_DIR
 
 from .mixins import _CrashWitnessDecoMixin
 from ..util import set_env4git
@@ -145,6 +146,82 @@ class GitDecoMixin(AlgoComponentDecoMixin):
                                               output=False)
         else:
             yield
+
+
+class IAL2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
+    """Make a pack (gmkpack) with sources from a IAL Git ref - post 50T2, bundle included."""
+
+    _footprint = [
+        dict(
+            info = "Make a pack (gmkpack) with sources from a IAL Git ref - post 50T2, bundle included.",
+            attr = dict(
+                kind = dict(
+                    values   = ['ial2pack'],
+                ),
+                bundle_relpath = dict(
+                    info = "Relative path to the bundle in the IAL repo.",
+                    optional = True,
+                    default = DEFAULT_BUNDLE_RELPATH
+                ),
+                bundle_cache_dir = dict(
+                    info = "Cache directory in which to download/update repositories for the hub.",
+                    optional = True,
+                    default = DEFAULT_BUNDLE_CACHE_DIR
+                ),
+                bundle_update = dict(
+                    info = "If bundle repositories are to be updated/checkedout.",
+                    optional = True,
+                    default = True
+                ),
+                pack_type = dict(
+                    info = "Pack type, whether main (full) or incremental.",
+                    values = ['incr', 'main'],
+                    optional = True,
+                    default = 'incr',
+                ),
+                compiler_label = dict(
+                    info = "Gmkpack compiler label.",
+                    optional = True,
+                    default = None
+                ),
+                compiler_flag = dict(
+                    info = "Gmkpack compiler flag.",
+                    optional = True,
+                    default = None
+                ),
+                preexisting_pack = dict(
+                    info = "Set to True if the pack preexists.",
+                    type = bool,
+                    optional = True,
+                    default = False,
+                ),
+                rootpack = dict(
+                    info = "Directory in which to find rootpack(s).",
+                    optional = True,
+                    default = None,
+                ),
+            )
+        )
+    ]
+
+    def execute(self, rh, kw):  # @UnusedVariable
+        from ial_build.algos import IAL2pack  # @UnresolvedImport
+        IAL2pack(self.git_ref,
+                 self.repository,
+                 bundle_relpath=self.bundle_relpath,
+                 bundle_cache_dir=self.bundle_cache_dir,
+                 bundle_update=self.bundle_update,
+                 pack_type=self.pack_type,
+                 preexisting_pack=self.preexisting_pack,
+                 clean_if_preexisting=self.cleanpack,
+                 compiler_label=self.compiler_label,
+                 compiler_flag=self.compiler_flag,
+                 homepack=self.homepack,
+                 rootpack=self.rootpack)
+
+
+class IAL2Pack_CrashWitness(IAL2Pack, _CrashWitnessDecoMixin):
+    pass
 
 
 class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):

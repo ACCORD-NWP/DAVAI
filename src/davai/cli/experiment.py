@@ -536,7 +536,8 @@ class XP(object):
         """Fetch sources for build with gmkpack."""
         if 'IAL_git_ref' in self.sources_to_test:
             # build from a single IAL Git reference
-            build_job = 'build.gmkpack.gitref2pack'
+            #build_job = 'build.gmkpack.gitref2pack'
+            build_job = 'build.gmkpack.ial2pack'
         elif any([k in self.sources_to_test for k in ['IAL_bundle_ref', 'IAL_bundle_file']]):
             # build from a bundle
             build_job = 'build.gmkpack.bundle2pack'

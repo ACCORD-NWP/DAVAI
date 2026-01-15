@@ -68,7 +68,7 @@ class GitRef2Pack(Task, DavaiTaskMixin, GmkpackMixin):
         if 'compute' in self.steps:
             self.sh.title('Toolbox algo = tbalgo')
             tbalgo = toolbox.algo(
-                #bundle_cache_dir = self.bundle_src_dir,
+                bundle_cache_dir = self.bundle_src_dir,
                 cleanpack      = self.conf.get('cleanpack', False),
                 compiler_flag  = self.gmkpack_compiler_flag,
                 compiler_label = self.gmkpack_compiler_label,

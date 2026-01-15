@@ -11,7 +11,7 @@ from bronx.fancies import loggers
 
 from vortex.algo.components import (AlgoComponent, AlgoComponentDecoMixin,
                                     algo_component_deco_mixin_autodoc)
-from IAL-build.config import DEFAULT_BUNDLE_RELPATH, DEFAULT_BUNDLE_CACHE_DIR
+from ial_build.config import DEFAULT_BUNDLE_RELPATH, DEFAULT_BUNDLE_CACHE_DIR
 
 from .mixins import _CrashWitnessDecoMixin
 from ..util import set_env4git
@@ -240,6 +240,11 @@ class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                     optional = True,
                     default = 'incr',
                 ),
+                bundle_cache_dir = dict(
+                    info = "Cache directory in which to download/update repositories for the hub.",
+                    optional = True,
+                    default = DEFAULT_BUNDLE_CACHE_DIR
+                ),
                 compiler_label = dict(
                     info = "Gmkpack compiler label.",
                     optional = True,
@@ -269,6 +274,7 @@ class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
         from ial_build.algos import IALgitref2pack  # @UnresolvedImport
         IALgitref2pack(self.git_ref,
                        self.repository,
+                       bundle_cache_dir=self.bundle_cache_dir,
                        pack_type=self.pack_type,
                        preexisting_pack=self.preexisting_pack,
                        clean_if_preexisting=self.cleanpack,

@@ -200,6 +200,11 @@ class IAL2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                     optional = True,
                     default = None,
                 ),
+                check_coding_norms = dict(
+                    info = "Run coding norms checker on local sources",
+                    optional = True,
+                    default = False,
+                ),
             )
         )
     ]
@@ -217,7 +222,8 @@ class IAL2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                  compiler_label=self.compiler_label,
                  compiler_flag=self.compiler_flag,
                  homepack=self.homepack,
-                 rootpack=self.rootpack)
+                 rootpack=self.rootpack,
+                 check_coding_norms=self.check_coding_norms)
 
 
 class IAL2Pack_CrashWitness(IAL2Pack, _CrashWitnessDecoMixin):

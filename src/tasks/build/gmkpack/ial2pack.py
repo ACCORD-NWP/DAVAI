@@ -71,6 +71,7 @@ class IAL2Pack(Task, DavaiTaskMixin, GmkpackMixin):
                 bundle_cache_dir = self.bundle_src_dir,
                 bundle_update  = self.conf.bundle_update,
                 cleanpack      = self.conf.get('cleanpack', False),
+                check_coding_norms = self.conf.get('check_coding_norms',False),
                 compiler_flag  = self.gmkpack_compiler_flag,
                 compiler_label = self.gmkpack_compiler_label,
                 crash_witness  = False,

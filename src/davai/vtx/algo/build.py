@@ -202,6 +202,7 @@ class IAL2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                 ),
                 check_coding_norms = dict(
                     info = "Run coding norms checker on local sources",
+                    type = bool,
                     optional = True,
                     default = False,
                 ),
@@ -274,6 +275,7 @@ class IALgitref2Pack(AlgoComponent, GmkpackDecoMixin, GitDecoMixin):
                 ),
                 check_coding_norms = dict(
                     info = "Run coding norms checker on local sources",
+                    type = bool,
                     optional = True,
                     default = False,
                 )

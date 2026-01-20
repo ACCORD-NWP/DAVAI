@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, unicode_literals, division
-
 import vortex
 from vortex import toolbox
 from vortex.layout.nodes import Task, Driver, Family, LoopFamily

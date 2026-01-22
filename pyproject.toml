@@ -14,7 +14,7 @@ dependencies=[
     "pyyaml",
     "bronx",
     "epygram==2.0.7",
-    "ial_build>=1.4.4",
+    "ial_build>=1.4.5",
     "ial_expertise>=1.3.2",
     "matplotlib",  # FIXME: remove when bronx>2.0.0 does not fail on matplotlib import
     "netCDF4==1.7.2",  # (epygram) FIXME: to remove, issue with newer versions not being properly installed on belenos
